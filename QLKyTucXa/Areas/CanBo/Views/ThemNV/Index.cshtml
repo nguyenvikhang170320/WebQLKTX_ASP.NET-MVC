@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Model.EF.LICH_SU>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";}
+
+
+@section header{
+    Quản Lý Danh Sách Nhân Viên
+}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-th"></i></span>
+                    <h5>Danh Sách Nhân Viên</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    <table class="table table-bordered data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Dãy</th>
+                                <th>Mã Phòng</th>
+                                <th>Mã Nhân Viên</th>
+                                <th>Tên Nhân Viên</th>
+                                <th>Ngày Chuyển</th>
+                                <th>CMND - CCCD</th>
+                                <th>Số Điện Thoại</th>
+                                <th><div class="fr"><p class="btn btn-primary btn-mini">@Html.ActionLink("Thêm mới", "Create")</p></div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="gradeX">
+                                    <td>@Html.DisplayFor(modelItem => item.PHONG.DAYPHONG.MADAYPHONG)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.PHONG.MAPHONG)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.NHANVIEN.MANV)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.NHANVIEN.TENNV)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.NGAYCHUYEN)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.NHANVIEN.CMND_CCCD)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.NHANVIEN.SDT)</td>
+                                    <td><div class="fr"><p class="btn btn-warning btn-mini">@Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.ID })</p> @*| <p class="btn btn-success btn-mini">@Html.ActionLink("Chi tiết", "Details", new { id = item.ID })</p> |*@ <p class="btn btn-danger btn-mini">@Html.ActionLink("Xóa", "Delete", new { id = item.ID })</p></div></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

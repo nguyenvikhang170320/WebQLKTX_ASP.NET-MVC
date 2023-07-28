@@ -1,0 +1,433 @@
+﻿@model IEnumerable<Model.EF.CONGTODIEN>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-success" id="btnAdd"><i class="fa fa-plus" aria-hidden="true">Thêm điện nước</i></button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-6 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm" id="phanTrang"></ul>
+            </nav>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Dãy phòng
+                </th>
+                <th>
+                    Mã phòng
+                </th>
+                <th>
+                    Điện tháng này
+                </th>
+                <th>
+                    Điện tháng sau
+                </th>
+                <th>
+                    Tháng
+                </th>
+                <th>
+                    Năm
+                </th>
+                <th>
+                    Trạng thái
+                </th>
+                <th>
+                    Thao tác
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tableDN">
+        </tbody>
+    </table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Dãy phòng
+                </th>
+                <th>
+                    Mã phòng
+                </th>
+                <th>
+                    Nước tháng này
+                </th>
+                <th>
+                    Nước tháng sau
+                </th>
+                <th>
+                    Tháng
+                </th>
+                <th>
+                    Năm
+                </th>
+                <th>
+                    Trạng thái
+                </th>
+                <th>
+                    Thao tác
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tableDN1">
+        </tbody>
+    </table>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalEdit">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="modalTitle"></div>
+                    <div class="panel-body">
+                        <input type="text" hidden id="idDien" value="" />
+                        <input type="text" hidden id="idNuoc" value="1" />
+                        <div class="form-group">
+                            <label>Điện chỉ số đầu(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="dienchisodau" placeholder="Điện tháng này">
+                        </div>
+                        <div class="form-group">
+                            <label>Điện chỉ số cuối(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="dienchisocuoi" placeholder="Điện tháng sau">
+                        </div>
+                        <div class="form-group">
+                            <label>Nước tháng này(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="nuocthangnay" placeholder="Nước tháng này">
+                        </div>
+                        <div class="form-group">
+                            <label>Nước tháng sau(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="nuocthangsau" placeholder="Nước tháng sau">
+                        </div>
+                        <div class="form-group">
+                            <label>Tháng điện(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="thangdien" placeholder="Điện tháng">
+                        </div>
+                        <div class="form-group">
+                            <label>Tháng nước(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="thangnuoc" placeholder="Nước tháng">
+                        </div>
+                        <div class="form-group">
+                            <label>Năm điện(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="namdien" placeholder="Điện năm">
+                        </div>
+                        <div class="form-group">
+                            <label>Năm nước(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="namnuoc" placeholder="Nước năm">
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng thái điện(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="trangthaidien" id="trangthaidien">
+                                <option value="Đã chốt" selected>Đã chốt</option>
+                                <option value="Chưa chốt">Chưa chốt</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng thái nước(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="trangthainuoc" id="trangthainuoc">
+                                <option value="Đã chốt" selected>Đã chốt</option>
+                                <option value="Chưa chốt">Chưa chốt</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSubmit">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        var tuKhoa = "";
+        var trang = 1;
+        $(document).ready(function () {
+            LoadDsDien(); // load danh sách điện
+            LoadDsNuoc(); // load danh sách nước
+        });
+        // edit nước
+        $(document).on('click', "button[name='edit1']", function () {
+            let idNuoc = $(this).closest('tr').attr('id1');
+            $.ajax({
+                url: '/CONGTODIENNUOCs/ChitietNuoc2',
+                type: 'get',
+                data: {
+                    id1: idNuoc
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#modalTitle').text('Cập nhật nước');
+                        $('#nuocthangnay').val(data.L1.CHISODAU);
+                        $('#nuocthangsau').val(data.L1.CHISOCUOI);
+                        $('#trangthainuoc').val(data.L1.TRANGTHAI);
+                        // gán giá trị cho nó
+                        $('#idNuoc').val(idNuoc);
+                        // ẩn chỉ số nước đầu và chỉ số nước cuối , tháng năm
+                        $('#dienchisodau').hide();
+                        $('#dienchisocuoi').hide();
+                        $('#thangdien').hide();
+                        $('#thangnuoc').hide();
+                        $('#namdien').hide();
+                        $('#namnuoc').hide();
+                        $('#trangthaidien').hide();
+                        $('#modalEdit').modal();
+
+
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+
+        // edit điện
+        $(document).on('click', "button[name='edit']", function () {
+            let idDien = $(this).closest('tr').attr('id');
+            $.ajax({
+                url: '/CONGTODIENNUOCs/ChitietDien2',
+                type: 'get',
+                data: {
+                    id: idDien
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#modaltitle').text('Cập nhật điện');
+                        $('#dienchisodau').val(data.L.CHISODAU);
+                        $('#dienchisocuoi').val(data.L.CHISOCUOI);
+                        $('#trangthaidien').val(data.L.TRANGTHAI);
+                        // gán giá trị
+                        $('#idDien').val(idDien);
+                        // ẩn chỉ số nước đầu và chỉ số nước cuối , tháng năm
+                        $('#nuocthangnay').hide();
+                        $('#nuocthangsau').hide();
+                        $('#thangdien').hide();
+                        $('#namdien').hide();
+                        $('#thangnuoc').hide();
+                        $('#namnuoc').hide();
+                        $('#trangthainuoc').hide();
+                        // load modal
+                        $('#modalEdit').modal();
+
+
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+        //thêm điện nước
+        $('#btnAdd').click(function () {
+            $('#modaltitle').text('Thêm mới điện nước');
+            $('#idDien').val('');
+            $('#idNuoc').val('1');
+            $('#modalEdit').modal();
+
+        });
+
+
+        $('#btnSearch').click(function () {
+            tuKhoa = $('#txtSearch').val();
+            LoadDSPhong();
+        })
+
+        // khi bấm lưu
+        $('#btnSubmit').click(function () {
+            let dienchisodau = $('#dienchisodau').val().trim();
+            let dienchisocuoi = $('#dienchisocuoi').val().trim();
+            let nuocchisodau = $('#nuocthangnay').val().trim();
+            let nuocchisocuoi = $('#nuocthangsau').val().trim();
+            let thangdien = $('#thangdien').val().trim();
+            let namdien = $('#namdien').val().trim();
+            let thangnuoc = $('#thangnuoc').val().trim();
+            let namnuoc = $('#namnuoc').val().trim();
+            let trangthaidien = $('#trangthaidien').val().trim();
+            let trangthainuoc = $('#trangthainuoc').val().trim();
+
+
+            // thêm khi nhấn button lưu
+            let idDien = $('#idDien').val().trim();
+            let idNuoc = $('#idNuoc').val().trim();
+            if (idDien == 0) {
+                if (idNuoc == 1) {
+                    $.ajax({
+                        url: '/CONGTODIENNUOCs/Add2',
+                        type: 'post',
+                        data: {
+                            dienchisodau: dienchisodau,
+                            dienchisocuoi: dienchisocuoi,
+                            nuocthangnay: nuocchisodau,
+                            nuocthangsau: nuocchisocuoi,
+                            thangdien: thangdien,
+                            namdien: namdien,
+                            thangnuoc: thangnuoc,
+                            namnuoc: namnuoc,
+                            trangthaidien: trangthaidien,
+                            trangthainuoc: trangthainuoc
+                        },
+                        success: function (data) {
+                            /* console.log(data);*/
+                            if (data.code == 200) {
+                                alert(data.msg);
+                                LoadDsDien();
+                                LoadDsNuoc();
+                            } else {
+                                alert(data.msg);
+                            }
+                        },
+                    });
+                }
+                else if ($('#idNuoc').val(idNuoc)) {
+                    $.ajax({
+                        url: '/CONGTODIENNUOCs/CapnhatNuoc2',
+                        type: 'post',
+                        data: {
+                            id1: idNuoc,
+                            nuocchisodau: nuocchisodau,
+                            nuocchisocuoi: nuocchisocuoi,
+                            trangthainuoc: trangthainuoc
+                        },
+                        success: function (data) {
+                            /* console.log(data);*/
+                            if (data.code == 200) {
+                                alert(data.msg);
+
+                                $('#modalEdit').modal('hide');
+                                LoadDsDien();
+                                LoadDsNuoc();
+                            } else {
+                                alert(data.msg);
+                            }
+                        },
+                    });
+
+                }
+
+            }
+
+            else {
+                $.ajax({
+                    url: '/CONGTODIENNUOCs/CapnhatDien2',
+                    type: 'post',
+                    data: {
+                        id: idDien,
+                        dienchisodau: dienchisodau,
+                        dienchisocuoi: dienchisocuoi,
+                        trangthaidien: trangthaidien
+                    },
+                    success: function (data) {
+                        /* console.log(data);*/
+                        if (data.code == 200) {
+                            alert(data.msg);
+
+                            $('#modalEdit').modal('hide');
+                            LoadDsDien();
+                            LoadDsNuoc();
+                        } else {
+                            alert(data.msg);
+                        }
+                    },
+                });
+
+            }
+
+
+        });
+        //phần ajax xử lý giao diện index cán bộ
+        function LoadDsDien() {
+            //dùng ajax để load danh sách lớp trong controller CanBo
+            $.ajax({
+                url: '/CONGTODIENNUOCs/DSDN2',
+                type: 'get',
+                success: function (data) {
+                    /* console.log(data);*/
+                    if (data.code == 200) {
+                        $('#tableDN').empty();
+                        $.each(data.join2, function (k, v) {
+                            let tr = '<tr id="' + v.ID_DIEN + '">'
+                            tr += '<td>' + v.MADAYPHONG + '</td>';
+                            tr += '<td>' + v.MAPHONG + '</td>';
+                            tr += '<td>' + v.DIENCHISODAU + '</td>';
+                            tr += '<td>' + v.DIENCHISOCUOI + '</td>';
+                            tr += '<td>' + v.THANGDIEN + '</td>';
+                            tr += '<td>' + v.NAMDIEN + '</td>';
+                            tr += '<td>' + v.TRANGTHAIDIEN + '</td>';
+                            tr += '<td>';
+                            tr += '<button class = "btn btn-xs btn-info" name="edit"> <i class="fa-solid fa-edit"></i></button>';
+                            tr += '</td>';
+                            tr += '</tr>';
+                            $('#tableDN').append(tr);
+                        });
+                    }
+                }
+            });
+
+        }
+
+        // load danh sách nước
+        function LoadDsNuoc() {
+            //dùng ajax để load danh sách lớp trong controller CanBo
+            $.ajax({
+                url: '/CONGTODIENNUOCs/DSDN2',
+                type: 'get',
+                success: function (data) {
+                    /* console.log(data);*/
+                    if (data.code == 200) {
+                        $('#tableDN1').empty();
+                        $.each(data.join2, function (k, v) {
+                            let tr = '<tr id1="' + v.ID_NUOC + '">'
+                            tr += '<td>' + v.MADAYPHONG + '</td>';
+                            tr += '<td>' + v.MAPHONG + '</td>';
+                            tr += '<td>' + v.NUOCCHISODAU + '</td>';
+                            tr += '<td>' + v.NUOCCHISOCUOI + '</td>';
+                            tr += '<td>' + v.THANGNUOC + '</td>';
+                            tr += '<td>' + v.NAMNUOC + '</td>';
+                            tr += '<td>' + v.TRANGTHAINUOC + '</td>';
+                            tr += '<td>';
+                            tr += '<button class = "btn btn-xs btn-info" name="edit1"> <i class="fa-solid fa-edit"></i></button>';
+
+                            tr += '</td>';
+                            tr += '</tr>';
+                            $('#tableDN1').append(tr);
+                        });
+                    }
+                }
+            });
+
+        }
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDsDien();
+            LoadDsNuoc();
+        });
+
+    </script>
+
+}

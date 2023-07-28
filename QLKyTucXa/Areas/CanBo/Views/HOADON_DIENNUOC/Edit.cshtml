@@ -1,0 +1,100 @@
+﻿@model Model.EF.HOADON_DIENNUOC
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";
+}
+
+@section header{
+    Cập Nhật Hóa Đơn Điện Nước
+}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"> <i class="icon-align-justify"></i> </span>
+                    <h5>Cập Nhật Thông Tin</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="form-horizontal">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.ID_HOADON)
+
+                            <div class="control-group">
+                                <label class="control-label">Mã Cán Bộ(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.DropDownList("ID_CANBO", null, htmlAttributes: new { @class = "span11" })
+                                    @Html.ValidationMessageFor(model => model.ID_CANBO, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Mã Phòng(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.DropDownList("ID_PHONG", null, htmlAttributes: new { @class = "span11" })
+                                    @Html.ValidationMessageFor(model => model.ID_PHONG, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Mã Đơn Giá(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.DropDownList("ID_DONGIA", null, htmlAttributes: new { @class = "span11" })
+                                    @Html.ValidationMessageFor(model => model.ID_DONGIA, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Tháng(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.EditorFor(model => model.THANG, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.THANG, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Năm(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.EditorFor(model => model.NAM, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.NAM, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Trạng Thái(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.DropDownListFor(model => model.TRANGTHAI, new[]
+                                                                     {
+                                                                          new SelectListItem{Text="Chưa thu tiền",Value="0"},
+                                                                          new SelectListItem{Text="Đã thu tiền",Value="1"}
+                                                                     }, htmlAttributes: new { @class = "span11" })
+                                    @Html.ValidationMessageFor(model => model.TRANGTHAI, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Lưu lại" class="btn btn-warning" />
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-actions">
+    <p class="btn btn-info">@Html.ActionLink("Quay lại trang danh sách", "Index")</p>
+</div>

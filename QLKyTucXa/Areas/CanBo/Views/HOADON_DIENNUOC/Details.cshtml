@@ -1,0 +1,67 @@
+﻿@model Model.EF.HOADON_DIENNUOC
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>HOADON_DIENNUOC</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CANBO.MACB)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CANBO.MACB)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DONGIA.MADONGIA)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DONGIA.MADONGIA)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PHONG.MAPHONG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PHONG.MAPHONG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.THANG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.THANG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NAM)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NAM)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TRANGTHAI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TRANGTHAI)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID_HOADON }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

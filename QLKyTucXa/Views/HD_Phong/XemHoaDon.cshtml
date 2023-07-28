@@ -1,0 +1,65 @@
+﻿@model IEnumerable<QLKyTucXa.Models.ViewModel_HD>
+@{
+    ViewBag.Title = "XemHoaDon";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+
+@section header{
+    Danh Sách Hóa Đơn Phòng
+}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-th"></i></span>
+                    <h5>Danh Sách Hóa Đơn Phòng</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    <table class="table table-bordered data-table">
+                        <thead>
+                            <tr>
+
+                                <th>Mã phòng</th>
+                                <th>Dãy phòng</th>
+                                <th>Năm</th>
+                                <th>Kỳ</th>
+                                <th>Đơn giá</th>
+                                <th>Thành tiền</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="gradeX">
+                                    <td>@item.MAPHONG</td>
+                                    <td>@item.MADAYPHONG</td>
+                                    <td>@item.NAM</td>
+                                    <td>@item.KY</td>
+                                    <td>@item.DONGIA</td>
+                                    <td>@item.THANHTIEN</td>
+                                    <td>
+                                        @{
+                                            int? temp = item.TRANGTHAI;
+                                        }
+                                        @if (temp == 0)
+                                        {
+                                            <p>Chưa thu tiền</p>
+                                        }
+                                        else if (temp == 1)
+                                        {
+                                            <p>Đã thu tiền</p>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

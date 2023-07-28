@@ -1,0 +1,312 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-success" id="btnAdd"><i class="fa fa-plus" aria-hidden="true"></i> Thêm dãy phòng</button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-6 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm " id="phanTrang">
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã dãy phòng
+                </th>
+                <th>
+                    Thao tác
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tblDsDayphong">
+        </tbody>
+    </table>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalDayphong">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="modalTitle"></div>
+                    <div class="panel-body">
+                        <input type="text" hidden id="idDayphong" value="" />
+                        <div class="form-group">
+                            <label>Mã dãy phòng(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="maDayphong" placeholder="Mã Dãy Phòng">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSubmit">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        var tuKhoa = '';
+        var trang = 1;
+        $(document).ready(function () {
+            LoadDsDayphong(tuKhoa, trang);
+        });
+
+        //sự kiện enter của text có id là txtSearch
+        $('#txtSearch').on('keypress', function (e) {
+            if (e.which == 13) {//nếu phím đc gõ là enter
+                $('#btnSearch').click();//thì gọi tới sự kiện click của button có id là btnSearch
+            }
+        });
+
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDsDayphong(tuKhoa, trang);
+        });
+
+
+        //sự kiện click của button tìm kiếm
+        $('#btnSearch').click(function () {
+            trang = 1;
+            tuKhoa = $('#txtSearch').val();
+            LoadDsDayphong(tuKhoa, trang);
+        });
+
+
+        //sự kiện xóa lớp
+        $(document).on('click', "button[name='delete']", function () {
+            let idDayphong = $(this).closest('tr').attr('id');
+            if (confirm("Bạn thực sự muốn xóa dãy phòng này?")) {
+                //dùng ajax để xóa dãy phòng đc chọn
+                $.ajax({
+                    url: '/Canbo/Dayphong/Xoa',
+                    type: 'post',
+                    data: {
+                        id: idDayphong
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsDayphong(tuKhoa, trang);
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+        });
+
+
+        //sự kiện của button sửa trên từng dòng
+        $(document).on('click', "button[name='update']", function () {
+            let idDayphong = $(this).closest('tr').attr('id');
+            $.ajax({
+                url: '/Canbo/Dayphong/CapNhat',
+                type: 'get',
+                data: {
+                    id: idDayphong
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //nếu lấy thông tin lớp thành công
+                        $('#maDayphong').val(data.dp.MADAYPHONG);
+
+                        //gán giá trị cho text hidden có id là idLop = id của tr được chọn
+                        $('#idDayphong').val(idDayphong);
+                        $('#modalTitle').text('Cập nhật thông tin dãy phòng');
+                        //không cho chỉnh sửa các giá trị
+                        $('#maDayphong').prop('readonly', false);
+
+                        //ẩn button xác nhận
+                        $('#btnSubmit').show();
+
+                        $('#modalDayphong').modal();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        //sự kiện click button chi tiết của mỗi dòng table
+        $(document).on('click', "button[name='view']", function () {
+            let idDayphong = $(this).closest('tr').attr('id');
+            $.ajax({
+                url: '/Canbo/Dayphong/ChiTiet',
+                type: 'get',
+                data: {
+                    id: idDayphong
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //nếu lấy thông tin lớp thành công
+                        $('#maDayphong').val(data.dp.MADAYPHONG);
+
+                        //không cho chỉnh sửa các giá trị
+                        $('#maDayphong').prop('readonly', true);
+
+                        $('#modalTitle').text('Thông tin chi tiết dãy phòng');
+
+                        //ẩn button xác nhận
+                        $('#btnSubmit').hide();
+
+                        $('#modalDayphong').modal();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        //sự kiện click button xác nhận
+        $('#btnSubmit').click(function () {
+            let maDayphong = $('#maDayphong').val().trim();
+
+            //ràng buộc dữ liệu
+            if (maDayphong.length == 0) {
+                alert('Vui lòng nhập đầy đủ thông tin để tiếp tục');
+                return;
+            }
+            let idDayphong = $('#idDayphong').val().trim();
+
+            if (idDayphong.length == 0) {//nếu là thêm mới dãy phòng
+                //dùng ajax để thêm mới 1 dãy phòng
+                $.ajax({
+                    url: '/Canbo/Dayphong/ThemMoi',
+                    type: 'post',
+                    data: {
+                        maDayphong: maDayphong
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsDayphong(tuKhoa, trang);
+                            $('#maDayphong').val('');
+                        } else {
+                            alert(data.msg);
+                        }
+
+                    }
+                });
+            } else {//nếu là cập nhật 1 dãy phòng đã có
+                //dùng ajax để cập nhật dãy phòng
+
+                $.ajax({
+                    url: '/Canbo/Dayphong/CapNhat',
+                    type: 'post',
+                    data: {
+                        id: idDayphong,
+                        maDayphong: maDayphong
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            //cập nhật thành công
+                            alert(data.msg);
+                            $('#modalDayphong').modal('hide');//đóng modal
+
+                            //load lại danh sách lớp sau khi cập nhật
+                            LoadDsDayphong(tuKhoa, trang);
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+
+            }
+
+        });
+
+
+        //sự kiện click của button thêm mới dãy phòng
+        $('#btnAdd').click(function () {
+            //set header của modal dãy phòng
+            $('#modalTitle').text('Thêm mới dãy phòng');
+
+            //set giá trị mặc định cho các thành phần của form
+            $('#idDayphong').val('');
+            $('#maDayphong').val('');
+
+            //không cho chỉnh sửa các giá trị
+            $('#maDayphong').prop('readonly', false);
+
+            //ẩn button xác nhận
+            $('#btnSubmit').show();
+
+            //hiển thị modal lên
+            $('#modalDayphong').modal();
+        })
+
+
+        //hàm load danh sách lớp đổ vào table
+        function LoadDsDayphong(search, trang) {
+            //dùng ajax để load danh sách lớp trong controller lop
+            $.ajax({
+                url: '/Canbo/Dayphong/DsDayphong',
+                type: 'get',
+                data: {
+                    tuKhoa: search,
+                    trang: trang
+                },
+                success: function (data) {
+                    //console.log(data);
+                    if (data.code == 200) {
+                        $('#tblDsDayphong').empty();
+                        $.each(data.dsDayphong, function (k, v) {
+                            let tr = '<tr id="' + v.ID_DAY + '">'
+                            tr += '<td class = "col-sm-8">' + v.MADAYPHONG + '</td>';
+                            tr += '<td class = "col-sm-4 text-right">';
+                            tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';
+                            tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
+                            tr += '<button class = "btn btn-xs btn-danger" name = "delete"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                            tr += '</td>';
+                            tr += '</tr>';
+                            $('#tblDsDayphong').append(tr);
+                        });
+
+                        //phân trang
+
+                        $('#phanTrang').empty();
+                        for (i = 1; i <= data.soTrang; i++) {
+                            let li = '<li class="page-item" id="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+                            $('#phanTrang').append(li);
+                        }
+
+                        let li = $('#phanTrang li#' + trang + '');//tìm li có id = trang truyền vào
+                        //ví dụ trang = 2, sẽ tìm tới cái thằng li có id = 2
+                        //tìm ra đc thằng cần tìm thì add class active để đánh dấu trang hiện tại đang đc load
+                        $(li).addClass('active');
+
+                    }
+                }
+            });
+        }
+    </script>
+}

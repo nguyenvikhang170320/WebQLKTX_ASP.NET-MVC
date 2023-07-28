@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Model.EF.HOADON_DIENNUOC>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";
+}
+
+@section header{
+    Quản Lý Danh Sách Hóa Đơn Điện Nước
+}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-th"></i></span>
+                    <h5>Danh Sách Hóa Đơn Điện Nước</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    <table class="table table-bordered data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Cán Bộ</th>
+                                <th>Mã Đơn Giá</th>
+                                <th>Mã Phòng</th>
+                                <th>Tháng</th>
+                                <th>Năm</th>
+                                <th>Trạng Thái</th>
+                                <th><div class="fr"><p class="btn btn-primary btn-mini">@Html.ActionLink("Thêm mới", "Create")</p></div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="gradeX">
+                                    <td>@Html.DisplayFor(modelItem => item.CANBO.MACB)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DONGIA.MADONGIA)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.PHONG.MAPHONG)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.THANG)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.NAM)</td>
+                                    <td>
+                                        @{
+                                            int? temp = item.TRANGTHAI;
+                                        }
+                                        @if (temp == 0)
+                                        {
+                                            <p>Chưa thu tiền</p>
+                                        }
+                                        else if (temp == 1)
+                                        {
+                                            <p>Đã thu tiền</p>
+                                        }
+                                    </td>
+                                    <td><div class="fr"><p class="btn btn-warning btn-mini">@Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.ID_HOADON })</p>@* | <p class="btn btn-success btn-mini">@Html.ActionLink("Chi tiết", "Details", new { id = item.ID_PHIEU })</p>*@@* | <p class="btn btn-danger btn-mini">@Html.ActionLink("Xóa", "Delete", new { id = item.ID_PHIEU })</p>*@</div></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

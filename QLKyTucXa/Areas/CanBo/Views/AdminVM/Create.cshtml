@@ -1,0 +1,21 @@
+﻿@model Model.EF.HOADON_DIENNUOC
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";
+}
+
+
+@section header{
+    Thêm hóa đơn
+}
+
+<div class="form-actions">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <input type="submit" value="Tạo hóa đơn" class="btn btn-primary" />
+    }
+</div>
+<div class="form-actions">
+    <p class="btn btn-info">@Html.ActionLink("Quay lại trang danh sách", "Index")</p>
+</div>

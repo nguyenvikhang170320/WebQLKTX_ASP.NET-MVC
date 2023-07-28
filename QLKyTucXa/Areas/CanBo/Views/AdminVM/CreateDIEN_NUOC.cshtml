@@ -1,0 +1,76 @@
+﻿@model QLKyTucXa.Models.ViewModel_HD
+@{
+    ViewBag.Title = "CreateDIEN_NUOC";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";
+}
+
+
+@section header{
+    Thêm Điện Nước Mới
+}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"> <i class="icon-align-justify"></i> </span>
+                    <h5>Nhập Thông Tin Điện Nước Mới</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="form-horizontal">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="control-group">
+                                <label class="control-label">Mã phòng(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.EditorFor(model => model.ID_PHONG, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.ID_PHONG, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Nước chỉ số đầu(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.EditorFor(model => model.NUOC_CHISODAU, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.NUOC_CHISODAU, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Nước chỉ số cuối(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.EditorFor(model => model.NUOC_CHISOCUOI, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.NUOC_CHISOCUOI, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Điện chỉ số đầu(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.EditorFor(model => model.DIEN_CHISODAU, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.DIEN_CHISODAU, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Điện chỉ số cuối(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.EditorFor(model => model.DIEN_CHISOCUOI, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.DIEN_CHISOCUOI, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Thêm mới" class="btn btn-primary" />
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-actions">
+    <p class="btn btn-info">@Html.ActionLink("Quay lại trang danh sách", "Index")</p>
+</div>

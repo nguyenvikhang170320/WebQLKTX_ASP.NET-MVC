@@ -1,0 +1,51 @@
+﻿@model Model.EF.HOADON_PHONG
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>HOADON_PHONG</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PHONG.MAPHONG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PHONG.MAPHONG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NAM)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NAM)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KY)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TRANGTHAI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TRANGTHAI)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID_HOADON_PHONG }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

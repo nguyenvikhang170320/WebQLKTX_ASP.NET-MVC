@@ -1,0 +1,48 @@
+﻿@model QLKyTucXa.Models.LoginPhongModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Đăng nhập phòng</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/Assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="~/Assets/css/maruti-login.css" />
+</head>
+<body>
+    <div id="loginbox">
+        @using (Html.BeginForm("LoginPhong", "LoginPhong", FormMethod.Post))
+        {
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" });
+            <div class="control-group normal_text"> <h3 style="color:black;"><img src="~/Assets/img/login.jpg" alt="Logo" /> QUẢN LÝ KÝ TÚC XÁ</h3><p>(Nhân Viên Phòng)</p></div>
+            <div class="control-group">
+                <div class="controls">
+                    <div class="main_input_box">
+                        <span class="add-on"><i class="icon-user"></i></span>@Html.TextBoxFor(model => model.TAIKHOAN, new { @class = "form-control", @autofocus = "autofocus", placeholder = "Tài khoản phòng" })
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <div class="main_input_box">
+                        <span class="add-on"><i class="icon-lock"></i></span>@Html.PasswordFor(model => model.MATKHAU, new { @class = "form-control", placeholder = "Mật khẩu" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <span class="pull-left"><a href="~/CanBo/Login/Index" class="flip-link btn btn-inverse" id="to-recover">Đổi Quyền</a></span>
+                <span class="pull-right"><input type="submit" class="btn btn-success" value="Đăng Nhập" /></span>
+            </div>
+        }
+    </div>
+
+    <script src="~/Assets/js/jquery.min.js"></script>
+    <script src="~/Assets/js/maruti.login.js"></script>
+</body>
+
+</html>

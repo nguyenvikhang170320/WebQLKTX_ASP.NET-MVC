@@ -1,0 +1,325 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-success" id="btnAdd"><i class="fa fa-plus" aria-hidden="true"></i> Thêm đơn giá mới</button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-6 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm " id="phanTrang">
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã đơn giá
+                </th>
+                <th>
+                    Đơn giá điện (nghìn/kWh)
+                </th>
+                <th>
+                    Đơn giá nước (nghìn/m3)
+                </th>
+                <th>
+                    Trạng thái
+                </th>
+                <th>
+                    Ngày áp dụng
+                </th>
+                <th>
+                    Thao tác
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tblDsDongia">
+        </tbody>
+    </table>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalDongia">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="modalTitle"></div>
+                    <div class="panel-body">
+                        <input type="text" hidden id="idDongia" value="" />
+                        <div class="form-group">
+                            <label>Mã đơn giá(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="maDongia" placeholder="Mã Đơn Giá">
+                        </div>
+                        <div class="form-group">
+                            <label>Đơn giá điện(nghìn/kWh)(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="donGiadien" placeholder="Đơn Giá Điện">
+                        </div>
+                        <div class="form-group">
+                            <label>Đơn giá nước(nghìn/m3)(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="donGianuoc" placeholder="Đơn Giá Nước">
+                        </div>
+                        <div class="form-group">
+                            <label for="trangThai">Trạng Thái(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="trangThai" id="trangThai">
+                                <option value="True">Áp dụng</option>
+                                <option value="False" selected>Không áp dụng</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày áp dụng(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="ngayApdung" placeholder="mm/dd/yyyy">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSubmit">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        var tuKhoa = '';
+        var trang = 1;
+        $(document).ready(function () {
+            LoadDsDongia(tuKhoa, trang);
+        });
+
+        //sự kiện enter của text có id là txtSearch
+        $('#txtSearch').on('keypress', function (e) {
+            if (e.which == 13) {//nếu phím đc gõ là enter
+                $('#btnSearch').click();//thì gọi tới sự kiện click của button có id là btnSearch
+            }
+        });
+
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDsDongia(tuKhoa, trang);
+        });
+
+
+        //sự kiện click của button tìm kiếm
+        $('#btnSearch').click(function () {
+            trang = 1;
+            tuKhoa = $('#txtSearch').val();
+            LoadDsDongia(tuKhoa, trang);
+        });
+
+
+        //sự kiện của button sửa trên từng dòng
+        $(document).on('click', "button[name='update']", function () {
+            let idDongia = $(this).closest('tr').attr('id');
+            $.ajax({
+                url: '/Canbo/Dongia/CapNhat',
+                type: 'get',
+                data: {
+                    id: idDongia
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //nếu lấy thông tin đơn giá thành công
+                        $('#maDongia').val(data.DG.MADONGIA);
+                        $('#donGiadien').val(data.DG.DONGIADIEN);
+                        $('#donGianuoc').val(data.DG.DONGIANUOC);
+                        $('#trangThai').val(data.DG.TRANGTHAI);
+                        $('#ngayApdung').val(data.DG.NGAYAPDUNG);
+
+                        //gán giá trị cho text hidden có id là idDongia = id của tr được chọn
+                        $('#idDongia').val(idDongia);
+                        $('#modalTitle').text('Cập nhật thông tin đơn giá');
+                        //không cho chỉnh sửa các giá trị
+                        $('#maDongia').prop('readonly', true);
+                        $('#donGiadien').prop('readonly', true);
+                        $('#donGianuoc').prop('readonly', true);
+                        $('#trangThai').prop('readonly', false);
+                        $('#ngayApdung').prop('readonly', true);
+
+                        //ẩn button xác nhận
+                        $('#btnSubmit').show();
+
+                        $('#modalDongia').modal();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        //sự kiện click button xác nhận
+        $('#btnSubmit').click(function () {
+            let maDongia = $('#maDongia').val().trim();
+            let donGiadien = $('#donGiadien').val().trim();
+            let donGianuoc = $('#donGianuoc').val().trim();
+            let trangThai = $('#trangThai').val().trim();
+            let ngayApdung = $('#ngayApdung').val().trim();
+
+            //ràng buộc dữ liệu
+            if (maDongia.length == 0 || donGiadien.length == 0 || donGianuoc.length == 0) {
+                alert('Vui lòng nhập đầy đủ dữ liệu để tiếp tục');
+                return;
+            }
+            let idDongia = $('#idDongia').val().trim();
+
+            if (idDongia.length == 0) {//nếu là thêm mới đơn giá
+                //dùng ajax để thêm mới đơn giá
+                $.ajax({
+                    url: '/Canbo/Dongia/ThemMoi',
+                    type: 'post',
+                    data: {
+                        maDongia: maDongia,
+                        donGiadien: donGiadien,
+                        donGianuoc: donGianuoc,
+                        trangThai: trangThai,
+                        ngayApdung: ngayApdung
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsDongia(tuKhoa, trang);
+                            $('#maDongia').val('');
+                            $('#donGiadien').val('');
+                            $('#donGianuoc').val('');
+                            $('#trangThai').val('');
+                            $('#ngayApdung').val('');
+                        } else {
+                            alert(data.msg);
+                        }
+
+                    }
+                });
+            } else {//nếu là cập nhật 1 đơn giá đã có
+                //dùng ajax để cập nhật đơn giá
+
+                $.ajax({
+                    url: '/Canbo/Dongia/CapNhat',
+                    type: 'post',
+                    data: {
+                        id: idDongia,
+                        maDongia: maDongia,
+                        donGiadien: donGiadien,
+                        donGianuoc: donGianuoc,
+                        trangThai: trangThai,
+                        ngayApdung: ngayApdung
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            //cập nhật thành công
+                            alert(data.msg);
+                            $('#modalDongia').modal('hide');//đóng modal
+
+                            //load lại danh sách đơn giá sau khi cập nhật
+                            LoadDsDongia(tuKhoa, trang);
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+
+            }
+
+        });
+
+
+        //sự kiện click của button thêm mới đơn giá
+        $('#btnAdd').click(function () {
+            //set header của modal đơn giá
+            $('#modalTitle').text('Thêm mới đơn giá');
+
+            //set giá trị mặc định cho các thành phần của form
+            $('#idDongia').val('');
+            $('#maDongia').val('');
+            $('#donGiadien').val('');
+            $('#donGianuoc').val('');
+            $('#trangThai').val('');
+            $('#ngayApdung').val('');
+
+            //không cho chỉnh sửa các giá trị
+            $('#maDongia').prop('readonly', false);
+            $('#donGiadien').prop('readonly', false);
+            $('#donGianuoc').prop('readonly', false);
+            $('#trangThai').prop('readonly', false);
+            $('#ngayApdung').prop('readonly', false);
+
+            //ẩn button xác nhận
+            $('#btnSubmit').show();
+
+            //hiển thị modal lên
+            $('#modalDongia').modal();
+        })
+
+
+        //hàm load danh sách đơn giá đổ vào table
+        function LoadDsDongia(search, trang) {
+            //dùng ajax để load danh sách đơn giá trong controller Dongia
+            $.ajax({
+                url: '/Canbo/Dongia/DsDongia',
+                type: 'get',
+                data: {
+                    tuKhoa: search,
+                    trang: trang
+                },
+                success: function (data) {
+                    //console.log(data);
+                    if (data.code == 200) {
+                        $('#tblDsDongia').empty();
+                        $.each(data.dsDongia, function (k, v) {
+                            let tr = '<tr id="' + v.ID_DONGIA + '">'
+                            tr += '<td class = "col-sm-2">' + v.MADONGIA + '</td>';
+                            tr += '<td class = "col-sm-2">' + v.DONGIADIEN + '</td>';
+                            tr += '<td class = "col-sm-2">' + v.DONGIANUOC + '</td>';
+                            tr += '<td class = "col-sm-2">' + (v.TRANGTHAI == 1 ? 'Đang áp dụng' : 'Không áp dụng') + '</td>';
+                            tr += '<td class = "col-sm-2">' + v.NGAYAPDUNG + '</td>';
+                            tr += '<td class = "col-sm-2 text-right">';
+                            /*tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';*/
+                            tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
+                            /*tr += '<button class = "btn btn-xs btn-danger" name = "delete"><i class="fa fa-trash" aria-hidden="true"></i></button>';*/
+                            tr += '</td>';
+                            tr += '</tr>';
+                            $('#tblDsDongia').append(tr);
+                        });
+
+                        //phân trang
+
+                        $('#phanTrang').empty();
+                        for (i = 1; i <= data.soTrang; i++) {
+                            let li = '<li class="page-item" id="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+                            $('#phanTrang').append(li);
+                        }
+
+                        let li = $('#phanTrang li#' + trang + '');//tìm li có id = trang truyền vào
+                        //ví dụ trang = 2, sẽ tìm tới cái thằng li có id = 2
+                        //tìm ra đc thằng cần tìm thì add class active để đánh dấu trang hiện tại đang đc load
+                        $(li).addClass('active');
+
+                    }
+                }
+            });
+        }
+    </script>
+}

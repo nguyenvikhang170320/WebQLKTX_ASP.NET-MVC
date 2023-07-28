@@ -1,0 +1,59 @@
+﻿@model QLKyTucXa.Models.ViewModel_HD
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";
+}
+
+
+@section header{
+    Thêm hóa đơn mới
+}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"> <i class="icon-align-justify"></i> </span>
+                    <h5>Nhập Thông Tin Hóa Đơn</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="form-horizontal">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="control-group">
+                                <label class="control-label">Tháng(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.EditorFor(model => model.THANG, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.THANG, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Năm(<a class="text-error">*</a>):</label>
+                                <div class="controls">
+                                    @Html.EditorFor(model => model.NAM, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.NAM, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Thêm mới" class="btn btn-primary" />
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-actions">
+    <p class="btn btn-info">@Html.ActionLink("Quay lại trang danh sách", "Index")</p>
+</div>

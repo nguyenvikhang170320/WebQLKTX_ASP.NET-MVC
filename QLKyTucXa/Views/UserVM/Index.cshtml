@@ -1,0 +1,64 @@
+﻿@model IEnumerable<QLKyTucXa.Models.ViewModel_HD>
+@{
+    ViewBag.Title = "Xem hóa đơn";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+
+@section header{
+    Danh Sách Hóa Đơn
+}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-th"></i></span>
+                    <h5>Danh Sách Hóa Đơn</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    <table class="table table-bordered data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã phòng</th>
+                                <th>Dãy phòng</th>
+                                <th>Điện tháng trước</th>
+                                <th>Điện tháng này</th>
+                                <th>Chỉ số điện</th>
+                                <th>Nước tháng trước</th>
+                                <th>Nước tháng này</th>
+                                <th>Chỉ số nước</th>
+                                <th>Tiền điện</th>
+                                <th>Tiền nước</th>
+                                <th>Thành tiền</th>
+                                <th>Tháng lập</th>
+                                <th>Năm lập</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="gradeX">
+                                    <td>@item.MAPHONG</td>
+                                    <td>@item.MADAYPHONG</td>
+                                    <td>@item.DIEN_CHISODAU</td>
+                                    <td>@item.DIEN_CHISOCUOI</td>
+                                    <td>@item.CHISODIEN</td>
+                                    <td>@item.NUOC_CHISODAU</td>
+                                    <td>@item.NUOC_CHISOCUOI</td>
+                                    <td>@item.CHISONUOC</td>
+                                    <td>@item.THANHTIEN_DIEN</td>
+                                    <td>@item.THANHTIEN_NUOC</td>
+                                    <td>@item.THANHTIEN</td>
+                                    <td>@item.THANG</td>
+                                    <td>@item.NAM</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

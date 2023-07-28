@@ -1,0 +1,686 @@
+﻿
+@{
+    ViewBag.Title = "Cán bộ";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-success" id="btnAdd"><i class="fa fa-plus" aria-hidden="true"></i> Thêm mới cán bộ</button>
+        </div>
+        <div class="col-sm-3">
+            <button class="btn btn-primary" id="btnApply"><i class="fa fa-plus" aria-hidden="true"></i> Thêm quản trị viên</button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-3 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm" id="phanTrang"></ul>
+            </nav>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã cán bộ
+                </th>
+                <th>
+                    Tài khoản
+                </th>
+                <th>
+                    Họ & tên
+                </th>
+                <th>
+                    Điện thoại
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Thao tác
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tblDsCanbo"> </tbody>
+
+    </table>
+
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalCanbo">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="modalTitle"></div>
+                    <div class="panel-body">
+                        <input type="text" hidden id="idCanbo" value="" />
+                        <div class="form-group">
+                            <label>Mã cán bộ(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="maCB" placeholder="Mã cán bộ">
+                        </div>
+                        <div class="form-group">
+                            <label>Tài khoản(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="taiKhoan" placeholder="Tài khoản">
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu(<span class="text-danger">*</span>):</label>
+                            <input type="password" class="form-control" id="matKhau" placeholder="Mật khẩu">
+                        </div>
+                        <div class="form-group">
+                            <label>Họ & tên(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="tenCB" placeholder="Họ và tên">
+                        </div>
+                        <div class="form-group">
+                            <label>Giới tính(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="gioiTinh" id="gioiTinh">
+                                <option value="True" selected>Nam</option>
+                                <option value="False">Nữ</option>>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>CMND - CCCD(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="cmndCccd" placeholder="CMND - CCCD">
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="diaChi" placeholder="Địa chỉ">
+                        </div>
+                        <div class="form-group">
+                            <label>Email(<span class="text-danger">*</span>):</label>
+                            <input type="email" class="form-control" id="email" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="sdt" placeholder="Số điện thoại">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSubmit">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalApply">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Thêm mới quản trị viên</div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Mã cán bộ
+                                </th>
+                                <th>
+                                    Tài khoản
+                                </th>
+                                <th>
+                                    Họ & tên
+                                </th>
+                                <th>
+                                    Điện thoại
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Thao tác
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblDsApply">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnXN">Xác nhận</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalReset">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="modalTitle"></div>
+                <div class="panel-body">
+                    <input type="text" hidden id="idCanbo" value="" />
+                    <div class="form-group">
+                        <label>Mật khẩu hiện tại(<span class="text-danger">*</span>):</label>
+                        <input type="password" class="form-control" id="matKhau0" placeholder="Nhập mật khẩu hiện tại">
+                    </div>
+                    <div class="form-group">
+                        <label>Mật khẩu mới(<span class="text-danger">*</span>):</label>
+                        <input type="password" class="form-control" id="matKhau1" placeholder="Nhập mật khẩu mới">
+                    </div>
+                    <div class="form-group">
+                        <label>Nhập lại mật khẩu(<span class="text-danger">*</span>):</label>
+                        <input type="password" class="form-control" id="matKhau2" placeholder="Nhập lại mật khẩu mới">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnReset">Xác nhận</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        var tuKhoa = '';
+        var trang = 1;
+        $(document).ready(function () {
+            //console.log(LoadDsCanbo);
+            LoadDsCanbo(tuKhoa, trang);
+        });
+
+        //sự kiện enter của text có id là txtSearch
+        $('#txtSearch').on('keypress', function (e) {
+            if (e.which == 13) {//nếu phím đc gõ là enter
+                $('#btnSearch').click();//thì gọi tới sự kiện click của button có id là btnSearch
+            }
+        });
+
+        //sự kiện click của button tìm kiếm
+        $('#btnSearch').click(function () {
+            trang = 1;
+            tuKhoa = $('#txtSearch').val();
+            LoadDsCanbo(tuKhoa, trang);
+        });
+
+
+        //sự kiện click của button apply
+        $('#btnApply').click(function () {
+            $.ajax({
+                url: '/CanBo/Canbo/ListApply',
+                type: 'get',
+                //data: {
+                //    idMH: $('#selectMon option:selected').val()
+                //},
+                success: function (data) {
+                    console.log(data);
+                    $('#tblDsApply').empty();
+                    if (data.code == 200) {
+                        //let idx = 1;
+                        data.apply.forEach(cb => {
+                            let tr = '<tr id="' + cb.ID_CANBO + '">';
+                            //tr += '<td>' + (idx++) + '</td>';
+                            tr += '<td>' + cb.MACB + '</td>';
+                            tr += '<td>' + cb.TAIKHOAN + '</td>';
+                            tr += '<td>' + cb.TENCB + '</td>';
+                            tr += '<td>' + cb.SDT + '</td>';
+                            tr += '<td>' + cb.EMAIL + '</td>';
+                            tr += '<td><input type="checkbox" /></td>'
+                            tr += '</tr>';
+                            $('#tblDsApply').append(tr);
+                        })
+                    }
+                }
+            })
+            $('#modalApply').modal();
+        })
+
+        //sự kiện của button reset
+        $('#btnReset').click(function () {
+            $('#tblDsCanbo  > tr').each(function (index, tr) {
+                if ($(this).find('input').is(":checked")) {
+                    let id = $(this).attr('id');
+                    $.ajax({
+                        url: '/CanBo/Canbo/Reset',
+                        type: 'post',
+                        data: {
+                            id: id
+                        },
+                        success: function (data) {
+                            if (data.code == 200) {
+                                alert(data.msg);
+                                //console.log(data.msg);
+                            }
+                        },
+                        failed: function (err) {
+                            alert('Loi')
+                        }
+                    })
+
+                }
+            });
+            /*LoadDsCanbo();*/
+        });
+
+        //sự kiện của button xác nhận
+        $('#btnXN').click(function () {
+            $('#tblDsApply  > tr').each(function (index, tr) {
+                if ($(this).find('input').is(":checked")) {
+                    let id = $(this).attr('id');
+                    $.ajax({
+                        url: '/CanBo/Canbo/XacNhan',
+                        type: 'post',
+                        data: {
+                            id: id
+                        },
+                        success: function (data) {
+                            if (data.code == 200) {
+                                alert(data.msg);
+                                //console.log(data.msg);
+                            }
+                        },
+                        failed: function (err) {
+                            alert('Loi')
+                        }
+                    })
+
+                }
+            });
+            /*LoadDsCanbo();*/
+        });
+
+        //sự kiện của button reset
+        $('#btnReset').click(function () {
+            let idCanbo = $('#idCanbo').val().trim();
+            let matKhau0 = $('#matKhau0').val().trim();
+            let matKhau1 = $('#matKhau1').val().trim();
+            let matKhau2 = $('#matKhau2').val().trim();
+
+            //ràng buộc dữ liệu
+            if (matKhau0.length == 0
+                || matKhau1.length == 0
+                || matKhau2.length == 0) {
+                alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
+                return;
+            } else if (matKhau1 != matKhau2) {
+                alert('Nhập lại mật khẩu sai!');
+                return;
+            }
+
+            if (idCanbo.length == 0) {//trường hợp k có cán bộ
+                
+            } else {//trường hợp reset pass cán bộ
+                $.ajax({
+                    url: '/Canbo/Canbo/Reset',
+                    type: 'post',
+                    data: {
+                        id: idCanbo,
+                        matKhau0: matKhau0,
+                        matKhau1: matKhau1,
+                        matKhau2: matKhau2,
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsCanbo(tuKhoa, trang);
+                            $('#modalReset').modal('hide');
+                        } else if (data.code == 300) {
+                            alert(data.msg);
+                            //console.log(data.msg);
+                        } else if (data.code == 501) {
+                            alert(data.msg);
+                            //console.log(data.msg);
+                        } else if (data.code == 500) {
+                            alert(data.msg);
+                            //console.log(data.msg);
+                        }
+                    }
+                })
+            }
+        });
+
+        //sự kiện của button xác nhận
+        $('#btnSubmit').click(function () {
+            let idCanbo = $('#idCanbo').val().trim();
+            let maCB = $('#maCB').val().trim();
+            let taiKhoan = $('#taiKhoan').val().trim();
+            let matKhau = $('#matKhau').val().trim();
+            let tenCB = $('#tenCB').val().trim();
+            let gioiTinh = $('#gioiTinh').val().trim();
+            let cmndCccd = $('#cmndCccd').val().trim();
+            let diaChi = $('#diaChi').val().trim();
+            let email = $('#email').val().trim();
+            let sdt = $('#sdt').val().trim();
+            //let quanTri = $('#quanTri').val().trim();
+            //let quanTri = $('#quanTri').is(':checked');
+
+            //ràng buộc dữ liệu
+            if (maCB.length == 0
+                || taiKhoan.length == 0
+                || matKhau.length == 0
+                || tenCB.length == 0
+                || gioiTinh.length == 0
+                || cmndCccd.length == 0
+                || diaChi.length == 0
+                || email.length == 0
+                || sdt.length == 0) {
+                alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
+                return;
+            }
+
+            if (idCanbo.length == 0) {//trường hợp thêm mới cán bộ
+                $.ajax({
+                    url: '/Canbo/Canbo/ThemMoi',
+                    type: 'post',
+                    data: {
+                        maCB: maCB,
+                        taiKhoan: taiKhoan,
+                        matKhau: matKhau,
+                        tenCB: tenCB,
+                        gioiTinh: gioiTinh,
+                        cmndCccd: cmndCccd,
+                        diaChi: diaChi,
+                        email: email,
+                        sdt: sdt
+                        //quanTri: quanTri == true ? 1 : 0
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsCanbo(tuKhoa, trang);
+                            $('#maCB').val('');
+                            $('#taiKhoan').val('');
+                            $('#matKhau').val('');
+                            $('#tenCB').val('');
+                            $('#gioiTinh').val('');
+                            $('#cmndCccd').val('');
+                            $('#diaChi').val('');
+                            $('#email').val('');
+                            $('#sdt').val('');
+                            //$('#quanTri').prop('checked', false);
+                        } else if (data.code == 300) {
+                            alert(data.msg);
+                        } else if (data.code == 301) {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            } else {//trường hợp cập nhật cán bộ
+                $.ajax({
+                    url: '/Canbo/Canbo/CapNhat',
+                    type: 'post',
+                    data: {
+                        id: idCanbo,
+                        maCB: maCB,
+                        taiKhoan: taiKhoan,
+                        matKhau: matKhau,
+                        tenCB: tenCB,
+                        gioiTinh: gioiTinh,
+                        cmndCccd: cmndCccd,
+                        diaChi: diaChi,
+                        email: email,
+                        sdt: sdt
+                        //quanTri: quanTri == true ? 1 : 0
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsCanbo(tuKhoa, trang);
+                            $('#modalCanbo').modal('hide');
+                        }
+                    }
+                })
+            }
+        });
+
+
+        //sự kiện click của button thêm mới cán bộ
+        $('#btnAdd').click(function () {
+            //set header của modal cán bộ
+            $('#modalTitle').text('Thêm mới cán bộ');
+
+            //set giá trị mặc định cho các thành phần của form
+            $('#idCanbo').val('');
+            $('#maCB').val('');
+            $('#taiKhoan').val('');
+            $('#matKhau').val('');
+            $('#tenCB').val('');
+            $('#gioiTinh').val('');
+            $('#cmndCccd').val('');
+            $('#diaChi').val('');
+            $('#email').val('');
+            $('#sdt').val('');
+            //$('#quanTri').prop('checked', false);
+
+
+            $('#maCB').prop('readonly', false);
+            $('#taiKhoan').prop('readonly', false);
+            $('#matKhau').prop('readonly', false);
+            $('#tenCB').prop('readonly', false);
+            $('#gioiTinh').prop('readonly', false);
+            $('#cmndCccd').prop('readonly', false);
+            $('#diaChi').prop('readonly', false);
+            $('#email').prop('readonly', false);
+            $('#sdt').prop('readonly', false);
+
+            //ẩn button xác nhận
+            $('#btnSubmit').show();
+
+            //hiển thị modal lên
+            $('#modalCanbo').modal();
+        })
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDsCanbo(tuKhoa, trang);
+        });
+
+        //sự kiện xóa cán bộ
+        $(document).on('click', "button[name='delete']", function () {
+            let id = $(this).closest('tr').attr('id');
+            if (confirm("Bạn thực sự muốn xóa cán bộ này?")) {
+                //dùng ajax để xóa cán bộ đc chọn
+                $.ajax({
+                    url: '/Canbo/Canbo/Xoa',
+                    type: 'post',
+                    data: {
+                        id: id
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsCanbo(tuKhoa, trang);
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+        });
+
+        //sự kiện reset cán bộ
+        $(document).on('click', "button[name='reset']", function () {
+            let id = $(this).closest('tr').attr('id');
+            $('#idCanbo').val(id);//gán vào giá trị cho thằng textbox hidden có giá trị để đánh dấu là trường hợp cập nhật
+            getPass(id);
+            $('#modalReset').modal();
+
+            //set header của modal cán bộ
+            $('#modalTitle').text('Thay đổi mật khẩu');
+
+            $('#matKhau0').prop('readonly', false);
+            //$('#matKhau1').prop('readonly', false);
+            //$('#matKhau2').prop('readonly', false);
+
+            ////ẩn button xác nhận
+            $('#btnReset').show();
+        });
+
+
+        //sự kiện cập nhật cán bộ
+        $(document).on('click', "button[name='update']", function () {
+            let id = $(this).closest('tr').attr('id');
+            $('#idCanbo').val(id);//gán vào giá trị cho thằng textbox hidden có giá trị để đánh dấu là trường hợp cập nhật
+            getCanbo(id);
+            $('#modalCanbo').modal();
+
+            //set header của modal cán bộ
+            $('#modalTitle').text('Cập nhật thông tin của cán bộ');
+
+            $('#maCB').prop('readonly', true);
+            $('#taiKhoan').prop('readonly', true);
+            $('#matKhau').prop('readonly', true);
+            $('#tenCB').prop('readonly', true);
+            $('#gioiTinh').prop('readonly', true);
+            $('#cmndCccd').prop('readonly', true);
+            $('#diaChi').prop('readonly', false);
+            $('#email').prop('readonly', false);
+            $('#sdt').prop('readonly', false);
+
+            ////ẩn button xác nhận
+            $('#btnSubmit').show();
+        });
+
+        //sự kiện click button chi tiết của mỗi dòng table
+        $(document).on('click', "button[name='view']", function () {
+            let idCanbo = $(this).closest('tr').attr('id');
+            getCanbo(idCanbo);
+            $('#modalCanbo').modal();
+
+            //set header của modal cán bộ
+            $('#modalTitle').text('Thông tin chi tiết của cán bộ');
+
+            $('#maCB').prop('readonly', true);
+            $('#taiKhoan').prop('readonly', true);
+            $('#matKhau').prop('readonly', true);
+            $('#tenCB').prop('readonly', true);
+            $('#gioiTinh').prop('readonly', true);
+            $('#cmndCccd').prop('readonly', true);
+            $('#diaChi').prop('readonly', true);
+            $('#email').prop('readonly', true);
+            $('#sdt').prop('readonly', true);
+
+            ////ẩn button xác nhận
+            $('#btnSubmit').hide();
+        });
+
+        function getPass(idCanbo) {
+            $.ajax({
+                url: '/Canbo/Canbo/ChiTietPass',
+                type: 'get',
+                data: {
+                    id: idCanbo
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //console.log(data);
+                        //set giá trị mặc định cho các thành phần của form
+                        $('#matKhau').val(data.cb.MATKHAU);
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+        function getCanbo(idCanbo) {
+            $.ajax({
+                url: '/Canbo/Canbo/ChiTiet',
+                type: 'get',
+                data: {
+                    id: idCanbo
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //console.log(data);
+                        //set giá trị mặc định cho các thành phần của form
+                        $('#maCB').val(data.cb.MACB);
+                        $('#taiKhoan').val(data.cb.TAIKHOAN)
+                        $('#matKhau').val(data.cb.MATKHAU);
+                        $('#tenCB').val(data.cb.TENCB);
+                        $('#gioiTinh').val(data.cb.GIOITINH);
+                        $('#cmndCccd').val(data.cb.CMND_CCCD);
+                        $('#diaChi').val(data.cb.DIACHI);
+                        $('#email').val(data.cb.EMAIL);
+                        $('#sdt').val(data.cb.SDT);
+                        //$('#quanTri').prop('checked', data.cb.QUANTRI == 1?true:false);
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+        //hàm load danh sách cán bộ đổ vào table
+        function LoadDsCanbo(search, trang) {
+            //dùng ajax để load danh sách cán bộ trong controller canbo
+            $.ajax({
+                url: '/Canbo/Canbo/DsCanbo',
+                type: 'get',
+                data: {
+                    tuKhoa: search,
+                    trang: trang
+                },
+                success: function (data) {
+                    //console.log(data);
+                    if (data.code == 200) {
+                        if (data.qt) {
+                            $('#btnApply').show();
+                        } else {
+                            $('#btnApply').hide();
+                        }
+                        $('#tblDsCanbo').empty();
+                        //console.log(data);
+                        $.each(data.dscb, function (k, v) { //dscb bien trong canbo controller
+                            let tr = '<tr id="' + v.ID_CANBO + '">'
+                            tr += '<td class = "col-sm-2">' + v.MACB + '</td>';
+                            tr += '<td class = "col-sm-2">' + v.TAIKHOAN + '</td>';
+                            tr += '<td class = "col-sm-2">' + v.TENCB + '</td>';
+                            tr += '<td class = "col-sm-2">' + (v.SDT == null ? '' : v.SDT) + '</td>';
+                            tr += '<td class = "col-sm-2">' + (v.EMAIL == null ? '' : v.EMAIL) + '</td>';
+                            tr += '<td class = "col-sm-2 text-right">';
+                            tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';
+                            if (data.qt) {
+                                tr += '<button class = "btn btn-xs btn-info" name = "reset"><i class="fa fa-key" aria-hidden="true"></i></button>&nbsp;';
+                                tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
+                                tr += '<button class = "btn btn-xs btn-danger" name = "delete"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                            } else if (data.idcb == v.ID_CANBO) {
+                                tr += '<button class = "btn btn-xs btn-info" name = "reset"><i class="fa fa-key" aria-hidden="true"></i></button>&nbsp;';
+                                tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
+                                tr += '<button class = "btn btn-xs btn-danger" name = "delete"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                            }
+                            tr += '</td>';
+                            tr += '</tr>';
+                            $('#tblDsCanbo').append(tr);
+                        });
+
+                        //phân trang
+
+                        $('#phanTrang').empty();
+                        for (i = 1; i <= data.soTrang; i++) {
+                            let li = '<li class="page-item" id="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+                            $('#phanTrang').append(li);
+                        }
+
+                        let li = $('#phanTrang li#' + trang + '');//tìm li có id = trang truyền vào
+                        //ví dụ trang = 2, sẽ tìm tới cái thằng li có id = 2
+                        //tìm ra đc thằng cần tìm thì add class active để đánh dấu trang hiện tại đang đc load
+                        $(li).addClass('active');
+
+                    }
+                }
+            });
+        }
+    </script>
+}

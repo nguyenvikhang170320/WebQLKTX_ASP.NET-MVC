@@ -1,0 +1,149 @@
+﻿@model Model.EF.HOTRO
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+
+@section header{
+    Thêm Phiếu Hỗ Trợ Mới
+}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"> <i class="icon-align-justify"></i> </span>
+                    <h5>Nhập Thông Tin Phiếu Hỗ Trợ</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="form-horizontal">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @*<div class="control-group">
+                                    <label class="control-label">Dãy Phòng:</label>
+                                    <div class="controls">
+                                        @Html.DropDownList("ID_PHONG", null, htmlAttributes: new { @class = "span11" })
+                                        @Html.ValidationMessageFor(model => model.ID_PHONG, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>*@
+
+                            @*<div class="control-group">
+                                    <label class="control-label">Mã Phiếu:</label>
+                                    <div class="controls">
+                                        <div class="input-prepend">
+                                            <span class="add-on">#</span>
+                                            @Html.EditorFor(model => model.MAPHIEU, new { htmlAttributes = new { @class = "span11" } })
+                                            @Html.ValidationMessageFor(model => model.MAPHIEU, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                            <div class="control-group">
+                                <label class="control-label">Nội Dung<a class="text-error">*</a>:</label>
+                                <div class="controls">
+                                    @Html.TextAreaFor(model => model.NOIDUNG, new { htmlAttributes = new { @class = "span11" } })
+                                    @Html.ValidationMessageFor(model => model.NOIDUNG, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            @*<div class="control-group">
+                                    <label class="control-label">Ngày Gửi:</label>
+                                    <div class="controls">
+                                        <div data-date="06-06-2022" class="input-append date datepicker">
+                                            <div class="input-prepend">
+                                                <span class="add-on"><i class="icon-th"></i></span>
+                                                @Html.EditorFor(model => model.NGAYGUI, new { htmlAttributes = new { @class = "span11" } })
+                                                @Html.ValidationMessageFor(model => model.NGAYGUI, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                            @*<div class="control-group">
+                                    <label class="control-label">Trạng Thái:</label>
+                                    <div class="controls">
+                                        <div class="input-prepend">
+                                            <span class="add-on">#</span>
+                                            @Html.EditorFor(model => model.TRANGTHAI, new { htmlAttributes = new { @class = "span11" } })
+                                            @Html.ValidationMessageFor(model => model.TRANGTHAI, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                            <div class="form-actions">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Thêm mới" class="btn btn-primary" />
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-actions">
+    <p class="btn btn-info">@Html.ActionLink("Quay lại trang danh sách", "Index")</p>
+</div>
+
+
+@*<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>HOTRO</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.ID_PHONG, "ID_PHONG", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ID_PHONG", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ID_PHONG, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NOIDUNG, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NOIDUNG, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NOIDUNG, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NGAYGUI, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NGAYGUI, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NGAYGUI, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TRANGTHAI, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TRANGTHAI, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TRANGTHAI, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>*@

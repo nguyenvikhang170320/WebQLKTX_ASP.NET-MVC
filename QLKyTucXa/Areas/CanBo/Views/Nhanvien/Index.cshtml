@@ -1,0 +1,434 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-success" id="btnAdd"><i class="fa fa-plus" aria-hidden="true"></i> Thêm mới nhân viên</button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-6 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm" id="phanTrang"></ul>
+            </nav>
+        </div>
+    </div>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã nhân viên
+                </th>
+                <th>
+                    Họ & tên
+                </th>
+                <th>
+                    Ngày sinh
+                </th>
+                <th>
+                    Điện thoại
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Địa chỉ
+                </th>
+                <th>
+                    Thao tác
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tblDsNhanvien">
+        </tbody>
+
+    </table>
+
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalNhanvien">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="modalTitle"></div>
+                    <div class="panel-body">
+                        <input type="text" hidden id="idNhanvien" value="" />
+                        <div class="form-group">
+                            <label>Mã nhân viên(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="maNV" placeholder="Mã nhân viên">
+                        </div>
+                        <div class="form-group">
+                            <label>Họ & tên(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="tenNV" placeholder="Họ và tên">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày sinh(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="ngaySinh" placeholder="tháng/ngày/năm">
+                        </div>
+                        <div class="form-group">
+                            <label>Giới tính(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="gioiTinh" id="gioiTinh">
+                                <option value="True">Nam</option>
+                                <option value="False">Nữ</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>CMND - CCCD(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="cmndCccd" placeholder="CMND - CCCD">
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="sdt" placeholder="Số điện thoại">
+                        </div>
+                        <div class="form-group">
+                            <label>Email(<span class="text-danger">*</span>):</label>
+                            <input type="email" class="form-control" id="email" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="diaChi" placeholder="Địa chỉ">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSubmit">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        var tuKhoa = '';
+        var trang = 1;
+
+        $(document).ready(function () {
+            LoadDsNhanvien(tuKhoa, trang);
+        });
+
+        //sự kiện enter của text có id là txtSearch
+        $('#txtSearch').on('keypress', function (e) {
+            if (e.which == 13) {//nếu phím đc gõ là enter
+                $('#btnSearch').click();//thì gọi tới sự kiện click của button có id là btnSearch
+            }
+        });
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDsNhanvien(tuKhoa, trang)
+        });
+
+        //sự kiện click của button tìm kiếm
+        $('#btnSearch').click(function () {
+            trang = 1;
+            tuKhoa = $('#txtSearch').val();
+            LoadDsNhanvien(tuKhoa, trang);
+        });
+
+
+
+        //sự kiện của button xác nhận
+        $('#btnSubmit').click(function () {
+            let idNhanvien = $('#idNhanvien').val().trim();
+
+            let maNV = $('#maNV').val().trim();
+            let tenNV = $('#tenNV').val().trim();
+            let ngaySinh = $('#ngaySinh').val().trim();
+            let gioiTinh = $('#gioiTinh').val().trim();
+            let cmndCccd = $('#cmndCccd').val().trim();
+            let sdt = $('#sdt').val().trim();
+            let email = $('#email').val().trim();
+            let diaChi = $('#diaChi').val().trim();
+
+            //ràng buộc dữ liệu
+            if (maNV.length == 0
+                || tenNV.length == 0
+                || ngaySinh.length == 0
+                || gioiTinh.length == 0
+                || cmndCccd.length == 0
+                || sdt.length == 0
+                || email.length == 0
+                || diaChi.length == 0) {
+                alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
+                return;
+            }
+
+            if (idNhanvien.length == 0) {//trường hợp thêm mới nhân viên
+                $.ajax({
+                    url: '/Canbo/Nhanvien/ThemMoi',
+                    type: 'post',
+                    data: {
+                        maNV: maNV,
+                        tenNV: tenNV,
+                        ngaySinh: ngaySinh,
+                        gioiTinh: gioiTinh,
+                        cmndCccd: cmndCccd,
+                        sdt: sdt,
+                        emai: email,
+                        diaChi: diaChi
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsNhanvien(tuKhoa, trang);
+                            $('#maNV').val('');
+                            $('#tenNV').val('');
+                            $('#ngaySinh').val('');
+                            $('#gioiTinh').val('');
+                            $('#cmndCccd').val('');
+                            $('#sdt').val('');
+                            $('#email').val('');
+                            $('#diaChi').val('');
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            } else {//trường hợp cập nhật nhân viên
+                $.ajax({
+                    url: '/Canbo/Nhanvien/CapNhat',
+                    type: 'post',
+                    data: {
+                        id: idNhanvien,
+                        maNV: maNV,
+                        tenNV: tenNV,
+                        ngaySinh: ngaySinh,
+                        gioiTinh: gioiTinh,
+                        cmndCccd: cmndCccd,
+                        sdt: sdt,
+                        email: email,
+                        diaChi: diaChi
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            $('#modalNhanvien').modal('hide');
+                            LoadDsNhanvien(tuKhoa, trang);
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+        });
+
+
+        //sự kiện click của button thêm mới nhân viên
+        $('#btnAdd').click(function () {
+            //set header của modal nhân viên
+            $('#modalTitle').text('Thêm mới nhân viên');
+
+            //set giá trị mặc định cho các thành phần của form
+            $('#idNhanvien').val('');
+            $('#maNV').val('');
+            $('#tenNV').val('');
+            $('#ngaySinh').val('');
+            $('#gioiTinh').val('');
+            $('#cmndCccd').val('');
+            $('#sdt').val('');
+            $('#email').val('');
+            $('#diaChi').val('');
+
+
+            $('#maNV').prop('readonly', false);
+            $('#tenNV').prop('readonly', false);
+            $('#ngaySinh').prop('readonly', false);
+            $('#gioiTinh').prop('readonly', false);
+            $('#cmndCccd').prop('readonly', false);
+            $('#sdt').prop('readonly', false);
+            $('#email').prop('readonly', false);
+            $('#diaChi').prop('readonly', false);
+
+            //ẩn button xác nhận
+            $('#btnSubmit').show();
+
+            //hiển thị modal lên
+            $('#modalNhanvien').modal();
+        })
+
+
+        //sự kiện xóa nhân viên
+        $(document).on('click', "button[name='delete']", function () {
+            let idNhanvien = $(this).closest('tr').attr('id');
+            if (confirm("Bạn thực sự muốn xóa nhân viên này?")) {
+                //dùng ajax để xóa nhân viên đc chọn
+                $.ajax({
+                    url: '/Canbo/Nhanvien/Xoa',
+                    type: 'post',
+                    data: {
+                        id: idNhanvien
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsNhanvien(tuKhoa, trang);
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+        });
+
+
+        //sự kiện click button cập nhật của mỗi dòng table
+        $(document).on('click', "button[name='update']", function () {
+            let id = $(this).closest('tr').attr('id');
+
+            $('#idNhanvien').val(id);//gán vào giá trị cho textbox hidden có giá trị để đánh dấu là trường hợp cập nhật
+            getNhanvien(id);
+            $('#modalNhanvien').modal();
+
+            //set header của modal lớp
+            $('#modalTitle').text('Cập nhật thông tin của nhân viên');
+
+            $('#maNV').prop('readonly', true);
+            $('#tenNV').prop('readonly', false);
+            $('#ngaySinh').prop('readonly', false);
+            $('#gioiTinh').prop('readonly', false);
+            $('#cmndCccd').prop('readonly', false);
+            $('#sdt').prop('readonly', false);
+            $('#email').prop('readonly', false);
+            $('#diaChi').prop('readonly', false);
+
+            ////ẩn button xác nhận
+            $('#btnSubmit').show();
+        });
+
+        //sự kiện click button chi tiết của mỗi dòng table
+        $(document).on('click', "button[name='view']", function () {
+            let idNhanvien = $(this).closest('tr').attr('id');
+            $('#modalNhanvien').modal();
+            getNhanvien(idNhanvien);
+            //set header của modal nhân viên
+            $('#modalTitle').text('Thông tin chi tiết của nhân viên');
+
+            $('#maNV').prop('readonly', true);
+            $('#tenNV').prop('readonly', true);
+            $('#ngaySinh').prop('readonly', true);
+            $('#gioiTinh').prop('readonly', true);
+            $('#cmndCccd').prop('readonly', true);
+            $('#sdt').prop('readonly', true);
+            $('#email').prop('readonly', true);
+            $('#diaChi').prop('readonly', true);
+
+            $('#btnSubmit').hide();
+        });
+
+        function getNhanvien(idNhanvien) {
+            $.ajax({
+                url: '/Canbo/Nhanvien/ChiTiet',
+                type: 'get',
+                data: {
+                    id: idNhanvien
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //set giá trị mặc định cho các thành phần của form
+                        $('#maNV').val(data.nv.MANV);
+                        $('#tenNV').val(data.nv.TENNV);
+                        $('#ngaySinh').val(data.nv.NGAYSINH);
+                        $('#gioiTinh').val(data.nv.GIOITINH);
+                        $('#cmndCccd').val(data.nv.CMND_CCCD);
+                        $('#sdt').val(data.nv.SDT);
+                        $('#email').val(data.nv.EMAIL);
+                        $('#diaChi').val(data.nv.DIACHI);
+
+                        //$('.datepicker').val(ConvertJsonDateString(data.hs.NgaySinh));
+
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+        //hàm load danh sách lớp đổ vào table
+        function LoadDsNhanvien(search, trang) {
+            //dùng ajax để load danh sách lớp trong controller lop
+            $.ajax({
+                url: '/Canbo/Nhanvien/DsNhanvien',
+                type: 'get',
+                data: {
+                    tuKhoa: search,
+                    trang: trang
+                },
+                success: function (data) {
+                    //console.log(data);
+                    if (data.code == 200) {
+                        $('#tblDsNhanvien').empty();
+                        $.each(data.dsNhanvien, function (k, v) {
+                            let tr = '<tr id="' + v.ID_NHANVIEN + '">'
+                            tr += '<td class = "col-sm-1">' + v.MANV + '</td>';
+                            tr += '<td class = "col-sm-2">' + v.TENNV + '</td>';
+                            tr += '<td class = "col-sm-1">' + v.NGAYSINH + '</td>';//ConvertJsonDateString(v.NGAYSINH)
+                            tr += '<td class = "col-sm-2">' + (v.SDT == null ? '' : v.SDT) + '</td>';
+                            tr += '<td class = "col-sm-2">' + (v.EMAIL == null ? '' : v.EMAIL) + '</td>';
+                            tr += '<td class = "col-sm-2">' + (v.DIACHI == null ? '' : v.DIACHI) + '</td>';
+                            tr += '<td class = "col-sm-2 text-right">';
+                            tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';
+                            tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
+                            tr += '<button class = "btn btn-xs btn-danger" name = "delete"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                            tr += '</td>';
+                            tr += '</tr>';
+                            $('#tblDsNhanvien').append(tr);
+                        });
+
+                        //phân trang
+
+                        $('#phanTrang').empty();
+                        for (i = 1; i <= data.soTrang; i++) {
+                            let li = '<li class="page-item" id="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+                            $('#phanTrang').append(li);
+                        }
+
+                        let li = $('#phanTrang li#' + trang + '');//tìm li có id = trang truyền vào
+                        //ví dụ trang = 2, sẽ tìm tới cái thằng li có id = 2
+                        //tìm ra đc thằng cần tìm thì add class active để đánh dấu trang hiện tại đang đc load
+                        $(li).addClass('active');
+
+                    }
+                }
+            });
+        }
+
+
+        function ConvertJsonDateString(jsonDate) {
+            var shortDate = null;
+            if (jsonDate) {
+                var regex = /-?\d+/;
+                var matches = regex.exec(jsonDate);
+                var dt = new Date(parseInt(matches[0]));
+                var month = dt.getMonth() + 1;
+                var monthString = month > 9 ? month : '0' + month;
+                var day = dt.getDate();
+                var dayString = day > 9 ? day : '0' + day;
+                var year = dt.getFullYear();
+                shortDate = monthString + '/' + dayString + '/' + year;
+            }
+            return shortDate;
+        };
+    </script>
+}

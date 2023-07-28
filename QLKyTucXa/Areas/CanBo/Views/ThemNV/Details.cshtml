@@ -1,0 +1,42 @@
+﻿@model Model.EF.LICH_SU
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";}
+
+<h2>Details</h2>
+
+<div>
+    <h4>LICH_SU</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NHANVIEN.MANV)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NHANVIEN.MANV)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PHONG.MAPHONG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PHONG.MAPHONG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NGAYCHUYEN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NGAYCHUYEN)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
