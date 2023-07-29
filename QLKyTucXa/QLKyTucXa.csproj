@@ -122,9 +122,7 @@
     <Compile Include="Areas\CanBo\Controllers\BaseController.cs" />
     <Compile Include="Areas\CanBo\Controllers\CanboController.cs" />
     <Compile Include="Areas\CanBo\Controllers\DayphongController.cs" />
-    <Compile Include="Areas\CanBo\Controllers\DIENNUOCsController.cs" />
     <Compile Include="Areas\CanBo\Controllers\DongiaController.cs" />
-    <Compile Include="Areas\CanBo\Controllers\HOADON_DIENNUOCController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HOADON_PHONGController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HomeController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HOTROesController.cs" />
@@ -141,12 +139,13 @@
     <Compile Include="Common\Encryptor.cs" />
     <Compile Include="Common\PhongLogin.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CANBOesController.cs" />
     <Compile Include="Controllers\CONGTODIENNUOCsController.cs" />
     <Compile Include="Controllers\HD_PhongController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HOTROesController.cs" />
     <Compile Include="Controllers\LoginPhongController.cs" />
-    <Compile Include="Controllers\UserVMController.cs" />
+    <Compile Include="Controllers\HD_DienNuocController.cs" />
     <Compile Include="Controllers\XemNVController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -329,29 +328,14 @@
     <Content Include="Areas\CanBo\Views\HOTROes\Details.cshtml" />
     <Content Include="Areas\CanBo\Views\HOTROes\Edit.cshtml" />
     <Content Include="Areas\CanBo\Views\HOTROes\Index.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Create.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Delete.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Details.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Edit.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Index.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Delete.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Details.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Edit.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Index.cshtml" />
     <Content Include="Areas\CanBo\Views\AdminVM\Create.cshtml" />
     <Content Include="Areas\CanBo\Views\AdminVM\Index.cshtml" />
     <Content Include="Areas\CanBo\Views\AdminVM\CreateDIEN_NUOC.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_PHONG\TaoHoaDonPhong.cshtml" />
     <Content Include="Areas\CanBo\Views\ThemNV\Create.cshtml" />
     <Content Include="Areas\CanBo\Views\ThemNV\Delete.cshtml" />
     <Content Include="Areas\CanBo\Views\ThemNV\Details.cshtml" />
     <Content Include="Areas\CanBo\Views\ThemNV\Edit.cshtml" />
     <Content Include="Areas\CanBo\Views\ThemNV\Index.cshtml" />
-    <Content Include="Areas\CanBo\Views\DIENNUOCs\Create.cshtml" />
-    <Content Include="Areas\CanBo\Views\DIENNUOCs\Delete.cshtml" />
-    <Content Include="Areas\CanBo\Views\DIENNUOCs\Details.cshtml" />
-    <Content Include="Areas\CanBo\Views\DIENNUOCs\Edit.cshtml" />
-    <Content Include="Areas\CanBo\Views\DIENNUOCs\Index.cshtml" />
     <Content Include="Public\Public\webfonts\fa-brands-400.ttf" />
     <Content Include="Public\Public\webfonts\fa-brands-400.woff2" />
     <Content Include="Public\Public\webfonts\fa-regular-400.ttf" />
@@ -368,6 +352,12 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Areas\CanBo\Views\HD_Phong\XemHoaDon.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Create.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Delete.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Details.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Edit.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -404,11 +394,16 @@
     <Content Include="Views\HOTROes\Details.cshtml" />
     <Content Include="Views\HOTROes\Edit.cshtml" />
     <Content Include="Views\HOTROes\Index.cshtml" />
-    <Content Include="Views\UserVM\CreateDIEN_NUOC.cshtml" />
-    <Content Include="Views\UserVM\Index.cshtml" />
+    <Content Include="Views\HD_DienNuoc\CreateDIEN_NUOC.cshtml" />
+    <Content Include="Views\HD_DienNuoc\Index.cshtml" />
     <Content Include="Views\HD_Phong\XemHoaDon.cshtml" />
     <Content Include="Views\XemNV\Index.cshtml" />
     <Content Include="Views\CONGTODIENNUOCs\Index.cshtml" />
+    <Content Include="Views\CANBOes\Create.cshtml" />
+    <Content Include="Views\CANBOes\Delete.cshtml" />
+    <Content Include="Views\CANBOes\Details.cshtml" />
+    <Content Include="Views\CANBOes\Edit.cshtml" />
+    <Content Include="Views\CANBOes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

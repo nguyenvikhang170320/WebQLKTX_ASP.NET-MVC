@@ -8,36 +8,33 @@ using System.Web.Mvc;
 
 namespace QLKyTucXa.Controllers
 {
-    public class UserVMController : BaseController
+    public class HD_DienNuocController : BaseController
     {
         private QLKyTucXaDbContext db = new QLKyTucXaDbContext();
         // GET: UserVM
         public ActionResult Index()
         {
             int uid = Convert.ToInt32(Session["idphong"]);
-            var join = (from phong in db.PHONGs
+            var hienthi = (from phong in db.PHONGs
                         join hoadon in db.HOADON_DIENNUOC on phong.ID_PHONG equals hoadon.ID_PHONG into tableA
                         from tA in tableA.DefaultIfEmpty()
-
                         join dien in db.CONGTODIENs on phong.ID_PHONG equals dien.ID_PHONG into tableB
-                        from tB in tableB.Where(x=>x.THANG == tA.THANG && x.NAM == tA.NAM).DefaultIfEmpty()
-
+                        from tB in tableB.Where(x => x.THANG == tA.THANG && x.NAM == tA.NAM).DefaultIfEmpty()
                         join nuoc in db.CONGTONUOCs on phong.ID_PHONG equals nuoc.ID_PHONG into tableC
-                        from tC in tableC.Where(x=>x.THANG == tA.THANG && x.NAM == tA.NAM).DefaultIfEmpty()
-
+                        from tC in tableC.Where(x => x.THANG == tA.THANG && x.NAM == tA.NAM).DefaultIfEmpty()
                         join dongia in db.DONGIAs on tA.ID_DONGIA equals dongia.ID_DONGIA into tableD
                         from tD in tableD.DefaultIfEmpty()
-
                         where (phong.TRANGTHAI == true && phong.ID_PHONG == uid)
+                        orderby (tA.THANG) descending
                         select new ViewModel_HD()
                         {
                             MAPHONG = phong.MAPHONG,
                             MADAYPHONG = phong.DAYPHONG.MADAYPHONG,
-                            DIEN_CHISODAU = tB.CHISODAU,
-                            DIEN_CHISOCUOI = tB.CHISOCUOI,
+                            DIENCHISODAU = tB.CHISODAU,
+                            DIENCHISOCUOI = tB.CHISOCUOI,
                             CHISODIEN = tB.CHISOCUOI - tB.CHISODAU,
-                            NUOC_CHISODAU = tC.CHISODAU,
-                            NUOC_CHISOCUOI = tC.CHISOCUOI,
+                            NUOCCHISODAU = tC.CHISODAU,
+                            NUOCCHISOCUOI = tC.CHISOCUOI,
                             CHISONUOC = tC.CHISOCUOI - tC.CHISODAU,
                             THANHTIEN_DIEN = (tB.CHISOCUOI - tB.CHISODAU) * tD.DONGIADIEN,
                             THANHTIEN_NUOC = (tC.CHISOCUOI - tC.CHISODAU) * tD.DONGIANUOC,
@@ -46,10 +43,9 @@ namespace QLKyTucXa.Controllers
                             NAM = tA.NAM
 
                         }).ToList().Distinct();
-            return View(join);
+            return View(hienthi);
 
         }
-
         [HttpGet]
         public ActionResult CreateDIEN_NUOC()
         {
@@ -67,8 +63,8 @@ namespace QLKyTucXa.Controllers
                 THANG = model.THANG,
                 NAM = model.NAM,
                 TRANGTHAI = 1,
-                CHISODAU = model.NUOC_CHISODAU,
-                CHISOCUOI = model.NUOC_CHISOCUOI
+                CHISODAU = model.NUOCCHISODAU,
+                CHISOCUOI = model.NUOCCHISOCUOI
             };
             db.CONGTONUOCs.Add(nuoc);
 
@@ -79,8 +75,8 @@ namespace QLKyTucXa.Controllers
                 THANG = model.THANG,
                 NAM = model.NAM,
                 TRANGTHAI = 1,
-                CHISODAU = model.DIEN_CHISODAU,
-                CHISOCUOI = model.DIEN_CHISOCUOI
+                CHISODAU = model.DIENCHISODAU,
+                CHISOCUOI = model.DIENCHISOCUOI
             };
             db.CONGTODIENs.Add(dien);
             db.SaveChanges();

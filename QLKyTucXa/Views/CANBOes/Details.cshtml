@@ -1,0 +1,107 @@
+﻿@model Model.EF.CANBO
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CANBO</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MACB)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MACB)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TAIKHOAN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TAIKHOAN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MATKHAU)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MATKHAU)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TENCB)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TENCB)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GIOITINH)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GIOITINH)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CMND_CCCD)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CMND_CCCD)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DIACHI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DIACHI)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EMAIL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EMAIL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SDT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SDT)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QUANTRI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QUANTRI)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DAXOA)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DAXOA)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID_CANBO }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

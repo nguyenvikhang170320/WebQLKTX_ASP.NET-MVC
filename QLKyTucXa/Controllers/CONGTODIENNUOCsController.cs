@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Model.EF;
+using QLKyTucXa.Models;
 
 namespace QLKyTucXa.Controllers
 {
@@ -15,55 +16,41 @@ namespace QLKyTucXa.Controllers
         private QLKyTucXaDbContext db = new QLKyTucXaDbContext();
 
         // GET: CONGTODIENNUOCs
+           
         public ActionResult Index()
         {
-
-            return View();
-        }
-
-        [HttpGet]
-        public JsonResult DSDN2()
-        {
             int uid = Convert.ToInt32(Session["idphong"]);
-            try
-            {
-                var join2 = (from phong in db.PHONGs
-                             join dien in db.CONGTODIENs on phong.ID_PHONG equals dien.ID_PHONG into dien1
-                             from d in dien1.DefaultIfEmpty()
-                             join nuoc in db.CONGTONUOCs on new { d.ID_PHONG } equals new { nuoc.ID_PHONG } into nuoc1
-                             from n in nuoc1.DefaultIfEmpty()
-                             where (phong.ID_PHONG == uid && phong.TRANGTHAI == true)
-                             orderby (d.THANG) descending
-                             orderby (d.NAM) descending
+            var join1 = (from phong in db.PHONGs
+                         join dien in db.CONGTODIENs on phong.ID_PHONG equals dien.ID_PHONG into dien1
+                         from d in dien1.DefaultIfEmpty()
+                         join nuoc in db.CONGTONUOCs on new { phong.ID_PHONG } equals new { nuoc.ID_PHONG } into nuoc1
+                         from n in nuoc1.DefaultIfEmpty().Where(n => n.CHISODAU != d.CHISODAU)
+                         where (n.ID_PHONG == d.ID_PHONG)
+                         orderby (d.THANG) descending
+                         orderby (d.NAM) descending
 
-                             select new Areas.CanBo.Models.DienNuoc
-                             {
-                                 ID_DIEN = d.ID_DIEN,
-                                 ID_NUOC = n.ID_NUOC,
-                                 MAPHONG = phong.MAPHONG,
-                                 MADAYPHONG = phong.DAYPHONG.MADAYPHONG,
-                                 DIENCHISODAU = d.CHISODAU,
-                                 DIENCHISOCUOI = d.CHISOCUOI,
-                                 NUOCCHISODAU = n.CHISODAU,
-                                 NUOCCHISOCUOI = n.CHISOCUOI,
-                                 THANGDIEN = d.THANG,
-                                 NAMDIEN = d.NAM,
-                                 THANGNUOC = n.THANG,
-                                 NAMNUOC = n.NAM,
-                                 TRANGTHAIDIEN = d.TRANGTHAI,
-                                 TRANGTHAINUOC = n.TRANGTHAI
+                         select new ViewModel_HD()
+                         {
+                             ID_DIEN = d.ID_DIEN,
+                             ID_NUOC = n.ID_NUOC,
 
-                             });
-                return Json(new { code = 200, join2 = join2, msg = "Load danh sách điện nước thành công!" }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                return Json(new
-                {
-                    code = 500,
-                    msg = "Load danh sách điện nước thất bại:" + e.Message
-                }, JsonRequestBehavior.AllowGet);
-            }
+                             MAPHONG = phong.MAPHONG,
+                             MADAYPHONG = phong.DAYPHONG.MADAYPHONG,
+                             DIENCHISODAU = d.CHISODAU,
+                             DIENCHISOCUOI = d.CHISOCUOI,
+                             CHISODIEN = (d.CHISOCUOI - d.CHISODAU),
+                             NUOCCHISODAU = n.CHISODAU,
+                             NUOCCHISOCUOI = n.CHISOCUOI,
+                             CHISONUOC = (n.CHISOCUOI - n.CHISODAU),
+                             THANGDIEN = d.THANG,
+                             NAMDIEN = d.NAM,
+                             THANGNUOC = n.THANG,
+                             NAMNUOC = n.NAM,
+                             TRANGTHAIDIEN = d.TRANGTHAI,
+                             TRANGTHAINUOC = n.TRANGTHAI
+
+                         }).ToList().Distinct();
+            return View(join1);
         }
         [HttpPost]
         public JsonResult Add2(int? dienchisodau, int? dienchisocuoi, int? nuocthangnay, int? nuocthangsau, int? thangdien, int? namdien, int? thangnuoc, int? namnuoc, int? trangthaidien, int? trangthainuoc)

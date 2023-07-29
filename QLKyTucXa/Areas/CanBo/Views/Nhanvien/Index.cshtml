@@ -43,6 +43,9 @@
                     Ngày sinh
                 </th>
                 <th>
+                    Giới tính
+                </th>
+                <th>
                     Điện thoại
                 </th>
                 <th>
@@ -79,7 +82,7 @@
                         </div>
                         <div class="form-group">
                             <label>Ngày sinh(<span class="text-danger">*</span>):</label>
-                            <input type="text" class="form-control" id="ngaySinh" placeholder="tháng/ngày/năm">
+                            <input type="text" class="form-control" id="ngaySinh" placeholder="năm/tháng/ngày">
                         </div>
                         <div class="form-group">
                             <label>Giới tính(<span class="text-danger">*</span>):</label>
@@ -103,6 +106,13 @@
                         <div class="form-group">
                             <label>Địa chỉ(<span class="text-danger">*</span>):</label>
                             <input type="text" class="form-control" id="diaChi" placeholder="Địa chỉ">
+                        </div>
+                        <div class="form-group">
+                            <label>Lựa chọn(Chọn 1 = True : Đã xóa, chọn 0= False : Chưa xóa)(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="daXoa" id="daXoa">
+                                <option value="True">1</option>
+                                <option value="False">0</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -151,8 +161,7 @@
 
         //sự kiện của button xác nhận
         $('#btnSubmit').click(function () {
-            let idNhanvien = $('#idNhanvien').val().trim();
-
+            
             let maNV = $('#maNV').val().trim();
             let tenNV = $('#tenNV').val().trim();
             let ngaySinh = $('#ngaySinh').val().trim();
@@ -161,6 +170,7 @@
             let sdt = $('#sdt').val().trim();
             let email = $('#email').val().trim();
             let diaChi = $('#diaChi').val().trim();
+            let daXoa = $('#daXoa').val().trim();
 
             //ràng buộc dữ liệu
             if (maNV.length == 0
@@ -174,7 +184,7 @@
                 alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
                 return;
             }
-
+            let idNhanvien = $('#idNhanvien').val().trim();
             if (idNhanvien.length == 0) {//trường hợp thêm mới nhân viên
                 $.ajax({
                     url: '/Canbo/Nhanvien/ThemMoi',
@@ -186,8 +196,9 @@
                         gioiTinh: gioiTinh,
                         cmndCccd: cmndCccd,
                         sdt: sdt,
-                        emai: email,
-                        diaChi: diaChi
+                        email: email,
+                        diaChi: diaChi,
+                        daXoa: daXoa
                     },
                     success: function (data) {
                         if (data.code == 200) {
@@ -201,6 +212,7 @@
                             $('#sdt').val('');
                             $('#email').val('');
                             $('#diaChi').val('');
+                            $('#daXoa').val('');
                         } else {
                             alert(data.msg);
                         }
@@ -219,7 +231,9 @@
                         cmndCccd: cmndCccd,
                         sdt: sdt,
                         email: email,
-                        diaChi: diaChi
+                        diaChi: diaChi,
+                        daXoa: daXoa
+
                     },
                     success: function (data) {
                         if (data.code == 200) {
@@ -250,6 +264,7 @@
             $('#sdt').val('');
             $('#email').val('');
             $('#diaChi').val('');
+            $('#daXoa').val('');
 
 
             $('#maNV').prop('readonly', false);
@@ -260,13 +275,14 @@
             $('#sdt').prop('readonly', false);
             $('#email').prop('readonly', false);
             $('#diaChi').prop('readonly', false);
+            $('#daXoa').prop('readonly', false);
 
             //ẩn button xác nhận
             $('#btnSubmit').show();
 
             //hiển thị modal lên
             $('#modalNhanvien').modal();
-        })
+        });
 
 
         //sự kiện xóa nhân viên
@@ -312,6 +328,7 @@
             $('#sdt').prop('readonly', false);
             $('#email').prop('readonly', false);
             $('#diaChi').prop('readonly', false);
+            $('#daXoa').prop('readonly', false);
 
             ////ẩn button xác nhận
             $('#btnSubmit').show();
@@ -320,8 +337,9 @@
         //sự kiện click button chi tiết của mỗi dòng table
         $(document).on('click', "button[name='view']", function () {
             let idNhanvien = $(this).closest('tr').attr('id');
-            $('#modalNhanvien').modal();
+
             getNhanvien(idNhanvien);
+            $('#modalNhanvien').modal();
             //set header của modal nhân viên
             $('#modalTitle').text('Thông tin chi tiết của nhân viên');
 
@@ -333,6 +351,7 @@
             $('#sdt').prop('readonly', true);
             $('#email').prop('readonly', true);
             $('#diaChi').prop('readonly', true);
+            $('#daXoa').prop('readonly', true);
 
             $('#btnSubmit').hide();
         });
@@ -342,7 +361,7 @@
                 url: '/Canbo/Nhanvien/ChiTiet',
                 type: 'get',
                 data: {
-                    id: idNhanvien
+                    id: idNhanvien,
                 },
                 success: function (data) {
                     if (data.code == 200) {
@@ -355,6 +374,7 @@
                         $('#sdt').val(data.nv.SDT);
                         $('#email').val(data.nv.EMAIL);
                         $('#diaChi').val(data.nv.DIACHI);
+                        $('#daXoa').val(data.nv.DAXOA);
 
                         //$('.datepicker').val(ConvertJsonDateString(data.hs.NgaySinh));
 
@@ -384,6 +404,7 @@
                             tr += '<td class = "col-sm-1">' + v.MANV + '</td>';
                             tr += '<td class = "col-sm-2">' + v.TENNV + '</td>';
                             tr += '<td class = "col-sm-1">' + v.NGAYSINH + '</td>';//ConvertJsonDateString(v.NGAYSINH)
+                            tr += '<td class = "col-sm-1">' + (v.GIOITINH == true ? 'Nam': 'Nữ') + '</td>';
                             tr += '<td class = "col-sm-2">' + (v.SDT == null ? '' : v.SDT) + '</td>';
                             tr += '<td class = "col-sm-2">' + (v.EMAIL == null ? '' : v.EMAIL) + '</td>';
                             tr += '<td class = "col-sm-2">' + (v.DIACHI == null ? '' : v.DIACHI) + '</td>';
@@ -426,7 +447,7 @@
                 var day = dt.getDate();
                 var dayString = day > 9 ? day : '0' + day;
                 var year = dt.getFullYear();
-                shortDate = monthString + '/' + dayString + '/' + year;
+                shortDate = year + '/' + monthString + '/' + dayString;
             }
             return shortDate;
         };

@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Model.EF.CANBO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MACB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TAIKHOAN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MATKHAU)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TENCB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GIOITINH)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CMND_CCCD)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DIACHI)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EMAIL)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SDT)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QUANTRI)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DAXOA)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MACB)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TAIKHOAN)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MATKHAU)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TENCB)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GIOITINH)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CMND_CCCD)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DIACHI)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EMAIL)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SDT)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QUANTRI)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DAXOA)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID_CANBO }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID_CANBO }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID_CANBO })
+        </td>
+    </tr>
+}
+
+</table>

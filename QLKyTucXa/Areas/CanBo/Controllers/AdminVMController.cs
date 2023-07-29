@@ -62,15 +62,15 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                         from d1 in dongia1.DefaultIfEmpty()
 
                         where (phong.ID_PHONG == h.ID_PHONG)
-                        select new ViewModel_HD()
+                        select new Areas.CanBo.Models.ViewModel_HDĐN_HDP()
                         {
                             MAPHONG = phong.MAPHONG,
                             MADAYPHONG = phong.DAYPHONG.MADAYPHONG,
-                            DIEN_CHISODAU = d.CHISODAU,
-                            DIEN_CHISOCUOI = d.CHISOCUOI,
+                            DIENCHISODAU = d.CHISODAU,
+                            DIENCHISOCUOI = d.CHISOCUOI,
                             CHISODIEN = d.CHISOCUOI - d.CHISODAU,
-                            NUOC_CHISODAU = n.CHISODAU,
-                            NUOC_CHISOCUOI = n.CHISOCUOI,
+                            NUOCCHISODAU = n.CHISODAU,
+                            NUOCCHISOCUOI = n.CHISOCUOI,
                             CHISONUOC = n.CHISOCUOI - n.CHISODAU,
                             THANHTIEN_DIEN = (d.CHISOCUOI - d.CHISODAU) * d1.DONGIADIEN,
                             THANHTIEN_NUOC = (n.CHISOCUOI - n.CHISODAU) * d1.DONGIANUOC,
@@ -99,8 +99,8 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 THANG = model.THANG,
                 NAM = model.NAM,
                 TRANGTHAI = 1,
-                CHISODAU = model.NUOC_CHISODAU,
-                CHISOCUOI = model.NUOC_CHISOCUOI
+                CHISODAU = model.NUOCCHISODAU,
+                CHISOCUOI = model.NUOCCHISOCUOI
             };
             db.CONGTONUOCs.Add(nuoc);
 
@@ -111,8 +111,8 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 THANG = model.THANG,
                 NAM = model.NAM,
                 TRANGTHAI = 1,
-                CHISODAU = model.DIEN_CHISODAU,
-                CHISOCUOI = model.DIEN_CHISOCUOI
+                CHISODAU = model.DIENCHISODAU,
+                CHISOCUOI = model.DIENCHISOCUOI
             };
             db.CONGTODIENs.Add(dien);
             db.SaveChanges();

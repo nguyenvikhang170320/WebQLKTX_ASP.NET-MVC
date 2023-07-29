@@ -105,7 +105,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult ThemMoi(string maNV, string tenNV, string cmndCccd, bool gioiTinh, DateTime ngaySinh, string sdt, string email, string diaChi)
+        public JsonResult ThemMoi(string maNV, string tenNV, string cmndCccd, bool gioiTinh, DateTime ngaySinh, string sdt, string email, string diaChi, bool daXoa)
         {
             try
             {
@@ -124,6 +124,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 nv.SDT = sdt;
                 nv.EMAIL = email;
                 nv.DIACHI = diaChi;
+                nv.DAXOA = daXoa;
                 //nv.NGAYSINH = DateTime.Parse(ngaySinh);
 
                 db.NHANVIENs.Add(nv);
@@ -153,6 +154,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 nv.SDT = sdt;
                 nv.EMAIL = email;
                 nv.DIACHI = diaChi;
+                
                 //nv.NGAYSINH = DateTime.Parse(ngaySinh);
 
                 db.SaveChanges();

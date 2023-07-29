@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<QLKyTucXa.Models.ViewModel_HD>
 @{
-    ViewBag.Title = "Xem hóa đơn";
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 
 
 @section header{
-    Danh Sách Hóa Đơn
+    Danh Sách Hóa Đơn điện nước
 }
 
 <div class="container-fluid">
@@ -15,8 +15,9 @@
             <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon"><i class="icon-th"></i></span>
-                    <h5>Danh Sách Hóa Đơn</h5>
+                    <h5>Danh Sách Hóa Đơn Điện Nước</h5>
                 </div>
+               
                 <div class="widget-content nopadding">
                     <table class="table table-bordered data-table">
                         <thead>
@@ -34,6 +35,7 @@
                                 <th>Thành tiền</th>
                                 <th>Tháng lập</th>
                                 <th>Năm lập</th>
+                                <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,17 +44,20 @@
                                 <tr class="gradeX">
                                     <td>@item.MAPHONG</td>
                                     <td>@item.MADAYPHONG</td>
-                                    <td>@item.DIEN_CHISODAU</td>
-                                    <td>@item.DIEN_CHISOCUOI</td>
+                                    <td>@item.DIENCHISODAU</td>
+                                    <td>@item.DIENCHISOCUOI</td>
                                     <td>@item.CHISODIEN</td>
-                                    <td>@item.NUOC_CHISODAU</td>
-                                    <td>@item.NUOC_CHISOCUOI</td>
+                                    <td>@item.NUOCCHISODAU</td>
+                                    <td>@item.NUOCCHISOCUOI</td>
                                     <td>@item.CHISONUOC</td>
                                     <td>@item.THANHTIEN_DIEN</td>
                                     <td>@item.THANHTIEN_NUOC</td>
                                     <td>@item.THANHTIEN</td>
                                     <td>@item.THANG</td>
                                     <td>@item.NAM</td>
+                                    <td>
+                                         @Html.ActionLink("Edit", "CreateDIEN_NUOC", new { id = item.ID_HOADONDIENNUOC }) |
+                                    </td>
                                 </tr>
                             }
                         </tbody>
