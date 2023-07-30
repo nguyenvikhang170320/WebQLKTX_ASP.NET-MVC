@@ -60,10 +60,6 @@
                     <div class="panel-body">
                         <input type="text" hidden id="idHDDN" value="" />
                         <div class="form-group">
-                            <label>Mã dãy phòng(<span class="text-danger">*</span>):</label>
-                            <select id="selectDayphong" class="form-control"></select>
-                        </div>
-                        <div class="form-group">
                             <label>Mã phòng(<span class="text-danger">*</span>):</label>
                             <select id="selectPhong" class="form-control"></select>
                         </div>
@@ -137,8 +133,6 @@
             $('#nam').val('');
             $('#trangthai').val('');
 
-
-            $('#selectDayphong').prop('readonly', false);
             $('#selectPhong').prop('readonly', false);
             $('#thang').prop('readonly', false);
             $('#nam').prop('readonly', false);
@@ -164,7 +158,6 @@
                         //console.log(data);
                         //set giá trị mặc định cho các thành phần của form
 
-                        $('#selectDayphong').val(data.p.ID_DAY);
                         $('#selectPhong').val(data.p.ID_PHONG);
                         $('#nam').val(data.tA.NAM);
                         $('#ky').val(data.tA.KY);

@@ -77,26 +77,8 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 return Json(new { code = 500, msg = "Lấy danh sách phòng thất bại: " + ex.Message, JsonRequestBehavior.AllowGet });
             }
         }
-        //dãy phòng
-        [HttpGet]
-        public JsonResult ListDayphong()
-        {
-            try
-            {
-                var dsdp = (from dp in db.DAYPHONGs.Where(x => x.DAXOA != true)
-                            select new
-                            {
-                                ID_DAY = dp.ID_DAY,
-                                MADAYPHONG = dp.MADAYPHONG
-                            }).ToList();
-                return Json(new { code = 200, dsdp = dsdp, msg = "Lấy danh sách dãy phòng thành công!" }, JsonRequestBehavior.AllowGet);
-
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 500, msg = "Lấy danh sách dãy phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
+     
+        
 
         // phòng
         [HttpGet]

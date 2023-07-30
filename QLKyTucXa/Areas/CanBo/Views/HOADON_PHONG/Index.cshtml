@@ -134,31 +134,31 @@
             $('#modalHDPhong').modal();
         });
 
-        //get dữ liệu
-        function GetDuLieu(idHDPhong) {
-            $.ajax({
-                url: '/CanBo/Phong/ChiTiet',
-                type: 'get',
-                data: {
-                    id: idHDPhong
-                },
-                success: function (data) {
-                    if (data.code == 200) {
-                        //console.log(data);
-                        //set giá trị mặc định cho các thành phần của form
+        ////get dữ liệu
+        //function GetDuLieu(idHDPhong) {
+        //    $.ajax({
+        //        url: '/CanBo/Phong/ChiTiet',
+        //        type: 'get',
+        //        data: {
+        //            id: idHDPhong
+        //        },
+        //        success: function (data) {
+        //            if (data.code == 200) {
+        //                //console.log(data);
+        //                //set giá trị mặc định cho các thành phần của form
 
-                        $('#selectPhong').val(data.p.ID_PHONG);
-                        $('#nam').val(data.tA.NAM);
-                        $('#ky').val(data.tA.KY);
-                        $('#trangthai').val(data.tA.TRANGTHAI);
+        //                $('#selectPhong').val(data.p.ID_PHONG);
+        //                $('#nam').val(data.tA.NAM);
+        //                $('#ky').val(data.tA.KY);
+        //                $('#trangthai').val(data.tA.TRANGTHAI);
 
                         
-                    } else {
-                        alert(data.msg);
-                    }
-                }
-            });
-        }
+        //            } else {
+        //                alert(data.msg);
+        //            }
+        //        }
+        //    });
+        //}
       
 
         //sự kiện của button xác nhận
