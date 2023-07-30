@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 using Model.EF;
+using QLKyTucXa.Areas.CanBo.Models;
+using QLKyTucXa.Common;
 using QLKyTucXa.Models;
 
 namespace QLKyTucXa.Areas.CanBo.Controllers
@@ -27,14 +30,17 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         {
             try
             {
+
                 var dshdp = (
-                  from phong in db.PHONGs
+                  from  phong in db.PHONGs.Where(x=>x.TRANGTHAI == true && x.DAXOA != true)
                   join hoadon_phong in db.HOADON_PHONG on phong.ID_PHONG equals hoadon_phong.ID_PHONG into tableA
                   from tA in tableA.DefaultIfEmpty()
-                  where (phong.TRANGTHAI == true)
-                  orderby (tA.NAM) descending
-                  select new ViewModel_HD()
+                  where(phong.MAPHONG.ToLower().Contains(tuKhoa))
+                  || phong.DAYPHONG.MADAYPHONG.ToLower().Contains(tuKhoa)
+                  select new ViewModel_HDĐN_HDP
                   {
+                      ID_PHONG = phong.ID_PHONG,
+                      //ID_HOADONPHONG = tA.ID_HOADONPHONG,
                       MAPHONG = phong.MAPHONG,
                       MADAYPHONG = phong.DAYPHONG.MADAYPHONG,
                       NAM = tA.NAM,
@@ -63,112 +69,62 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             }
         }
 
-        // GET: CanBo/HOADON_PHONG/Details/5
-        public ActionResult Details(int? id)
+       
+
+        // phòng
+        [HttpGet]
+        public JsonResult ListPhong()
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var dsp = (from p in db.PHONGs.Where(x => x.DAXOA != true)
+                            select new
+                            {
+                                ID_PHONG = p.ID_PHONG,
+                                MAPHONG = p.MAPHONG
+
+                            }).ToList();
+                return Json(new { code = 200, dsp = dsp, msg = "Lấy danh sách dãy phòng thành công!" }, JsonRequestBehavior.AllowGet);
+
             }
-            HOADON_PHONG hOADON_PHONG = db.HOADON_PHONG.Find(id);
-            if (hOADON_PHONG == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                return Json(new { code = 500, msg = "Lấy danh sách dãy phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
-            return View(hOADON_PHONG);
         }
 
-        // GET: CanBo/HOADON_PHONG/Create
-        public ActionResult Create()
-        {
-            ViewBag.ID_PHONG = new SelectList(db.PHONGs, "ID_PHONG", "MAPHONG");
-            return View();
-        }
-
-        // POST: CanBo/HOADON_PHONG/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID_HOADONPHONG,ID_PHONG,NAM,KY,TRANGTHAI")] HOADON_PHONG hOADON_PHONG)
+        public JsonResult ThemMoi(int idP, int? nam, int? ky, int? trangthai)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.HOADON_PHONG.Add(hOADON_PHONG);
+                //var chk = db.HOADON_PHONG.Where(x => x.NAM == nam).Count() == 0;
+              
+                
+                //if (!chk)
+                //{
+                //    return Json(new { code = 300, msg = "Năm này đã tồn tại trong hệ thống!" }, JsonRequestBehavior.AllowGet);
+                //}
+               
+                var p = new HOADON_PHONG();
+                p.ID_PHONG = idP;
+               
+                p.NAM = nam;
+                p.KY = ky;
+                p.TRANGTHAI = trangthai;
+               
+                db.HOADON_PHONG.Add(p);
                 db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                return Json(new { code = 200, msg = "Thêm mới hóa đơn phòng thành công" }, JsonRequestBehavior.AllowGet);
 
-            ViewBag.ID_PHONG = new SelectList(db.PHONGs, "ID_PHONG", "MAPHONG", hOADON_PHONG.ID_PHONG);
-            return View(hOADON_PHONG);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = "Thêm mới hóa đơn phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
-        // GET: CanBo/HOADON_PHONG/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            HOADON_PHONG hOADON_PHONG = db.HOADON_PHONG.Find(id);
-            if (hOADON_PHONG == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.ID_PHONG = new SelectList(db.PHONGs, "ID_PHONG", "MAPHONG", hOADON_PHONG.ID_PHONG);
-            return View(hOADON_PHONG);
-        }
 
-        // POST: CanBo/HOADON_PHONG/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID_HOADONPHONG,ID_PHONG,NAM,KY,TRANGTHAI")] HOADON_PHONG hOADON_PHONG)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(hOADON_PHONG).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.ID_PHONG = new SelectList(db.PHONGs, "ID_PHONG", "MAPHONG", hOADON_PHONG.ID_PHONG);
-            return View(hOADON_PHONG);
-        }
-
-        // GET: CanBo/HOADON_PHONG/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            HOADON_PHONG hOADON_PHONG = db.HOADON_PHONG.Find(id);
-            if (hOADON_PHONG == null)
-            {
-                return HttpNotFound();
-            }
-            return View(hOADON_PHONG);
-        }
-
-        // POST: CanBo/HOADON_PHONG/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            HOADON_PHONG hOADON_PHONG = db.HOADON_PHONG.Find(id);
-            db.HOADON_PHONG.Remove(hOADON_PHONG);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        
     }
 }

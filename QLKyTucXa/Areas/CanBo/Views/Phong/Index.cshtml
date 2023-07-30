@@ -48,6 +48,9 @@
                     Đơn giá
                 </th>
                 <th>
+                    Mô tả khác
+                </th>
+                <th>
                     Tình trạng
                 </th>
                 <th>
@@ -91,6 +94,10 @@
                             <input type="number" class="form-control" id="donGia" placeholder="Đơn giá">
                         </div>
                         <div class="form-group">
+                            <label>Mô tả khác(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="motaKhac" placeholder="Mô tả">
+                        </div>
+                        <div class="form-group">
                             <label>Tình trạng(<span class="text-danger">*</span>):</label>
                             <select class="form-control" name="tinhTrang" id="tinhTrang">
                                 <option value="0" selected>Còn trống</option>
@@ -98,10 +105,14 @@
                                 <option value="2">2 người ở</option>
                                 <option value="3">3 người ở</option>
                                 <option value="4">4 người ở</option>
+                                <option value="5">5 người ở</option>
+                                <option value="6">6 người ở</option>
+                                <option value="7">7 người ở</option>
+                                <option value="8">8 người ở</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Trạng thái(<span class="text-danger">*</span>):</label>
+                            <label>Trạng thái(Chọn trạng thái OK là phòng có người ở)(<span class="text-danger">*</span>):</label>
                             <select class="form-control" name="trangThai" id="trangThai">
                                 <option value="True" selected>OK</option>
                                 <option value="False">NO</option>
@@ -195,7 +206,7 @@
             }
 
             if (idPhong.length == 0) {//trường hợp k có phòng
-
+                alert('Không có phòng nào ở đây!!')
             } else {//trường hợp reset pass phòng
                 $.ajax({
                     url: '/Canbo/Phong/Reset',
@@ -265,6 +276,7 @@
             $('#matKhau').val('');
             $('#soLuongnv').val('');
             $('#donGia').val('');
+            $('#motaKhac').val('');
             $('#tinhTrang').val('');
             $('#trangThai').val('');
 
@@ -274,6 +286,7 @@
             $('#matKhau').prop('readonly', false);
             $('#soLuongnv').prop('readonly', false);
             $('#donGia').prop('readonly', false);
+            $('#motaKhac').prop('readonly', false);
             $('#tinhTrang').prop('readonly', false);
             $('#trangThai').prop('readonly', false);
 
@@ -282,7 +295,7 @@
 
             //hiển thị modal lên
             $('#modalPhong').modal();
-        })
+        });
 
         function GetDetail(idPhong) {
             $.ajax({
@@ -301,6 +314,7 @@
                         $('#matKhau').val(data.p.MATKHAU);
                         $('#soLuongnv').val(data.p.SOLUONGNV);
                         $('#donGia').val(data.p.DONGIA);
+                        $('#motaKhac').val(data.p.MOTAKHAC);
                         $('#tinhTrang').val(data.p.TINHTRANG);
                         $('#trangThai').val(data.p.TRANGTHAI);
 
@@ -326,6 +340,7 @@
             $('#matKhau').prop('readonly', true);
             $('#soLuongnv').prop('readonly', false);
             $('#donGia').prop('readonly', false);
+            $('#motaKhac').prop('readonly', false);
             $('#tinhTrang').prop('readonly', false);
             $('#trangThai').prop('readonly', false);
 
@@ -348,6 +363,7 @@
             $('#matKhau').prop('readonly', true);
             $('#soLuongnv').prop('readonly', true);
             $('#donGia').prop('readonly', true);
+            $('#motaKhac').prop('readonly', true);
             $('#tinhTrang').prop('readonly', true);
             $('#trangThai').prop('readonly', true);
 
@@ -387,6 +403,7 @@
             let matKhau = $('#matKhau').val().trim();
             let soLuongnv = $('#soLuongnv').val().trim();
             let donGia = $('#donGia').val().trim();
+            let motaKhac = $('#motaKhac').val().trim();
             let tinhTrang = $('#tinhTrang').val().trim();
             let trangThai = $('#trangThai option:selected').val().trim();
 
@@ -413,6 +430,7 @@
                         matKhau: matKhau,
                         soLuongnv: soLuongnv,
                         donGia: donGia,
+                        motaKhac: motaKhac,
                         tinhTrang: tinhTrang,
                         trangThai: trangThai
                     },
@@ -426,6 +444,7 @@
                             $('#matKhau').prop('readonly', false);
                             $('#soLuongnv').prop('readonly', false);
                             $('#donGia').prop('readonly', false);
+                            $('#motaKhac').prop('readonly', false);
                             $('#tinhTrang').prop('readonly', false);
                             $('#trangThai').prop('readonly', false);
 
@@ -434,6 +453,7 @@
                             $('#matKhau').val('');
                             $('#soLuongnv').val('');
                             $('#donGia').val('');
+                            $('#motaKhac').val('');
                             $('#tinhTrang').val('');
                             $('#trangThai').val('');
                         } else if (data.code == 300) {
@@ -458,6 +478,7 @@
                         matKhau: matKhau,
                         soLuongnv: soLuongnv,
                         donGia: donGia,
+                        motaKhac: motaKhac,
                         tinhTrang: tinhTrang,
                         trangThai: trangThai
                     },
@@ -501,6 +522,7 @@
                             tr += '<td>' + p.TAIKHOAN + '</td>';
                             tr += '<td>' + p.SOLUONGNV + '</td>';
                             tr += '<td>' + p.DONGIA + '</td>';
+                            tr += '<td>' + p.MOTAKHAC + '</td>';
                             tr += '<td>' + (p.TINHTRANG == 0 ? 'Còn trống' : 'Có người ở') + '</td>';
 
                             tr += '<td class = "text-right text-nowrap">';

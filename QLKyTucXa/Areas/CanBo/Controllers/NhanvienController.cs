@@ -16,33 +16,33 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             return View();
         }
 
-        [HttpGet]
-        public JsonResult AllNhanvien()
-        {
-            try
-            {
-                var dsNhanvien = (from nv in db.NHANVIENs.Where(x => x.DAXOA != true)
-                                  select new
-                                  {
-                                      ID_NHANVIEN = nv.ID_NHANVIEN,
-                                      MANV = nv.MANV,
-                                      TENNV = nv.TENNV,
-                                      //NGAYSINH = nv.NGAYSINH,
-                                      //GIOITINH = nv.GIOITINH,
-                                      CMND_CCCD = nv.CMND_CCCD,
-                                      SDT = nv.SDT,
-                                      EMAIL = nv.EMAIL,
-                                      DIACHI = nv.DIACHI,
+        //[HttpGet]
+        //public JsonResult AllNhanvien()
+        //{
+        //    try
+        //    {
+        //        var dsNhanvien = (from nv in db.NHANVIENs.Where(x => x.DAXOA != true)
+        //                          select new
+        //                          {
+        //                              ID_NHANVIEN = nv.ID_NHANVIEN,
+        //                              MANV = nv.MANV,
+        //                              TENNV = nv.TENNV,
+        //                              NGAYSINH = nv.NGAYSINH,
+        //                              GIOITINH = nv.GIOITINH,
+        //                              CMND_CCCD = nv.CMND_CCCD,
+        //                              SDT = nv.SDT,
+        //                              EMAIL = nv.EMAIL,
+        //                              DIACHI = nv.DIACHI,
 
-                                  }).ToList();
+        //                          }).ToList();
 
-                return Json(new { code = 200, dsNhanvien = dsNhanvien }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 500, msg = "Lấy danh sách nhân viên thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //        return Json(new { code = 200, dsNhanvien = dsNhanvien }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { code = 500, msg = "Lấy danh sách nhân viên thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
         [HttpGet]
         public JsonResult DsNhanvien(string tuKhoa, int trang)
@@ -63,7 +63,8 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                                       ID_NHANVIEN = nv.ID_NHANVIEN,
                                       MANV = nv.MANV,
                                       TENNV = nv.TENNV,
-                                      NGAYSINH = nv.NGAYSINH.Day + "/" + nv.NGAYSINH.Month + "/" + nv.NGAYSINH.Year, //nv.NGAYSINH
+                                      //nv.NGAYSINH : do kiểu datetime nên để như này
+                                      NGAYSINH = nv.NGAYSINH.Day + "/" + nv.NGAYSINH.Month + "/" + nv.NGAYSINH.Year, 
                                       GIOITINH = nv.GIOITINH,
                                       CMND_CCCD = nv.CMND_CCCD,
                                       SDT = nv.SDT,
@@ -124,7 +125,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 nv.SDT = sdt;
                 nv.EMAIL = email;
                 nv.DIACHI = diaChi;
-                nv.DAXOA = daXoa;
+                nv.DAXOA = false;
                 //nv.NGAYSINH = DateTime.Parse(ngaySinh);
 
                 db.NHANVIENs.Add(nv);
@@ -154,6 +155,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 nv.SDT = sdt;
                 nv.EMAIL = email;
                 nv.DIACHI = diaChi;
+                nv.DAXOA = false;
                 
                 //nv.NGAYSINH = DateTime.Parse(ngaySinh);
 

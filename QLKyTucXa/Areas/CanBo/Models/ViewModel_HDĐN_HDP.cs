@@ -8,6 +8,11 @@ namespace QLKyTucXa.Areas.CanBo.Models
 {
     public class ViewModel_HDĐN_HDP
     {
+        public int ID_PHONG { get; set; }
+        public int ID_HOADONDIENNUOC { get; set; }
+        public int ID_HOADONPHONG { get; set; }
+        public int ID_DIEN { get; set; }
+        public int ID_NUOC { get; set; }
         // Not used
         public string MAPHONG { get; set; }
         public string MADAYPHONG { get; set; }
@@ -22,10 +27,7 @@ namespace QLKyTucXa.Areas.CanBo.Models
 
         public double DONGIA_DIEN { get; set; }
         public double DONGIA_NUOC { get; set; }
-        public int ID_PHONG { get; set; }
-        public int ID_HOADONDIENNUOC { get; set; }
-        public int ID_DIEN { get; set; }
-        public int ID_NUOC { get; set; }
+       
         public int? NUOCCHISODAU { get; set; }
         public int? NUOCCHISOCUOI { get; set; }
         public int? DIENCHISODAU { get; set; }

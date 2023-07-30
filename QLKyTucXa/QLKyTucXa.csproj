@@ -123,6 +123,7 @@
     <Compile Include="Areas\CanBo\Controllers\CanboController.cs" />
     <Compile Include="Areas\CanBo\Controllers\DayphongController.cs" />
     <Compile Include="Areas\CanBo\Controllers\DongiaController.cs" />
+    <Compile Include="Areas\CanBo\Controllers\HOADON_DIENNUOCController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HOADON_PHONGController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HomeController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HOTROesController.cs" />
@@ -353,11 +354,12 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\CanBo\Views\HD_Phong\XemHoaDon.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Create.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Delete.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Details.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_PHONG\Edit.cshtml" />
     <Content Include="Areas\CanBo\Views\HOADON_PHONG\Index.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Create.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Delete.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Details.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Edit.cshtml" />
+    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -396,7 +398,7 @@
     <Content Include="Views\HOTROes\Index.cshtml" />
     <Content Include="Views\HD_DienNuoc\CreateDIEN_NUOC.cshtml" />
     <Content Include="Views\HD_DienNuoc\Index.cshtml" />
-    <Content Include="Views\HD_Phong\XemHoaDon.cshtml" />
+    <Content Include="Views\HD_Phong\Index.cshtml" />
     <Content Include="Views\XemNV\Index.cshtml" />
     <Content Include="Views\CONGTODIENNUOCs\Index.cshtml" />
     <Content Include="Views\CANBOes\Create.cshtml" />

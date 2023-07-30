@@ -107,13 +107,6 @@
                             <label>Địa chỉ(<span class="text-danger">*</span>):</label>
                             <input type="text" class="form-control" id="diaChi" placeholder="Địa chỉ">
                         </div>
-                        <div class="form-group">
-                            <label>Lựa chọn(Chọn 1 = True : Đã xóa, chọn 0= False : Chưa xóa)(<span class="text-danger">*</span>):</label>
-                            <select class="form-control" name="daXoa" id="daXoa">
-                                <option value="True">1</option>
-                                <option value="False">0</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -170,7 +163,7 @@
             let sdt = $('#sdt').val().trim();
             let email = $('#email').val().trim();
             let diaChi = $('#diaChi').val().trim();
-            let daXoa = $('#daXoa').val().trim();
+            
 
             //ràng buộc dữ liệu
             if (maNV.length == 0
@@ -197,8 +190,8 @@
                         cmndCccd: cmndCccd,
                         sdt: sdt,
                         email: email,
-                        diaChi: diaChi,
-                        daXoa: daXoa
+                        diaChi: diaChi
+                        
                     },
                     success: function (data) {
                         if (data.code == 200) {
@@ -232,7 +225,7 @@
                         sdt: sdt,
                         email: email,
                         diaChi: diaChi,
-                        daXoa: daXoa
+                        
 
                     },
                     success: function (data) {
@@ -264,7 +257,7 @@
             $('#sdt').val('');
             $('#email').val('');
             $('#diaChi').val('');
-            $('#daXoa').val('');
+            
 
 
             $('#maNV').prop('readonly', false);
@@ -275,7 +268,7 @@
             $('#sdt').prop('readonly', false);
             $('#email').prop('readonly', false);
             $('#diaChi').prop('readonly', false);
-            $('#daXoa').prop('readonly', false);
+            
 
             //ẩn button xác nhận
             $('#btnSubmit').show();
@@ -328,7 +321,7 @@
             $('#sdt').prop('readonly', false);
             $('#email').prop('readonly', false);
             $('#diaChi').prop('readonly', false);
-            $('#daXoa').prop('readonly', false);
+           
 
             ////ẩn button xác nhận
             $('#btnSubmit').show();
@@ -351,7 +344,7 @@
             $('#sdt').prop('readonly', true);
             $('#email').prop('readonly', true);
             $('#diaChi').prop('readonly', true);
-            $('#daXoa').prop('readonly', true);
+            
 
             $('#btnSubmit').hide();
         });
@@ -374,7 +367,7 @@
                         $('#sdt').val(data.nv.SDT);
                         $('#email').val(data.nv.EMAIL);
                         $('#diaChi').val(data.nv.DIACHI);
-                        $('#daXoa').val(data.nv.DAXOA);
+                        
 
                         //$('.datepicker').val(ConvertJsonDateString(data.hs.NgaySinh));
 
@@ -436,20 +429,20 @@
         }
 
 
-        function ConvertJsonDateString(jsonDate) {
-            var shortDate = null;
-            if (jsonDate) {
-                var regex = /-?\d+/;
-                var matches = regex.exec(jsonDate);
-                var dt = new Date(parseInt(matches[0]));
-                var month = dt.getMonth() + 1;
-                var monthString = month > 9 ? month : '0' + month;
-                var day = dt.getDate();
-                var dayString = day > 9 ? day : '0' + day;
-                var year = dt.getFullYear();
-                shortDate = year + '/' + monthString + '/' + dayString;
-            }
-            return shortDate;
-        };
+        //function ConvertJsonDateString(jsonDate) {
+        //    var shortDate = null;
+        //    if (jsonDate) {
+        //        var regex = /-?\d+/;
+        //        var matches = regex.exec(jsonDate);
+        //        var dt = new Date(parseInt(matches[0]));
+        //        var month = dt.getMonth() + 1;
+        //        var monthString = month > 9 ? month : '0' + month;
+        //        var day = dt.getDate();
+        //        var dayString = day > 9 ? day : '0' + day;
+        //        var year = dt.getFullYear();
+        //        shortDate = year + '/' + monthString + '/' + dayString;
+        //    }
+        //    return shortDate;
+        //};
     </script>
 }

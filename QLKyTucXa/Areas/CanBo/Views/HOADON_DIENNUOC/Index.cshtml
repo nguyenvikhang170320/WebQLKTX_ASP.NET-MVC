@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Hóa đơn phòng";
+    ViewBag.Title = "Hóa đơn điện nước";
     Layout = "~/Areas/CanBo/Views/Shared/_Layout.cshtml";
 }
 
@@ -32,31 +32,23 @@
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    Mã dãy phòng
-                </th>
-                <th>
-                    Mã phòng
-                </th>
-                <th>
-                    Năm
-                </th>
-                <th>
-                    Kỳ
-                </th>
-                <th>
-                    Đơn giá
-                </th>
-                <th>
-                    Thành tiền
-                </th>
-                <th>
-                    Trạng thái hóa đơn
-                </th>
-                    
+                <th>Mã dãy phòng</th>
+                <th>Mã phòng</th>
+                <th>Điện tháng trước</th>
+                <th>Điện tháng này</th>
+                <th>Chỉ số điện</th>
+                <th>Nước tháng trước</th>
+                <th>Nước tháng này</th>
+                <th>Chỉ số nước</th>
+                <th>Tiền điện</th>
+                <th>Tiền nước</th>
+                <th>Thành tiền</th>
+                <th>Tháng lập</th>
+                <th>Năm lập</th>
+                <th>Trạng thái hóa đơn</th>
             </tr>
         </thead>
-        <tbody id="tblDsHDPhong">
+        <tbody id="tblDsHDDN">
         </tbody>
     </table>
 
@@ -66,19 +58,22 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading" id="modalTitle"></div>
                     <div class="panel-body">
-                        <input type="text" hidden id="idHDPhong" value="" />
-                       
+                        <input type="text" hidden id="idHDDN" value="" />
+                        <div class="form-group">
+                            <label>Mã dãy phòng(<span class="text-danger">*</span>):</label>
+                            <select id="selectDayphong" class="form-control"></select>
+                        </div>
                         <div class="form-group">
                             <label>Mã phòng(<span class="text-danger">*</span>):</label>
                             <select id="selectPhong" class="form-control"></select>
                         </div>
                         <div class="form-group">
-                            <label>Năm(<span class="text-danger">*</span>):</label>
-                            <input type="number" class="form-control" id="nam" placeholder="Năm">
+                            <label>Tháng(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="thang" placeholder="Tháng">
                         </div>
                         <div class="form-group">
-                            <label>Kỳ(<span class="text-danger">*</span>):</label>
-                            <input type="number" class="form-control" id="ky" placeholder="Kỳ(Mỗi kỳ có 6 tháng)">
+                            <label>Năm(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="năm" placeholder="Năm">
                         </div>
                         <div class="form-group">
                             <label>Trạng thái(<span class="text-danger">*</span>):</label>
@@ -104,27 +99,49 @@
         var tuKhoa = "";
         var trang = 1;
         $(document).ready(function () {
-
+            LoadDsDayphong(); // load danh sách dãy phòng ID -> Mã dãy
             LoadDsPhong();// load danh sách dãy phòng ID -> Mã phòng
-            LoadDSHDPhong();//load danh sách hóa đơn phòng
+            LoadDSHDDN();//load danh sách hóa đơn phòng
         })
-        
+        $(document).on('click', "button[name='create']", function(){
+            //set header của modal phòng
+            $('#modalTitle').text('Thêm mới hóa đơn phòng');
+
+            //set giá trị mặc định cho các thành phần của form
+            $('#idHDDN').val('');
+            $('#thang').val('');
+            $('#nam').val('');
+            $('#trangthai').val('');
+
+
+            $('#selectDayphong').prop('readonly', false);
+            $('#selectPhong').prop('readonly', false);
+            $('#thang').prop('readonly', false);
+            $('#nam').prop('readonly', false);
+            $('#trangthai').prop('readonly', false);
+
+            //hiển thị button xác nhận
+            $('#btnSubmit').show();
+
+            //hiển thị modal lên
+            $('#modalHDPhong').modal();
+        })
         //sự kiện click của button thêm mới phòng
         $('#btnAdd').click(function () {
             //set header của modal phòng
             $('#modalTitle').text('Thêm mới hóa đơn phòng');
 
             //set giá trị mặc định cho các thành phần của form
-            $('#idHDPhong').val('');
+            $('#idHDDN').val('');
+            $('#thang').val('');
             $('#nam').val('');
-            $('#ky').val('');
             $('#trangthai').val('');
 
 
+            $('#selectDayphong').prop('readonly', false);
             $('#selectPhong').prop('readonly', false);
+            $('#thang').prop('readonly', false);
             $('#nam').prop('readonly', false);
-            $('#ky').prop('readonly', false);  
-            $('#dongia').prop('readonly', false);
             $('#trangthai').prop('readonly', false);
 
             //hiển thị button xác nhận
@@ -135,71 +152,74 @@
         });
 
         //get dữ liệu
-        function GetDuLieu(idHDPhong) {
+        function GetDuLieu(idHDDN) {
             $.ajax({
                 url: '/CanBo/Phong/ChiTiet',
                 type: 'get',
                 data: {
-                    id: idHDPhong
+                    id: idHDDN
                 },
                 success: function (data) {
                     if (data.code == 200) {
                         //console.log(data);
                         //set giá trị mặc định cho các thành phần của form
 
+                        $('#selectDayphong').val(data.p.ID_DAY);
                         $('#selectPhong').val(data.p.ID_PHONG);
                         $('#nam').val(data.tA.NAM);
                         $('#ky').val(data.tA.KY);
                         $('#trangthai').val(data.tA.TRANGTHAI);
 
-                        
+
                     } else {
                         alert(data.msg);
                     }
                 }
             });
         }
-      
+
 
         //sự kiện của button xác nhận
         $('#btnSubmit').click(function () {
-            let idHDPhong = $('#idHDPhong').val().trim();
+            let idHDDN = $('#idHDDN').val().trim();
+            let idDp = $('#selectDayphong option:selected').val();
             let idP = $('#selectPhong option:selected').val();
-            let nam = $('#nam').val().trim();
-            let ky = $('#ky').val().trim();
+            let thang = $('#nam').val().trim();
+            let nam = $('#ky').val().trim();
             let trangthai = $('#trangthai option:selected').val().trim();
 
             //ràng buộc dữ liệu
-            if (nam.length == 0
-                || ky.length == 0
+            if (thang.length == 0
+                || nam.length == 0
                 || trangthai.length == 0) {
                 alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
                 return;
             }
 
-            if (idHDPhong.length == 0) {//trường hợp thêm mới phòng
-               
+            if (idHDDN.length == 0) {//trường hợp thêm mới phòng
+                alert(1);
+
                 $.ajax({
-                    url: '/CanBo/HOADON_PHONG/ThemMoi',
+                    url: '/CanBo/HOADON_DIENNUOC/ThemMoi',
                     type: 'post',
                     data: {
                         idP: idP,
+                        thang: thang,
                         nam: nam,
-                        ky: ky,
                         trangthai: trangthai
                     },
                     success: function (data) {
                         if (data.code == 200) {
                             alert(data.msg);
-                            LoadDSHDPhong(tuKhoa, trang);//cập nhật lại ds phòng đc hiển thị
+                            LoadDSHDDN(tuKhoa, trang);//cập nhật lại ds phòng đc hiển thị
 
+                            $('#thang').prop('readonly', false);
                             $('#nam').prop('readonly', false);
-                            $('#ky').prop('readonly', false);
                             $('#trangthai').prop('readonly', false);
-
+                            $('#selectDayphong').prop('readonly', false);
                             $('#selectPhong').prop('readonly', false);
+                            $('#thang').val('');
                             $('#nam').val('');
-                            $('#ky').val('');
                             $('#selectDayphong').val('');
                             $('#selectPhong').val('');
 
@@ -208,49 +228,57 @@
                         }
                     },
                     error: function (err) {
-                       
+
                     }
                 });
             }
         });
 
         $('#btnSearch').click(function () {
-           
+
             tuKhoa = $('#txtSearch').val();
-           
-            LoadDSHDPhong();
+
+            LoadDSHDDN();
             if (tuKhoa.length == 0) {
-                LoadDSHDPhong();
+                LoadDSHDDN();
             }
-          
+
         });
         //load danh sách hóa đơn phòng
-        function LoadDSHDPhong() {
+        function LoadDSHDDN() {
             $.ajax({
-                url: '/CanBo/HOADON_PHONG/DsHDPhong',
+                url: '/CanBo/HOADON_DIENNUOC/DsHDDN',
                 type: 'get',
 
                 data: {
                     tuKhoa,
                     trang,
-                    
+                    //idDp: $('#selectDayphong option:selected').val()
                 },
                 success: function (data) {
                     console.log(data);
-                    $('#tblDsHDPhong').empty();
+                    $('#tblDsHDDN').empty();
                     if (data.code == 200) {
-                      
-                        data.dshdp.forEach(p => {
-                            let tr = '<tr id ="' + p.ID_HOADONPHONG + '">';
+                        
+                        data.dshddn.forEach(p => {
+                            let tr = '<tr id ="' + p.ID_HOADONDIENNUOC + '">';
                             tr += '<td>' + p.MADAYPHONG + '</td>';
                             tr += '<td>' + p.MAPHONG + '</td>';
-                            tr += '<td>' + (p.NAM == null ? '' : p.NAM) + '</td>';
-                            tr += '<td>' + (p.KY == null ? '' : p.KY) + '</td>';
-                            tr += '<td>' + p.DONGIA + '</td>';
+                            tr += '<td>' + p.DIENTHANGDAU + '</td>';
+                            tr += '<td>' + p.DIENTHANGSAU + '</td>';
+                            tr += '<td>' + p.CHISODIEN + '</td>';
+                            tr += '<td>' + p.NUOCTHANGDAU + '</td>';
+                            tr += '<td>' + p.NUOCTHANGSAU + '</td>';
+                            tr += '<td>' + p.CHISONUOC + '</td>';
+                            tr += '<td>' + p.TIENDIEN + '</td>';
+                            tr += '<td>' + p.TIENNUOC + '</td>';
                             tr += '<td>' + p.THANHTIEN + '</td>';
+                            tr += '<td>' + (p.THANG == null ? '' : p.NAM) + '</td>';
+                            tr += '<td>' + (p.NAM == null ? '' : p.KY) + '</td>';
                             tr += '<td>' + (p.TRANGTHAI == 0 ? 'Đã thu tiền' : 'Chưa thu tiền') + '</td>';
+
                             tr += '</tr>';
-                            $('#tblDsHDPhong').append(tr);
+                            $('#tblDsHDDN').append(tr);
                         });
 
                         //phân trang
@@ -270,11 +298,27 @@
             })
         }
 
+        //load danh sách dãy phòng ID -> Mã dãy
+        function LoadDsDayphong() {
+            $.ajax({
+                url: '/CanBo/HOADON_DIENNUOC/ListDayphong',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#selectDayphong').empty();
+                        data.dsdp.forEach(dp => {
+                            let option = '<option value="' + dp.ID_DAY + '">' + dp.MADAYPHONG + '</option>';
+                            $('#selectDayphong').append(option);
+                        })
+                    }
+                }
+            })
+        }
 
         //load danh sách dãy phòng ID -> Mã phòng
         function LoadDsPhong() {
             $.ajax({
-                url: '/CanBo/HOADON_PHONG/ListPhong',
+                url: '/CanBo/HOADON_DIENNUOC/ListPhong',
                 type: 'get',
                 success: function (data) {
                     if (data.code == 200) {
@@ -292,7 +336,7 @@
         $("#phanTrang").on("click", "li", function (e) {
             e.preventDefault();
             trang = $(this).text();
-            LoadDSHDPhong();
+            LoadDSHDDN();
         });
 
     </script>

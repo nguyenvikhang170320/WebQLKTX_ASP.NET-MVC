@@ -18,7 +18,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult ThemMoi(int idDp, string maPhong, string taiKhoan, string matKhau, int soLuongnv, double donGia, int tinhTrang, bool trangThai)
+        public JsonResult ThemMoi(int idDp, string maPhong, string taiKhoan, string matKhau, int soLuongnv, double donGia, string motaKhac, int tinhTrang, bool trangThai)
         {
             try
             {
@@ -41,6 +41,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 p.MATKHAU = encryptedMd5Pas;
                 p.SOLUONGNV = soLuongnv;
                 p.DONGIA = donGia;
+                p.MOTAKHAC = motaKhac;
                 p.TINHTRANG = tinhTrang;
                 p.TRANGTHAI = trangThai;
                 p.DAXOA = false;
@@ -57,7 +58,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult CapNhat(int id, int soLuongnv, double donGia, int tinhTrang, bool trangThai) //, int idDp, string maPhong, string taiKhoan, string matKhau
+        public JsonResult CapNhat(int id, int soLuongnv, double donGia,string motaKhac, int tinhTrang, bool trangThai) //, int idDp, string maPhong, string taiKhoan, string matKhau
         {
             try
             {
@@ -71,8 +72,10 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 //p.MATKHAU = encryptedMd5Pas;
                 p.SOLUONGNV = soLuongnv;
                 p.DONGIA = donGia;
+                p.MOTAKHAC = motaKhac;
                 p.TINHTRANG = tinhTrang;
                 p.TRANGTHAI = trangThai;
+                p.DAXOA = false;
 
                 //luu vao csdl
                 db.SaveChanges();
@@ -120,12 +123,14 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                            select new
                                 {
                                     ID_PHONG = p.ID_PHONG,
+                                    ID_DAYPHONG = p.ID_DAY,
                                     MADAYPHONG = dp.MADAYPHONG,
                                     MAPHONG = p.MAPHONG,
                                     TAIKHOAN = p.TAIKHOAN,
                                     MATKHAU = p.MATKHAU,
                                     SOLUONGNV = p.SOLUONGNV,
                                     DONGIA = p.DONGIA,
+                                    MOTAKHAC = p.MOTAKHAC,
                                     TINHTRANG = p.TINHTRANG,
                                     TRANGTHAI = p.TRANGTHAI
                                 }
@@ -142,7 +147,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                              .ToList();
 
 
-                return Json(new { code = 200, dsp = kqht, soTrang = soTrang, msg = "Lấy danh sách phòng thành công!" }, JsonRequestBehavior.AllowGet); //, isTBM = isTBM, idDangNhap = gv.Id
+                return Json(new { code = 200, dsp = kqht, soTrang = soTrang, msg = "Lấy danh sách phòng thành công!" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -168,6 +173,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                               MATKHAU = p.MATKHAU,
                               SOLUONGNV = p.SOLUONGNV,
                               DONGIA = p.DONGIA,
+                              MOTAKHAC = p.MOTAKHAC,
                               TINHTRANG = p.TINHTRANG,
                               TRANGTHAI = p.TRANGTHAI,
                               ID_DAY = dp.ID_DAY
