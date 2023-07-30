@@ -121,6 +121,7 @@
     <Compile Include="Areas\CanBo\Controllers\AdminVMController.cs" />
     <Compile Include="Areas\CanBo\Controllers\BaseController.cs" />
     <Compile Include="Areas\CanBo\Controllers\CanboController.cs" />
+    <Compile Include="Areas\CanBo\Controllers\CONGTODIENNUOCController.cs" />
     <Compile Include="Areas\CanBo\Controllers\DayphongController.cs" />
     <Compile Include="Areas\CanBo\Controllers\DongiaController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HOADON_DIENNUOCController.cs" />
@@ -355,6 +356,11 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\CanBo\Views\HOADON_PHONG\Index.cshtml" />
     <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Index.cshtml" />
+    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Create.cshtml" />
+    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Delete.cshtml" />
+    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Details.cshtml" />
+    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Edit.cshtml" />
+    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
