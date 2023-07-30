@@ -123,8 +123,36 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 return Json(new { code = 500, msg = "Thêm mới hóa đơn phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        public JsonResult CapNhat(int id, int? nam, int? ky, int? trangthai) //, int idDp, string maPhong, string taiKhoan, string matKhau
+        {
+            try
+            {
+                //tìm ra phòng cần cập nhật dựa vào id truyền vào
+                var p = db.HOADON_PHONG.SingleOrDefault(x => x.ID_PHONG == id); // lỗi khúc này
+                //var encryptedMd5Pas = Encryptor.MD5Hash(matKhau);
+
+                //p.ID_DAY = idDp;
+                //p.MAPHONG = maPhong;
+                p.NAM = nam;
+                p.KY = ky;
+
+                p.TRANGTHAI = trangthai;
+                
+
+                //luu vao csdl
+                db.SaveChanges();
+
+                return Json(new { code = 200, msg = "Cập nhật phòng thành công" }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = "Cập nhật phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
 
-        
+
     }
 }

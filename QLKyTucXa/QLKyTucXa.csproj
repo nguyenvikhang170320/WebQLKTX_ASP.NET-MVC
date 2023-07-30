@@ -353,12 +353,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Areas\CanBo\Views\HD_Phong\XemHoaDon.cshtml" />
     <Content Include="Areas\CanBo\Views\HOADON_PHONG\Index.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Create.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Delete.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Details.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Edit.cshtml" />
     <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />

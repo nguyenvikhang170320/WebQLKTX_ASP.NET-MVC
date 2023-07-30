@@ -103,7 +103,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult ThemMoi(int idP, int? thang, int? nam, int? trangthai)
+        public JsonResult ThemMoi(int idP,  int? thang, int? nam, int? trangthai)
         {
             try
             {
@@ -115,8 +115,11 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 //    return Json(new { code = 300, msg = "Năm này đã tồn tại trong hệ thống!" }, JsonRequestBehavior.AllowGet);
                 //}
 
+                int uid = Convert.ToInt32(Session["idcb"]);
                 var p = new HOADON_DIENNUOC();
                 p.ID_PHONG = idP;
+                p.ID_CANBO = uid;
+                p.ID_DONGIA = 1; // suy nghĩ chỗ này sau lấy được đơn giá
 
                 p.NAM = nam;
                 p.THANG = thang;
