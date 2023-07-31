@@ -7,7 +7,7 @@
 <div class="jumbotron">
     <div class="row">
         <div class="col-sm-2">
-            <button class="btn btn-primary" id="btnAdd"><i class="fa fa-plus" aria-hidden="true"></i>Bảng Hóa Đơn Phòng</button>
+            <button class="btn btn-primary">Hóa Đơn Phòng</button>
         </div>
         <div class="col-sm-4 col-sm-offset-6 text-right">
             <div class="input-group">
@@ -53,6 +53,9 @@
                 <th>
                     Trạng thái
                 </th>
+                <th>
+                    Thao tác
+                </th>
             </tr>
         </thead>
         <tbody id="tblDsHDPhong">
@@ -66,10 +69,7 @@
                     <div class="panel-heading" id="modalTitle"></div>
                     <div class="panel-body">
                         <input type="text" hidden id="idHDPhong" value="" />
-                        <div class="form-group">
-                            <label>Mã dãy phòng(<span class="text-danger">*</span>):</label>
-                            <select id="selectDayphong" class="form-control"></select>
-                        </div>
+
                         <div class="form-group">
                             <label>Mã phòng(<span class="text-danger">*</span>):</label>
                             <select id="selectPhong" class="form-control"></select>
@@ -98,6 +98,7 @@
             </div>
         </div>
     </div>*@
+
 </div>
 
 @section scripts{
@@ -110,7 +111,49 @@
             //LoadDsPhong();// load danh sách dãy phòng ID -> Mã phòng
             LoadDSHDPhong();//load danh sách hóa đơn phòng
         })
-        
+
+        //function getHDPhong(idHDPhong) {
+        //    $.ajax({
+        //        url: 'HD_PHONG/ChiTiet',
+        //        type: 'get',
+        //        data: {
+        //            id: idHDPhong
+        //        },
+        //        success: function (data) {
+        //            if (data.code == 200) {
+        //                //console.log(data);
+        //                //alert("Danh sách hóa đơn phòng đã load lên");
+        //                //set giá trị mặc định cho các thành phần của form
+        //                $('#selectPhong').val(data.hdp.ID_PHONG);
+        //                $('#nam').val(data.hdp.NAM);
+        //                $('#ky').val(data.hdp.KY);
+        //                $('#trangthai').val(data.hdp.TRANGTHAI);
+
+        //                //$('#quanTri').prop('checked', data.cb.QUANTRI == 1?true:false);
+        //            } else {
+        //                alert(data.msg);
+        //            }
+        //        }
+        //    });
+        //}
+        ////sự kiện click button chi tiết của mỗi dòng table
+        //$(document).on('click', "button[name='view']", function () {
+        //    let idHDPhong = $(this).closest('tr').attr('id');
+        //    getHDPhong(idHDPhong);
+        //    $('#modalHDPhong').modal();
+
+        //    //set header của modal cán bộ
+        //    $('#modalTitle').text('Thông tin chi tiết của hóa đơn phòng');
+
+        //    $('#selectPhong').prop('readonly', true);
+        //    $('#nam').prop('readonly', true);
+        //    $('#ky').prop('readonly', true);
+        //    $('#trangthai').prop('readonly', true);
+
+
+        //    ////ẩn button xác nhận
+        //    $('#btnSubmit').hide();
+        //});
 
         $('#btnSearch').click(function () {
 
@@ -140,7 +183,7 @@
                         //let idx = 1;
 
                         data.dshdp.forEach(p => {
-                            let tr = '<tr id ="' + p.ID_PHONG + '">';
+                            let tr = '<tr id ="' + p.ID_HOADONPHONG + '">';
                             //tr += '<td>' + (idx++) + '</td>';
                             tr += '<td>' + p.MADAYPHONG + '</td>';
                             tr += '<td>' + p.MAPHONG + '</td>';
@@ -149,6 +192,9 @@
                             tr += '<td>' + p.DONGIA + '</td>';
                             tr += '<td>' + p.THANHTIEN + '</td>';
                             tr += '<td>' + (p.TRANGTHAI == 0 ? 'Đã thu tiền' : 'Chưa thu tiền') + '</td>';
+                            tr += '<td class = "text-right text-nowrap">';
+                            tr += '<button class = "btn btn-xs btn-info" name="view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';
+                            tr += '</td>';
                             tr += '</tr>';
                             $('#tblDsHDPhong').append(tr);
                         });

@@ -18,27 +18,27 @@ namespace QLKyTucXa.Areas.CanBo.Models
         public string MADAYPHONG { get; set; }
 
         // In used
-        public int? THANGDIEN { get; set; }
-        public int? THANG { get; set; }
-        public int? THANGNUOC { get; set; }
-        public int? NAM { get; set; }
-        public int? NAMDIEN { get; set; }
-        public int? NAMNUOC { get; set; }
+        public int THANGDIEN { get; set; }
+        public int THANG { get; set; }
+        public int THANGNUOC { get; set; }
+        public int NAM { get; set; }
+        public int NAMDIEN { get; set; }
+        public int NAMNUOC { get; set; }
 
         public double DONGIA_DIEN { get; set; }
         public double DONGIA_NUOC { get; set; }
        
-        public int? NUOCCHISODAU { get; set; }
-        public int? NUOCCHISOCUOI { get; set; }
-        public int? DIENCHISODAU { get; set; }
-        public int? DIENCHISOCUOI { get; set; }
+        public int NUOCCHISODAU { get; set; }
+        public int NUOCCHISOCUOI { get; set; }
+        public int DIENCHISODAU { get; set; }
+        public int DIENCHISOCUOI { get; set; }
 
-        public int? CHISODIEN { get; set; }
-        public int? CHISONUOC { get; set; }
+        public int CHISODIEN { get; set; }
+        public int CHISONUOC { get; set; }
         public double? THANHTIEN { get; set; }
         public double? THANHTIEN_DIEN { get; set; }
         public double? THANHTIEN_NUOC { get; set; }
-        public int? KY { get; set; }
+        public int KY { get; set; }
         public double? DONGIA { get; set; }
         public double? DONGIADIEN { get; set; }
         public double? DONGIANUOC { get; set; }

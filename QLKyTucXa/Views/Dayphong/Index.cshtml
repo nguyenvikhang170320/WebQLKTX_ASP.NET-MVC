@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-primary">Dãy Phòng</button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-6 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm " id="phanTrang">
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã dãy phòng
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tblDsDayphong">
+        </tbody>
+    </table>
+
+</div>
+
+
+@section scripts{
+
+    <script>
+        var tuKhoa = '';
+        var trang = 1;
+        $(document).ready(function () {
+            LoadDsDayphong(tuKhoa, trang);
+        });
+
+        //sự kiện enter của text có id là txtSearch
+        $('#txtSearch').on('keypress', function (e) {
+            if (e.which == 13) {//nếu phím đc gõ là enter
+                $('#btnSearch').click();//thì gọi tới sự kiện click của button có id là btnSearch
+            }
+        });
+
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDsDayphong(tuKhoa, trang);
+        });
+
+
+        //sự kiện click của button tìm kiếm
+        $('#btnSearch').click(function () {
+            trang = 1;
+            tuKhoa = $('#txtSearch').val();
+            LoadDsDayphong(tuKhoa, trang);
+        });
+
+        //hàm load danh sách lớp đổ vào table
+        function LoadDsDayphong(search, trang) {
+            //dùng ajax để load danh sách lớp trong controller lop
+            $.ajax({
+                url: '/Dayphong/DsDayphong',
+                type: 'get',
+                data: {
+                    tuKhoa: search,
+                    trang: trang
+                },
+                success: function (data) {
+                    //console.log(data);
+                    if (data.code == 200) {
+                        $('#tblDsDayphong').empty();
+                        $.each(data.dsDayphong, function (k, v) {
+                            let tr = '<tr id="' + v.ID_DAY + '">'
+                            tr += '<td class = "col-sm-8">' + v.MADAYPHONG + '</td>';
+                            tr += '</tr>';
+                            $('#tblDsDayphong').append(tr);
+                        });
+
+                        //phân trang
+
+                        $('#phanTrang').empty();
+                        for (i = 1; i <= data.soTrang; i++) {
+                            let li = '<li class="page-item" id="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+                            $('#phanTrang').append(li);
+                        }
+
+                        let li = $('#phanTrang li#' + trang + '');//tìm li có id = trang truyền vào
+                        //ví dụ trang = 2, sẽ tìm tới cái thằng li có id = 2
+                        //tìm ra đc thằng cần tìm thì add class active để đánh dấu trang hiện tại đang đc load
+                        $(li).addClass('active');
+
+                    }
+                }
+            });
+        }
+    </script>
+}

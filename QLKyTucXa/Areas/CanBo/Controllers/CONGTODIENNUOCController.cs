@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Model.EF;
+using QLKyTucXa.Areas.CanBo.Models;
 
 namespace QLKyTucXa.Areas.CanBo.Controllers
 {
@@ -17,24 +18,52 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         // GET: CanBo/CONGTODIENNUOC
         public ActionResult Index()
         {
-            var cONGTODIENs = db.CONGTODIENs.Include(c => c.PHONG);
-            return View(cONGTODIENs.ToList());
+            return View();
+        }
+        [HttpGet]
+        public JsonResult LoadDSDN(string tuKhoa, int trang)
+        {
+            try
+            {
+                //int uid = Convert.ToInt32(Session["idphong"]);
+                var dshdp = (
+                      from phong in db.PHONGs.Where(x => x.TRANGTHAI == true && x.DAXOA != true)
+                      join dien in db.CONGTODIENs on phong.ID_PHONG equals dien.ID_PHONG into tableA
+                      from tA in tableA.DefaultIfEmpty()
+                      join nuoc in db.CONGTONUOCs on phong.ID_PHONG equals nuoc.ID_PHONG into tableB
+                      from tB in tableB.DefaultIfEmpty()
+                      where (phong.MAPHONG.ToLower().Contains(tuKhoa))
+                      || phong.DAYPHONG.MADAYPHONG.ToLower().Contains(tuKhoa)
+                      select new ViewModel_HDĐN_HDP
+                      {
+                          ID_PHONG = phong.ID_PHONG,
+                          MAPHONG = phong.MAPHONG,
+                          MADAYPHONG = phong.DAYPHONG.MADAYPHONG,
+                          NAM = tA.NAM,
+                          DONGIA = phong.DONGIA,
+                          THANHTIEN = phong.DONGIA * 6,
+                          TRANGTHAI = tA.TRANGTHAI
+                      }).ToList();
+
+
+                var pageSize = 10;
+
+                var soTrang = dshdp.Count() % pageSize == 0 ? dshdp.Count() / pageSize : dshdp.Count() / pageSize + 1;
+
+                var kqht = dshdp
+                            .Skip((trang - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToList();
+
+
+                return Json(new { code = 200, dshdp = kqht, soTrang = soTrang, msg = "Lấy danh sách hóa đơn phòng thành công!" }, JsonRequestBehavior.AllowGet); //, isTBM = isTBM, idDangNhap = gv.Id
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = "Lấy danh sách phòng thất bại: " + ex.Message, JsonRequestBehavior.AllowGet });
+            }
         }
 
-        // GET: CanBo/CONGTODIENNUOC/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CONGTODIEN cONGTODIEN = db.CONGTODIENs.Find(id);
-            if (cONGTODIEN == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cONGTODIEN);
-        }
 
         // GET: CanBo/CONGTODIENNUOC/Create
         public ActionResult Create()

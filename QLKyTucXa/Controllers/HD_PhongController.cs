@@ -30,21 +30,22 @@ namespace QLKyTucXa.Controllers
                 {
                 int uid = Convert.ToInt32(Session["idphong"]);
                 var dshdp = (
-                      from phong in db.PHONGs.Where(x => x.TRANGTHAI == true && x.DAXOA != true && x.ID_PHONG == uid)
-                      join hoadon_phong in db.HOADON_PHONG on phong.ID_PHONG equals hoadon_phong.ID_PHONG into tableA
-                      from tA in tableA.DefaultIfEmpty()
-                      where (phong.MAPHONG.ToLower().Contains(tuKhoa))
-                      || phong.DAYPHONG.MADAYPHONG.ToLower().Contains(tuKhoa)
+                      from hdp in db.HOADON_PHONG.Where(x=> x.ID_PHONG == uid)
+                      join phong in db.PHONGs on hdp.ID_PHONG equals phong.ID_PHONG into tableA
+                      from tA in tableA.Where(x => x.TRANGTHAI == true && x.DAXOA != true && x.ID_PHONG == uid).DefaultIfEmpty()
+                      where (hdp.PHONG.MAPHONG.ToLower().Contains(tuKhoa))
+                      || hdp.PHONG.DAYPHONG.MADAYPHONG.ToLower().Contains(tuKhoa)
                       select new ViewModel_HDĐN_HDP
                       {
-                          ID_PHONG = phong.ID_PHONG,
-                          MAPHONG = phong.MAPHONG,
-                          MADAYPHONG = phong.DAYPHONG.MADAYPHONG,
-                          NAM = tA.NAM,
-                          KY = tA.KY,
-                          DONGIA = phong.DONGIA,
-                          THANHTIEN = phong.DONGIA * 6,
-                          TRANGTHAI = tA.TRANGTHAI
+                          ID_HOADONPHONG = hdp.ID_HOADONPHONG,
+                          ID_PHONG = tA.ID_PHONG,
+                          MAPHONG = tA.MAPHONG,
+                          MADAYPHONG = tA.DAYPHONG.MADAYPHONG,
+                          NAM = hdp.NAM,
+                          KY = hdp.KY,
+                          DONGIA = tA.DONGIA,
+                          THANHTIEN = tA.DONGIA * 6,
+                          TRANGTHAI = hdp.TRANGTHAI
                       }).ToList();
 
 
@@ -65,51 +66,7 @@ namespace QLKyTucXa.Controllers
                     return Json(new { code = 500, msg = "Lấy danh sách phòng thất bại: " + ex.Message, JsonRequestBehavior.AllowGet });
                 }
             }
-
-            ////dãy phòng
-            //[HttpGet]
-            //public JsonResult ListDayphong()
-            //{
-            //    try
-            //    {
-            //        var dsdp = (from dp in db.DAYPHONGs.Where(x => x.DAXOA != true)
-            //                    select new
-            //                    {
-            //                        ID_DAY = dp.ID_DAY,
-            //                        MADAYPHONG = dp.MADAYPHONG
-            //                    }).ToList();
-            //        return Json(new { code = 200, dsdp = dsdp, msg = "Lấy danh sách dãy phòng thành công!" }, JsonRequestBehavior.AllowGet);
-
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        return Json(new { code = 500, msg = "Lấy danh sách dãy phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            //    }
-            //}
-
-            //// phòng
-            //[HttpGet]
-            //public JsonResult ListPhong()
-            //{
-            //    try
-            //    {
-            //        var dsp = (from p in db.PHONGs.Where(x => x.DAXOA != true)
-            //                   select new
-            //                   {
-            //                       ID_PHONG = p.ID_PHONG,
-            //                       MAPHONG = p.MAPHONG
-
-            //                   }).ToList();
-            //        return Json(new { code = 200, dsp = dsp, msg = "Lấy danh sách dãy phòng thành công!" }, JsonRequestBehavior.AllowGet);
-
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        return Json(new { code = 500, msg = "Lấy danh sách dãy phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            //    }
-            //}
-
-           
-
+      
     }
+
 }

@@ -112,14 +112,58 @@
             LoadDSHDPhong();//load danh sách hóa đơn phòng
         })
 
+        function getHDPhong(idHDPhong) {
+            $.ajax({
+                url: '/Canbo/HOADON_PHONG/ChiTiet',
+                type: 'get',
+                data: {
+                    id: idHDPhong
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //console.log(data);
+                        //alert("Danh sách hóa đơn phòng đã load lên");
+                        //set giá trị mặc định cho các thành phần của form
+                        $('#selectPhong').val(data.tA.ID_PHONG);
+                        $('#nam').val(data.hdp.NAM);
+                        $('#ky').val(data.hdp.KY);
+                        $('#trangthai').val(data.hdp.TRANGTHAI);
+                       
+                        //$('#quanTri').prop('checked', data.cb.QUANTRI == 1?true:false);
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+        //sự kiện click button chi tiết của mỗi dòng table
+        $(document).on('click', "button[name='view']", function () {
+            let idHDPhong = $(this).closest('tr').attr('id');
+            getHDPhong(idHDPhong);
+            $('#modalHDPhong').modal();
+
+            //set header của modal cán bộ
+            $('#modalTitle').text('Thông tin chi tiết của cán bộ');
+
+            $('#selectPhong').prop('readonly', true);
+            $('#nam').prop('readonly', true);
+            $('#ky').prop('readonly', true);
+            $('#trangthai').prop('readonly', true);
+
+
+            ////ẩn button xác nhận
+            $('#btnSubmit').hide();
+        });
+
         //chỉnh sửa
         $(document).on('click', "button[name='update']", function () {
             let id = $(this).closest('tr').attr('id');
             $('#idHDPhong').val(id);//gán vào giá trị cho thằng textbox hidden có giá trị để đánh dấu là trường hợp cập nhật
             //set header của modal phòng
+            getHDPhong(id);
             $('#modalTitle').text('Chỉnh sửa hóa đơn phòng');
 
-            $('#selectPhong').prop('readonly', true);
+            $('#selectPhong').prop('readonly', false);
             /*//$('#selectPhong').hide();*/
             $('#nam').prop('readonly', false);
             $('#ky').prop('readonly', false);
@@ -211,7 +255,7 @@
                 });
 
             }
-            else {//trường hợp cập nhật phòng
+            else {//trường hợp cập nhật hóa đơn phòng
                 alert(2);
                 $.ajax({
                     url: '/CanBo/HOADON_PHONG/CapNhat',
@@ -226,7 +270,10 @@
                     success: function (data) {
                         if (data.code == 200) {
                             alert(data.msg);
-                            
+
+                            $('#nam').prop('readonly', false);
+                            $('#ky').prop('readonly', false);
+                            $('#trangthai').prop('readonly', false);
                             $('#modalHDPhong').modal('hide');
                             LoadDSHDPhong(tuKhoa, trang);
                         }
@@ -262,7 +309,7 @@
                     if (data.code == 200) {
                       
                         data.dshdp.forEach(p => {
-                            let tr = '<tr id ="' + p.ID_PHONG + '">';
+                            let tr = '<tr id ="' + p.ID_HOADONPHONG + '">';
                             tr += '<td>' + p.MADAYPHONG + '</td>';
                             tr += '<td>' + p.MAPHONG + '</td>';
                             tr += '<td>' + (p.NAM == null ? '' : p.NAM) + '</td>';
@@ -271,8 +318,9 @@
                             tr += '<td>' + p.THANHTIEN + '</td>';
                             tr += '<td>' + (p.TRANGTHAI == 0 ? 'Đã thu tiền' : 'Chưa thu tiền') + '</td>';
                             tr += '<td class = "text-right text-nowrap">';
+                            tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';
                             tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
-                            tr += '</td>'
+                            tr += '</td>';
                             tr += '</tr>';
                             $('#tblDsHDPhong').append(tr);
                         });

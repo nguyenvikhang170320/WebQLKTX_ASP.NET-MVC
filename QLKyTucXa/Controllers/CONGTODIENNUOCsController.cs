@@ -53,7 +53,7 @@ namespace QLKyTucXa.Controllers
             return View(join1);
         }
         [HttpPost]
-        public JsonResult Add2(int? dienchisodau, int? dienchisocuoi, int? nuocthangnay, int? nuocthangsau, int? thangdien, int? namdien, int? thangnuoc, int? namnuoc, int? trangthaidien, int? trangthainuoc)
+        public JsonResult Add2(int dienchisodau, int dienchisocuoi, int nuocthangnay, int nuocthangsau, int thangdien, int namdien, int thangnuoc, int namnuoc, int? trangthaidien, int? trangthainuoc)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace QLKyTucXa.Controllers
         }
         // xử lý khi bấm button lưu chỉnh sửa điện
         [HttpPost]
-        public JsonResult CapnhatDien2(int id, int? dienchisodau, int? dienchisocuoi, int? trangthaidien)
+        public JsonResult CapnhatDien2(int id, int dienchisodau, int dienchisocuoi, int? trangthaidien)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace QLKyTucXa.Controllers
 
         // xử lý khi bấm button lưu chỉnh sửa nước
         [HttpPost]
-        public JsonResult CapnhatNuoc2(int id1, int? nuocthangnay, int? nuocthangsau, int? trangthainuoc)
+        public JsonResult CapnhatNuoc2(int id1, int nuocthangnay, int nuocthangsau, int trangthainuoc)
         {
             try
             {

@@ -88,36 +88,36 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public ActionResult CreateDIEN_NUOC(ViewModel_HD model)
-        {
-            model.THANG = System.DateTime.Now.Month;
-            model.NAM = System.DateTime.Now.Year;
-            CONGTONUOC nuoc = new CONGTONUOC()
-            {
-                ID_PHONG = model.ID_PHONG,
-                THANG = model.THANG,
-                NAM = model.NAM,
-                TRANGTHAI = 1,
-                CHISODAU = model.NUOCCHISODAU,
-                CHISOCUOI = model.NUOCCHISOCUOI
-            };
-            db.CONGTONUOCs.Add(nuoc);
+        //[HttpPost]
+        //public ActionResult CreateDIEN_NUOC(ViewModel_HD model)
+        //{
+        //    model.THANG = System.DateTime.Now.Month;
+        //    model.NAM = System.DateTime.Now.Year;
+        //    CONGTONUOC nuoc = new CONGTONUOC()
+        //    {
+        //        ID_PHONG = model.ID_PHONG,
+        //        THANG = model.THANG,
+        //        NAM = model.NAM,
+        //        TRANGTHAI = 1,
+        //        CHISODAU = model.NUOCCHISODAU,
+        //        CHISOCUOI = model.NUOCCHISOCUOI
+        //    };
+        //    db.CONGTONUOCs.Add(nuoc);
 
-            // dien
-            CONGTODIEN dien = new CONGTODIEN()
-            {
-                ID_PHONG = model.ID_PHONG,
-                THANG = model.THANG,
-                NAM = model.NAM,
-                TRANGTHAI = 1,
-                CHISODAU = model.DIENCHISODAU,
-                CHISOCUOI = model.DIENCHISOCUOI
-            };
-            db.CONGTODIENs.Add(dien);
-            db.SaveChanges();
-            return View(model);
-        }
+        //    // dien
+        //    CONGTODIEN dien = new CONGTODIEN()
+        //    {
+        //        ID_PHONG = model.ID_PHONG,
+        //        THANG = model.THANG,
+        //        NAM = model.NAM,
+        //        TRANGTHAI = 1,
+        //        CHISODAU = model.DIENCHISODAU,
+        //        CHISOCUOI = model.DIENCHISOCUOI
+        //    };
+        //    db.CONGTODIENs.Add(dien);
+        //    db.SaveChanges();
+        //    return View(model);
+        //}
 
 
         // Tạo hóa đơn phòng

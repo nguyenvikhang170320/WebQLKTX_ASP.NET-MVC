@@ -51,37 +51,37 @@ namespace QLKyTucXa.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public ActionResult CreateDIEN_NUOC(ViewModel_HD model)
-        {
-            int uid = Convert.ToInt32(Session["idphong"]);
-            model.THANG = System.DateTime.Now.Month;
-            model.NAM = System.DateTime.Now.Year;
-            CONGTONUOC nuoc = new CONGTONUOC()
-            {
-                ID_PHONG = uid,
-                THANG = model.THANG,
-                NAM = model.NAM,
-                TRANGTHAI = 1,
-                CHISODAU = model.NUOCCHISODAU,
-                CHISOCUOI = model.NUOCCHISOCUOI
-            };
-            db.CONGTONUOCs.Add(nuoc);
+        //[HttpPost]
+        //public ActionResult CreateDIEN_NUOC(ViewModel_HD model)
+        //{
+        //    int uid = Convert.ToInt32(Session["idphong"]);
+        //    model.THANG = System.DateTime.Now.Month;
+        //    model.NAM = System.DateTime.Now.Year;
+        //    CONGTONUOC nuoc = new CONGTONUOC()
+        //    {
+        //        ID_PHONG = uid,
+        //        THANG = model.THANG,
+        //        NAM = model.NAM,
+        //        TRANGTHAI = 1,
+        //        CHISODAU = model.NUOCCHISODAU,
+        //        CHISOCUOI = model.NUOCCHISOCUOI
+        //    };
+        //    db.CONGTONUOCs.Add(nuoc);
 
-            // dien
-            CONGTODIEN dien = new CONGTODIEN()
-            {
-                ID_PHONG = uid,
-                THANG = model.THANG,
-                NAM = model.NAM,
-                TRANGTHAI = 1,
-                CHISODAU = model.DIENCHISODAU,
-                CHISOCUOI = model.DIENCHISOCUOI
-            };
-            db.CONGTODIENs.Add(dien);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-            //return View(model);
-        }
+        //    // dien
+        //    CONGTODIEN dien = new CONGTODIEN()
+        //    {
+        //        ID_PHONG = uid,
+        //        THANG = model.THANG,
+        //        NAM = model.NAM,
+        //        TRANGTHAI = 1,
+        //        CHISODAU = model.DIENCHISODAU,
+        //        CHISOCUOI = model.DIENCHISOCUOI
+        //    };
+        //    db.CONGTODIENs.Add(dien);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //    //return View(model);
+        //}
     }
 }

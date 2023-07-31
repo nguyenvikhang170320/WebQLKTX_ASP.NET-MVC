@@ -13,9 +13,9 @@ namespace Model.EF
         [Key]
         public int ID_HOADONPHONG { get; set; }
 
-        public int? NAM { get; set; }
+        public int NAM { get; set; }
 
-        public int? KY { get; set; }
+        public int KY { get; set; }
 
         public int? TRANGTHAI { get; set; }
 

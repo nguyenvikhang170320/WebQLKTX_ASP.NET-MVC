@@ -103,7 +103,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult ThemMoi(int idP,  int? thang, int? nam, int? trangthai)
+        public JsonResult ThemMoi(int idP,  int thang, int nam, int? trangthai)
         {
             try
             {

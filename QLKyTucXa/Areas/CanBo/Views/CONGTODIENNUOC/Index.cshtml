@@ -1,64 +1,325 @@
-﻿@model IEnumerable<Model.EF.CONGTODIEN>
-
+﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Công tơ điện nước";
     Layout = "~/Areas/CanBo/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-success" id="btnAdd"><i class="fa fa-plus" aria-hidden="true"></i> Thêm công tơ điện nước</button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-6 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.PHONG.MAPHONG)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CHISODAU)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CHISOCUOI)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.THANG)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NAM)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TRANGTHAI)
-        </th>
-        <th></th>
-    </tr>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm" id="phanTrang"></ul>
+            </nav>
+        </div>
+    </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.PHONG.MAPHONG)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CHISODAU)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CHISOCUOI)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.THANG)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NAM)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TRANGTHAI)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID_DIEN }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID_DIEN }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID_DIEN })
-        </td>
-    </tr>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã dãy phòng</th>
+                <th>Mã phòng</th>
+                <th>Điện tháng trước</th>
+                <th>Điện tháng này</th>
+                <th>Chỉ số điện</th>
+                <th>Nước tháng trước</th>
+                <th>Nước tháng này</th>
+                <th>Chỉ số nước</th>
+                <th>Tháng lập</th>
+                <th>Năm lập</th>
+                <th>Trạng thái điện</th>
+                <th>Trạng thái nước</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody id="tblDsDN">
+        </tbody>
+    </table>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalHDDN">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="modalTitle"></div>
+                    <div class="panel-body">
+                        <input type="text" hidden id="idHDDN" value="" />
+                        <div class="form-group">
+                            <label>Mã phòng(<span class="text-danger">*</span>):</label>
+                            <select id="selectPhong" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mã cán bộ(<span class="text-danger">*</span>):</label>
+                            <select id="selectCanBo" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mã đơn giá(<span class="text-danger">*</span>):</label>
+                            <select id="selectDonGia" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tháng(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="thang" placeholder="Tháng">
+                        </div>
+                        <div class="form-group">
+                            <label>Năm(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="nam" placeholder="Năm">
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng thái(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="trangthai" id="trangthai">
+                                <option value="0" selected>Đã thu tiền</option>
+                                <option value="1">Chưa thu tiền</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSubmit">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        var tuKhoa = "";
+        var trang = 1;
+        $(document).ready(function () {
+            LoadDsDayphong(); // load danh sách dãy phòng ID -> Mã dãy
+            LoadDsPhong();// load danh sách dãy phòng ID -> Mã phòng
+            LoadDSHDDN();//load danh sách hóa đơn phòng
+        })
+        $(document).on('click', "button[name='create']", function(){
+            //set header của modal phòng
+            $('#modalTitle').text('Thêm mới hóa đơn điện nước');
+
+            //set giá trị mặc định cho các thành phần của form
+            $('#idHDDN').val('');
+            $('#thang').val('');
+            $('#nam').val('');
+            $('#trangthai').val('');
+
+
+            $('#selectCanBo').prop('readonly', true);
+            $('#selectCanBo').hide();
+            $('#selectDonGia').prop('readonly', true);
+            $('#selectDonGia').hide();
+            $('#selectPhong').prop('readonly', false);
+            $('#thang').prop('readonly', false);
+            $('#nam').prop('readonly', false);
+            $('#trangthai').prop('readonly', false);
+
+            //hiển thị button xác nhận
+            $('#btnSubmit').show();
+
+            //hiển thị modal lên
+            $('#modalHDDN').modal();
+        })
+        //sự kiện click của button thêm mới phòng
+        $('#btnAdd').click(function () {
+            //set header của modal phòng
+            $('#modalTitle').text('Thêm mới hóa đơn phòng');
+
+            //set giá trị mặc định cho các thành phần của form
+            $('#idHDDN').val('');
+            $('#thang').val('');
+            $('#nam').val('');
+            $('#trangthai').val('');
+
+            $('#selectCanBo').prop('readonly', true);
+            $('#selectCanBo').hide();
+            $('#selectDonGia').prop('readonly', true);
+            $('#selectDonGia').hide();
+            $('#selectPhong').prop('readonly', false);
+            $('#thang').prop('readonly', false);
+            $('#nam').prop('readonly', false);
+            $('#trangthai').prop('readonly', false);
+
+            //hiển thị button xác nhận
+            $('#btnSubmit').show();
+
+            //hiển thị modal lên
+            $('#modalHDDN').modal();
+        });
+
+
+        //sự kiện của button xác nhận
+        $('#btnSubmit').click(function () {
+            let idHDDN = $('#idHDDN').val().trim();
+            let idCb = $('#selectCanBo option:selected').val();
+            let idDg = $('#selectDonGia option:selected').val();
+            let idP = $('#selectPhong option:selected').val();
+            let thang = $('#thang').val().trim();
+            let nam = $('#nam').val().trim();
+            let trangthai = $('#trangthai option:selected').val().trim();
+
+            //ràng buộc dữ liệu
+            if (thang.length == 0
+                || nam.length == 0
+                || trangthai.length == 0) {
+                alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
+                return;
+            }
+
+            if (idHDDN.length == 0) {//trường hợp thêm mới phòng
+                alert(1);
+
+                $.ajax({
+                    url: '/CanBo/HOADON_DIENNUOC/ThemMoi',
+                    type: 'post',
+                    data: {
+                        idP: idP,
+                        idCb: idCb,
+                        idDg: idDg,
+                        thang: thang,
+                        nam: nam,
+                        trangthai: trangthai
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDSHDDN(tuKhoa, trang);//cập nhật lại ds phòng đc hiển thị
+
+                            $('#thang').prop('readonly', false);
+                            $('#nam').prop('readonly', false);
+                            $('#trangthai').prop('readonly', false);
+                            $('#selectDonGia').prop('readonly', false);
+                            $('#selectCanBo').prop('readonly', false);
+                            $('#selectPhong').prop('readonly', false);
+                            $('#thang').val('');
+                            $('#nam').val('');
+
+                            $('#selectPhong').val('');
+
+                        } else if (data.code == 300) {
+                            alert(data.msg);
+                        }
+                    },
+                    error: function (err) {
+
+                    }
+                });
+            }
+        });
+
+        $('#btnSearch').click(function () {
+
+            tuKhoa = $('#txtSearch').val();
+
+            LoadDSHDDN();
+            if (tuKhoa.length == 0) {
+                LoadDSHDDN();
+            }
+
+        });
+        //load danh sách hóa đơn phòng
+        function LoadDSDN() {
+            $.ajax({
+                url: '/CanBo/HOADON_DIENNUOC/DsDN',
+                type: 'get',
+
+                data: {
+                    tuKhoa,
+                    trang,
+                    //idDp: $('#selectDayphong option:selected').val()
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#tblDsDN').empty();
+                    if (data.code == 200) {
+
+                        data.dshddn.forEach(p => {
+                            let tr = '<tr id ="' + p.ID_CONGTODIEN + '">';
+                            tr += '<td>' + p.MADAYPHONG + '</td>';
+                            tr += '<td>' + p.MAPHONG + '</td>';
+                            tr += '<td>' + (p.DIENTHANGDAU == null ? '' : p.DIENTHANGDAU) + '</td>';
+                            tr += '<td>' + (p.DIENTHANGSAU == null ? '' : p.DIENTHANGSAU) + '</td>';
+                            tr += '<td>' + (p.NUOCTHANGDAU == null ? '' : p.NUOCTHANGDAU) + '</td>';
+                            tr += '<td>' + (p.NUOCTHANGSAU == null ? '' : p.NUOCTHANGSAU) + '</td>';
+                            tr += '<td>' + (p.THANG == null ? '' : p.THANG) + '</td>';
+                            tr += '<td>' + (p.NAM == null ? '' : p.NAM) + '</td>';
+                            tr += '<td>' + (p.TRANGTHAIDIEN == 0 ? 'Công tơ cũ' : 'Đã đổi công tơ') + '</td>';
+                            tr += '<td>' + (p.TRANGTHAINUOC == 0 ? 'Công tơ cũ' : 'Đã đổi công tơ') + '</td>';
+
+                            tr += '</tr>';
+                            $('#tblDsDN').append(tr);
+                        });
+
+                        //phân trang
+
+                        $('#phanTrang').empty();
+                        for (i = 1; i <= data.soTrang; i++) {
+                            let li = '<li class="page-item" id="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+                            $('#phanTrang').append(li);
+                        }
+
+                        let li = $('#phanTrang li#' + trang + '');//tìm li có id = trang truyền vào
+                        //ví dụ trang = 2, sẽ tìm tới cái thằng li có id = 2
+                        //tìm ra đc thằng cần tìm thì add class active để đánh dấu trang hiện tại đang đc load
+                        $(li).addClass('active');
+                    }
+                }
+            })
+        }
+
+        //load danh sách dãy phòng ID -> Mã dãy
+        function LoadDsDayphong() {
+            $.ajax({
+                url: '/CanBo/HOADON_DIENNUOC/ListDayphong',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#selectDayphong').empty();
+                        data.dsdp.forEach(dp => {
+                            let option = '<option value="' + dp.ID_DAY + '">' + dp.MADAYPHONG + '</option>';
+                            $('#selectDayphong').append(option);
+                        })
+                    }
+                }
+            })
+        }
+
+        //load danh sách dãy phòng ID -> Mã phòng
+        function LoadDsPhong() {
+            $.ajax({
+                url: '/CanBo/HOADON_DIENNUOC/ListPhong',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#selectPhong').empty();
+                        data.dsp.forEach(dp => {
+                            let option = '<option value="' + dp.ID_PHONG + '">' + dp.MAPHONG + '</option>';
+                            $('#selectPhong').append(option);
+                        })
+                    }
+                }
+            })
+        }
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDSHDDN();
+        });
+
+    </script>
 }
 
-</table>

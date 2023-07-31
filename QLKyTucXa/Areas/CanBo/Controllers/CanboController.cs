@@ -147,19 +147,17 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult CapNhat(int id, string diaChi, string email, string sdt) //, string maCB, string taiKhoan, string matKhau, string tenCB, bool gioiTinh, string cmndCccd, bool quanTri
+        public JsonResult CapNhat(int id, string maCB,string tenCB, string taiKhoan, bool gioiTinh, string cmndCccd, string diaChi, string email, string sdt) //, string maCB, string taiKhoan, string matKhau, string tenCB, bool gioiTinh, string cmndCccd, bool quanTri
         {
             try
             {
                 var cb = db.CANBOes.SingleOrDefault(x => x.ID_CANBO == id);
-                //var encryptedMd5Pas = Encryptor.MD5Hash(matKhau);
-
-                //cb.MACB = maCB;
-                //cb.TAIKHOAN = taiKhoan;
-                //cb.MATKHAU = encryptedMd5Pas;
-                //cb.TENCB = tenCB;
-                //cb.GIOITINH = gioiTinh;
-                //cb.CMND_CCCD = cmndCccd;
+                
+                cb.MACB = maCB;
+                cb.TAIKHOAN = taiKhoan;
+                cb.TENCB = tenCB;
+                cb.GIOITINH = gioiTinh;
+                cb.CMND_CCCD = cmndCccd;
                 cb.DIACHI = diaChi;
                 cb.EMAIL = email;
                 cb.SDT = sdt;

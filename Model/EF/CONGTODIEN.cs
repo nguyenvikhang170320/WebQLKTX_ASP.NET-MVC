@@ -14,13 +14,13 @@ namespace Model.EF
 
         public int ID_PHONG { get; set; }
 
-        public int? CHISODAU { get; set; }
+        public int CHISODAU { get; set; }
 
-        public int? CHISOCUOI { get; set; }
+        public int CHISOCUOI { get; set; }
 
-        public int? THANG { get; set; }
+        public int THANG { get; set; }
 
-        public int? NAM { get; set; }
+        public int NAM { get; set; }
 
         public int? TRANGTHAI { get; set; }
 

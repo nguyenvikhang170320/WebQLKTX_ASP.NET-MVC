@@ -143,6 +143,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CANBOesController.cs" />
     <Compile Include="Controllers\CONGTODIENNUOCsController.cs" />
+    <Compile Include="Controllers\DayphongController.cs" />
     <Compile Include="Controllers\HD_PhongController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HOTROesController.cs" />
@@ -407,6 +408,7 @@
     <Content Include="Views\CANBOes\Details.cshtml" />
     <Content Include="Views\CANBOes\Edit.cshtml" />
     <Content Include="Views\CANBOes\Index.cshtml" />
+    <Content Include="Views\Dayphong\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
