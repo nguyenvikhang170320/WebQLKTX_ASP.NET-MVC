@@ -103,7 +103,7 @@
                 if ($(this).find('input').is(":checked")) {
                     let id = $(this).attr('id');
                     $.ajax({
-                        url: '/CanBo/Phong/Reset',
+                        url: '/Phong/Reset',
                         type: 'post',
                         data: {
                             id: id
@@ -144,7 +144,7 @@
                 alert('Không có phòng nào ở đây!!')
             } else {//trường hợp reset pass phòng
                 $.ajax({
-                    url: '/Canbo/Phong/Reset',
+                    url: '/Phong/Reset',
                     type: 'post',
                     data: {
                         id: idPhong,
@@ -182,7 +182,7 @@
 
         function getPass(idPhong) {
             $.ajax({
-                url: '/Canbo/Phong/ChiTietPass',
+                url: '/Phong/ChiTietPass',
                 type: 'get',
                 data: {
                     id: idPhong
@@ -258,7 +258,7 @@
 
         function LoadDsDayphong() {
             $.ajax({
-                url: '/CanBo/Phong/ListDayphong',
+                url: '/Phong/ListDayphong',
                 type: 'get',
                 success: function (data) {
                     if (data.code == 200) {

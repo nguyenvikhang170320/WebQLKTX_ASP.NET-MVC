@@ -29,13 +29,13 @@ namespace QLKyTucXa.Models
         public double DONGIA_DIEN { get; set; }
         public double DONGIA_NUOC { get; set; }
 
-        public int NUOCTHANGDAU { get; set; }
-        public int NUOCTHANGSAU { get; set; }
-        public int DIENTHANGDAU { get; set; }
-        public int DIENTHANGSAU { get; set; }
+        public int? NUOCTHANGDAU { get; set; }
+        public int? NUOCTHANGSAU { get; set; }
+        public int? DIENTHANGDAU { get; set; }
+        public int? DIENTHANGSAU { get; set; }
 
-        public int CHISODIEN { get; set; }
-        public int CHISONUOC { get; set; }
+        public int? CHISODIEN { get; set; }
+        public int? CHISONUOC { get; set; }
         public double? THANHTIEN { get; set; }
         public double? TIENDIEN { get; set; }
         public double? TIENNUOC { get; set; }

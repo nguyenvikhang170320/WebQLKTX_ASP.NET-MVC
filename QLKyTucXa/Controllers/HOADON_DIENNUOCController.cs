@@ -31,13 +31,13 @@ namespace QLKyTucXa.Controllers
             try
             {
                 int uid = Convert.ToInt32(Session["idphong"]);
-                var dshddn = (from hddn in db.HOADON_DIENNUOC
+                var dshddn = (from hddn in db.HOADON_DIENNUOC.Where(x=>x.ID_PHONG == uid)
                                join p in db.PHONGs on hddn.ID_PHONG equals p.ID_PHONG into tableA
-                               from tA in tableA.Where(x => x.TRANGTHAI == true && x.DAXOA == false && x.ID_PHONG == uid).DefaultIfEmpty()
+                               from tA in tableA.Where(x => x.TRANGTHAI == true && x.DAXOA == false).DefaultIfEmpty()
                                join dien in db.CONGTODIENs on hddn.ID_PHONG equals dien.ID_PHONG into tableB
-                               from tB in tableB.Where(x => x.THANG == hddn.THANG && x.NAM == hddn.NAM && x.TRANGTHAI == 0).DefaultIfEmpty()
+                               from tB in tableB.Where(x => x.THANG == hddn.THANG && x.NAM == hddn.NAM).DefaultIfEmpty()
                                join nuoc in db.CONGTONUOCs on hddn.ID_PHONG equals nuoc.ID_PHONG into tableC
-                               from tC in tableC.Where(x => x.THANG == hddn.THANG && x.NAM == hddn.NAM && x.TRANGTHAI == 0).DefaultIfEmpty()
+                               from tC in tableC.Where(x => x.THANG == hddn.THANG && x.NAM == hddn.NAM).DefaultIfEmpty()
                                join dongia in db.DONGIAs on hddn.ID_DONGIA equals dongia.ID_DONGIA into tableD
                                from tD in tableD.DefaultIfEmpty()
                                where (hddn.PHONG.MAPHONG.ToLower().Contains(tuKhoa))

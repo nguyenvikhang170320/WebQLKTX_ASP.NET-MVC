@@ -60,7 +60,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             }
         }
         [HttpPost]
-        public JsonResult ThemMoi(int idP, int dienthangdau, int dienthangsau, int nuocthangdau, int nuocthangsau, int thang, int nam,int thangnuoc, int namnuoc, int trangthaidien, int trangthainuoc)
+        public JsonResult ThemMoi(int idP, int? dienthangdau, int? dienthangsau, int? nuocthangdau, int? nuocthangsau, int thang, int nam,int thangnuoc, int namnuoc, int trangthaidien, int trangthainuoc)
         {
             try
             {

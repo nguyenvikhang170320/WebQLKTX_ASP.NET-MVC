@@ -118,16 +118,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\CanBo\CanBoAreaRegistration.cs" />
-    <Compile Include="Areas\CanBo\Controllers\AdminVMController.cs" />
     <Compile Include="Areas\CanBo\Controllers\BaseController.cs" />
     <Compile Include="Areas\CanBo\Controllers\CanboController.cs" />
-    <Compile Include="Areas\CanBo\Controllers\CONGTODIENNUOCController.cs" />
     <Compile Include="Areas\CanBo\Controllers\DayphongController.cs" />
+    <Compile Include="Areas\CanBo\Controllers\HotroController.cs" />
     <Compile Include="Areas\CanBo\Controllers\DongiaController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HOADON_DIENNUOCController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HOADON_PHONGController.cs" />
     <Compile Include="Areas\CanBo\Controllers\HomeController.cs" />
-    <Compile Include="Areas\CanBo\Controllers\HOTROesController.cs" />
     <Compile Include="Areas\CanBo\Controllers\LoginController.cs" />
     <Compile Include="Areas\CanBo\Controllers\NhanvienController.cs" />
     <Compile Include="Areas\CanBo\Controllers\PhongController.cs" />
@@ -145,6 +143,7 @@
     <Compile Include="Controllers\HD_PhongController.cs" />
     <Compile Include="Controllers\HOADON_DIENNUOCController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HotroController.cs" />
     <Compile Include="Controllers\HOTROesController.cs" />
     <Compile Include="Controllers\LoginPhongController.cs" />
     <Compile Include="Controllers\NhanvienController.cs" />
@@ -324,16 +323,6 @@
     <Content Include="Assets\img\demo\Thumbs.db" />
     <Content Include="Assets\img\icons\32\Thumbs.db" />
     <Content Include="Assets\img\Thumbs.db" />
-    <Content Include="Areas\CanBo\Views\Shared\_Layout2.cshtml" />
-    <Content Include="Areas\CanBo\Views\Shared\_Sidebar.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOTROes\Create.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOTROes\Delete.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOTROes\Details.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOTROes\Edit.cshtml" />
-    <Content Include="Areas\CanBo\Views\HOTROes\Index.cshtml" />
-    <Content Include="Areas\CanBo\Views\AdminVM\Create.cshtml" />
-    <Content Include="Areas\CanBo\Views\AdminVM\Index.cshtml" />
-    <Content Include="Areas\CanBo\Views\AdminVM\CreateDIEN_NUOC.cshtml" />
     <Content Include="Areas\CanBo\Views\ThemNV\Create.cshtml" />
     <Content Include="Areas\CanBo\Views\ThemNV\Delete.cshtml" />
     <Content Include="Areas\CanBo\Views\ThemNV\Details.cshtml" />
@@ -357,7 +346,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\CanBo\Views\HOADON_PHONG\Index.cshtml" />
     <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Index.cshtml" />
-    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Index.cshtml" />
+    <Content Include="Areas\CanBo\Views\Hotro\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -387,13 +376,6 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\LoginPhong\Index.cshtml" />
-    <Content Include="Views\Shared\_Layout2.cshtml" />
-    <Content Include="Views\Shared\_Sidebar.cshtml" />
-    <Content Include="Views\HOTROes\Create.cshtml" />
-    <Content Include="Views\HOTROes\Delete.cshtml" />
-    <Content Include="Views\HOTROes\Details.cshtml" />
-    <Content Include="Views\HOTROes\Edit.cshtml" />
-    <Content Include="Views\HOTROes\Index.cshtml" />
     <Content Include="Views\HD_Phong\Index.cshtml" />
     <Content Include="Views\XemNV\Index.cshtml" />
     <Content Include="Views\CANBOes\Create.cshtml" />
@@ -406,6 +388,7 @@
     <Content Include="Views\Nhanvien\Index.cshtml" />
     <Content Include="Views\HOADON_DIENNUOC\Index.cshtml" />
     <Content Include="Views\CONGTODIENNUOC\Index.cshtml" />
+    <Content Include="Views\Hotro\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

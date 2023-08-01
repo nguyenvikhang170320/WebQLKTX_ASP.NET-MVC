@@ -46,7 +46,6 @@
                 <th>Tháng lập</th>
                 <th>Năm lập</th>
                 <th>Trạng thái hóa đơn</th>
-                <th>Thao tác</th>
             </tr>
         </thead>
         <tbody id="tblDsHDDN">
@@ -179,8 +178,8 @@
                         
                         data.dshddn.forEach(p => {
                             let tr = '<tr id ="' + p.ID_HOADONDIENNUOC + '">';
-                            tr += '<td>' + p.MADAYPHONG + '</td>';
-                            tr += '<td>' + p.MAPHONG + '</td>';
+                            tr += '<td>' + (p.MADAYPHONG == null ? '' : p.MADAYPHONG) + '</td>';
+                            tr += '<td>' + (p.MAPHONG == null ? '' : p.MAPHONG) + '</td>';
                             tr += '<td>' + (p.DIENTHANGDAU == null ? '' : p.DIENTHANGDAU) + '</td>';
                             tr += '<td>' + (p.DIENTHANGSAU == null ? '' : p.DIENTHANGSAU) + '</td>';
                             tr += '<td>' + (p.CHISODIEN == null ? '' : p.CHISODIEN) +'</td>';
@@ -192,10 +191,7 @@
                             tr += '<td>' + (p.THANHTIEN == null ? '' : p.THANHTIEN) + '</td>';
                             tr += '<td>' + (p.THANG == null ? '' : p.THANG) + '</td>';
                             tr += '<td>' + (p.NAM == null ? '' : p.NAM) + '</td>';
-                            tr += '<td>' + (p.TRANGTHAI == 0 ? 'Đã thu tiền' : 'Chưa thu tiền') + '</td>';
-
-
-
+                            tr += '<td>' + (p.TRANGTHAIHDDN == 0 ? 'Chưa thanh toán' : 'Đã thanh toán') + '</td>';
                             tr += '</tr>';
                             $('#tblDsHDDN').append(tr);
                         });

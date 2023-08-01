@@ -34,16 +34,18 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                                join p in db.PHONGs on hddn.ID_PHONG equals p.ID_PHONG into tableA
                                from tA in tableA.Where(x => x.TRANGTHAI == true && x.DAXOA == false).DefaultIfEmpty()
                                join dien in db.CONGTODIENs on hddn.ID_PHONG equals dien.ID_PHONG into tableB
-                               from tB in tableB.Where(x => x.THANG == hddn.THANG && x.NAM == hddn.NAM && x.TRANGTHAI == 0).DefaultIfEmpty()
+                               from tB in tableB.Where(x => x.THANG == hddn.THANG && x.NAM == hddn.NAM).DefaultIfEmpty()
                                join nuoc in db.CONGTONUOCs on hddn.ID_PHONG equals nuoc.ID_PHONG into tableC
-                               from tC in tableC.Where(x => x.THANG == hddn.THANG && x.NAM == hddn.NAM && x.TRANGTHAI == 0).DefaultIfEmpty()
+                               from tC in tableC.Where(x => x.THANG == hddn.THANG && x.NAM == hddn.NAM).DefaultIfEmpty()
                                join dongia in db.DONGIAs on hddn.ID_DONGIA equals dongia.ID_DONGIA into tableD
-                               from tD in tableD.DefaultIfEmpty()
+                               from tD in tableD.Where(x=>x.TRANGTHAI == true).DefaultIfEmpty()
                                where (hddn.PHONG.MAPHONG.ToLower().Contains(tuKhoa))
                                      || hddn.PHONG.DAYPHONG.MADAYPHONG.ToLower().Contains(tuKhoa)
                                select new ViewModel_HDĐN_HDP()
                                {
                                    ID_HOADONDIENNUOC = hddn.ID_HOADONDIENNUOC,
+                                   ID_PHONG = hddn.ID_PHONG,
+                                   ID_DONGIA = tD.ID_DONGIA,
                                    MAPHONG = tA.MAPHONG,
                                    MADAYPHONG = tA.DAYPHONG.MADAYPHONG,
                                    DIENTHANGDAU = tB.CHISODAU,
@@ -91,7 +93,8 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                             select new
                             {
                                 ID_DONGIA = ds.ID_DONGIA,
-                                MADONGIA = ds.MADONGIA
+                                MADONGIA = ds.MADONGIA,
+                                TRANGTHAI = true,
                             }).ToList();
                 return Json(new { code = 200, dsdg = dsdg, msg = "Lấy danh sách đơn giá thành công!" }, JsonRequestBehavior.AllowGet);
             }
@@ -159,6 +162,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             }
         }
 
+
         //chỉnh sửa hóa đơn điện nước
         [HttpPost]
         public JsonResult CapNhat(int id, int idP, int idDg, int thang, int nam, int trangthai) //, int idDp, string maPhong, string taiKhoan, string matKhau
@@ -167,26 +171,18 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             {
                 //tìm ra phòng cần cập nhật dựa vào id truyền vào
                 var hddn = db.HOADON_DIENNUOC.SingleOrDefault(x => x.ID_HOADONDIENNUOC == id); // lỗi khúc này
-                //var encryptedMd5Pas = Encryptor.MD5Hash(matKhau);
-                int uid = Convert.ToInt32(Session["idcb"]);
-                if (uid == 1)
-                {
-                    hddn.NAM = nam;
-                    hddn.THANG = thang;
-                    hddn.ID_PHONG = idP;
-                    hddn.ID_DONGIA = idDg;
-                    hddn.ID_CANBO = 1;
-                    hddn.TRANGTHAI = trangthai;
+                                                                                               //var encryptedMd5Pas = Encryptor.MD5Hash(matKhau);
+                hddn.NAM = nam;
+                hddn.THANG = thang;
+                hddn.ID_PHONG = idP;
+                hddn.ID_DONGIA = idDg;
+                hddn.ID_CANBO = 1;
+                hddn.TRANGTHAI = trangthai;
 
 
-                    //luu vao csdl
-                    db.SaveChanges();
-                    return Json(new { code = 200, msg = "Cập nhật hóa đơn điện nước thành công" }, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    return Json(new { code = 200, msg = "Tài khoản của bạn không có quyền chỉnh sửa" }, JsonRequestBehavior.AllowGet);
-                }
+                //luu vao csdl
+                db.SaveChanges();
+                return Json(new { code = 200, msg = "Cập nhật hóa đơn điện nước thành công" }, JsonRequestBehavior.AllowGet);
 
             }
             catch (Exception ex)
@@ -202,8 +198,8 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             try
             {
                 db.Configuration.ProxyCreationEnabled = false;//cấu hình proxy cho database
-                var hddp = db.HOADON_DIENNUOC.SingleOrDefault(x => x.ID_HOADONDIENNUOC == id);
-                return Json(new { code = 200, hddp = hddp }, JsonRequestBehavior.AllowGet);
+                var hddn = db.HOADON_DIENNUOC.SingleOrDefault(x => x.ID_HOADONDIENNUOC == id);
+                return Json(new { code = 200, HDDN = hddn }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

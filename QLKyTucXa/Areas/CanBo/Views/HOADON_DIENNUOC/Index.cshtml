@@ -46,7 +46,6 @@
                 <th>Tháng lập</th>
                 <th>Năm lập</th>
                 <th>Trạng thái hóa đơn</th>
-                <th>Thao tác</th>
             </tr>
         </thead>
         <tbody id="tblDsHDDN">
@@ -79,8 +78,8 @@
                         <div class="form-group">
                             <label>Trạng thái(<span class="text-danger">*</span>):</label>
                             <select class="form-control" name="trangthai" id="trangthai">
-                                <option value="0" selected>Đã thu tiền</option>
-                                <option value="1">Chưa thu tiền</option>
+                                <option value="0" selected>Chưa thanh toán</option>
+                                <option value="1">Đã thanh toán</option>
                             </select>
                         </div>
                     </div>
@@ -105,85 +104,6 @@
             LoadDSHDDN();//load danh sách hóa đơn phòng
         });
 
-
-        function getHDDN(idHDDN) {
-            $.ajax({
-                url: '/Canbo/HOADON_DIENNUOC/ChiTiet',
-                type: 'get',
-                data: {
-                    id: idHDDN
-                },
-                success: function (data) {
-                    if (data.code == 200) {
-                        //console.log(data);
-                        //alert("Danh sách hóa đơn phòng đã load lên");
-                        //set giá trị mặc định cho các thành phần của form
-                        $('#selectPhong').val(data.hddn.ID_PHONG);
-                        $('#thang').val(data.hddn.THANG);
-                        $('#nam').val(data.hddn.NAM);
-                        $('#trangthai').val(data.hddn.TRANGTHAI);
-
-                        //$('#quanTri').prop('checked', data.cb.QUANTRI == 1?true:false);
-                    } else {
-                        alert(data.msg);
-                    }
-                }
-            });
-        }
-
-        //sự kiện click button chi tiết của mỗi dòng table
-        $(document).on('click', "button[name='view']", function () {
-            let idHDDN = $(this).closest('tr').attr('id');
-
-            getHDDN(idHDDN);
-            $('#modalHDDN').modal();
-
-            //set header của modal cán bộ
-            $('#modalTitle').text('Thông tin chi tiết của cán bộ');
-
-            $('#selectDongia').prop('readonly', true);
-            $('#selectPhong').prop('readonly', true);
-
-            $('#thang').prop('readonly', true);
-            $('#nam').prop('readonly', true);
-            $('#trangthai').prop('readonly', true);
-
-
-            ////ẩn button xác nhận
-            $('#btnSubmit').hide();
-        });
-
-        $(document).on('click', "button[name='update']", function () {
-
-            let id = $(this).closest('tr').attr('id');
-            $('#idHDDN').val(id);//gán vào giá trị cho thằng textbox hidden có giá trị để đánh dấu là trường hợp cập nhật
-            
-            getHDDN(id);
-
-            //set header của modal phòng
-            $('#modalTitle').text('Chỉnh sửa hóa đơn điện nước');
-
-            //set giá trị mặc định cho các thành phần của form
-            $('#idHDDN').val('');
-            $('#thang').val('');
-            $('#nam').val('');
-            $('#trangthai').val('');
-
-
-            
-            $('#selectDongia').prop('readonly', false);
-            $('#selectPhong').prop('readonly', false);
-            
-            $('#thang').prop('readonly', false);
-            $('#nam').prop('readonly', false);
-            $('#trangthai').prop('readonly', false);
-
-            //hiển thị button xác nhận
-            $('#btnSubmit').show();
-
-            //hiển thị modal lên
-            $('#modalHDDN').modal();
-        })
         //sự kiện click của button thêm mới phòng
         $('#btnAdd').click(function () {
             //set header của modal phòng
@@ -234,6 +154,7 @@
                     url: '/CanBo/HOADON_DIENNUOC/ThemMoi',
                     type: 'post',
                     data: {
+                        id: idHDDN,
                         idP: idP,
                         idDg: idDg,
                         thang: thang,
@@ -266,30 +187,7 @@
                     }
                 });
             }
-            else {//trường hợp cập nhật hóa đơn điện nước
-                $.ajax({
-                    url: '/CanBo/HOADON_DIENNUOC/CapNhat',
-                    type: 'post',
-                    data: {
-                        id: idHDDN,
-                        idP: idP,
-                        thang: thang,
-                        nam: nam,
-                        trangthai: trangthai
-                    },
-                    success: function (data) {
-                        if (data.code == 200) {
-                            alert(data.msg);
-
-                            $('#thang').prop('readonly', false);
-                            $('#nam').prop('readonly', false);
-                            $('#trangthai').prop('readonly', false);
-                            $('#modalHDPhong').modal('hide');
-                            LoadDSHDPhong(tuKhoa, trang);
-                        }
-                    }
-                })
-            }
+            
         });
 
         $('#btnSearch').click(function () {
@@ -320,8 +218,8 @@
                         
                         data.dshddn.forEach(p => {
                             let tr = '<tr id ="' + p.ID_HOADONDIENNUOC + '">';
-                            tr += '<td>' + p.MADAYPHONG + '</td>';
-                            tr += '<td>' + p.MAPHONG + '</td>';
+                            tr += '<td>' + (p.MADAYPHONG == null ? '' : p.MADAYPHONG) + '</td>';
+                            tr += '<td>' + (p.MAPHONG == null ? '' : p.MAPHONG) + '</td>';
                             tr += '<td>' + (p.DIENTHANGDAU == null ? '' : p.DIENTHANGDAU) + '</td>';
                             tr += '<td>' + (p.DIENTHANGSAU == null ? '' : p.DIENTHANGSAU) + '</td>';
                             tr += '<td>' + (p.CHISODIEN == null ? '' : p.CHISODIEN) +'</td>';
@@ -333,11 +231,7 @@
                             tr += '<td>' + (p.THANHTIEN == null ? '' : p.THANHTIEN) + '</td>';
                             tr += '<td>' + (p.THANG == null ? '' : p.THANG) + '</td>';
                             tr += '<td>' + (p.NAM == null ? '' : p.NAM) + '</td>';
-                            tr += '<td>' + (p.TRANGTHAIHDDN == 0 ? 'Đã thu tiền' : 'Chưa thu tiền') + '</td>';
-                            tr += '<td class = "text-right text-nowrap">';
-                            tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';
-                            tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
-                            tr += '</td>';
+                            tr += '<td>' + (p.TRANGTHAIHDDN == 0 ? 'Chưa thanh toán' : 'Đã thanh toán') + '</td>';
                             tr += '</tr>';
                             $('#tblDsHDDN').append(tr);
                         });
@@ -368,7 +262,7 @@
                     if (data.code == 200) {
                         $('#selectDongia').empty();
                         data.dsdg.forEach(dg => {
-                            let option = '<option value="' + dg.ID_DONGIA + '">' + dg.MADONGIA + '</option>';
+                            let option = '<option value="' + dg.ID_DONGIA + '">' + dg.MADONGIA + '">' + dg.TRANGTHAI + '</option>';
                             $('#selectDongia').append(option);
                         })
                     }

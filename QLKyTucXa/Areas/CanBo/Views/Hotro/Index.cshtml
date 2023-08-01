@@ -1,0 +1,392 @@
+﻿
+@{
+    ViewBag.Title = "Hỗ trợ";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-success" id="btnAdd">Hỗ trợ</button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-6 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm " id="phanTrang">
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã phòng
+                </th>
+                <th>
+                    Nội dung
+                </th>
+                <th>
+                   Ngày gửi nội dung hỗ trợ
+                </th>
+                <th>
+                    Trạng thái
+                </th>
+                <th>
+                    Thao tác
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tblDsHotro">
+        </tbody>
+    </table>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalHotro">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="modalTitle"></div>
+                    <div class="panel-body">
+                        <input type="text" hidden id="idHotro" value="" />
+                        <div class="form-group">
+                            <label>Mã phòng(<span class="text-danger">*</span>):</label>
+                            <select id="selectPhong" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nội dung(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="noidung" placeholder="Nội dung ngắn gọn">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày gửi(<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" id="ngaygui" placeholder="Ngày gửi">
+                        </div>
+                        <div class="form-group">
+                            <label for="trangThai">Trạng Thái(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="trangthai" id="trangthai">
+                                <option value="0">Chưa hỗ trợ</option>
+                                <option value="1" selected>Đã hỗ trợ</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSubmit">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        var tuKhoa = '';
+        var trang = 1;
+        $(document).ready(function () {
+            LoadDsHotro(tuKhoa, trang);
+            LoadDsPhong();
+        });
+
+        //sự kiện enter của text có id là txtSearch
+        $('#txtSearch').on('keypress', function (e) {
+            if (e.which == 13) {//nếu phím đc gõ là enter
+                $('#btnSearch').click();//thì gọi tới sự kiện click của button có id là btnSearch
+            }
+        });
+
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDsHotro(tuKhoa, trang);
+        });
+
+
+        //sự kiện click của button tìm kiếm
+        $('#btnSearch').click(function () {
+            trang = 1;
+            tuKhoa = $('#txtSearch').val();
+            LoadDsHotro(tuKhoa, trang);
+        });
+
+        function getHDPhong(idHotro) {
+            $.ajax({
+                url: '/Canbo/Hotro/ChiTiet',
+                type: 'get',
+                data: {
+                    id: idHotro
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //console.log(data);
+                        //alert("Danh sách hóa đơn phòng đã load lên");
+                        //set giá trị mặc định cho các thành phần của form
+                        //nếu lấy thông tin thành công
+                        $('#noidung').val(data.I.noidung);
+                        $('#ngaygui').val(data.I.ngaygui);
+                        $('#trangthai').val(data.I.trangthai);
+                        //$('#quanTri').prop('checked', data.cb.QUANTRI == 1?true:false);
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+        //sự kiện click button chỉnh sửa
+        $(document).on('click', "button[name = 'edit' ]", function () {
+            let id = $(this).closest('tr').attr('id');
+            $('#idHotro').val(id);//gán vào giá trị cho thằng textbox hidden có giá trị để đánh dấu là trường hợp cập nhật
+            getHDPhong(id);
+            $.ajax({
+                url: '/CanBo/Hotro/ChiTiet',
+                type: 'get',
+                data: {
+                    id: id,
+
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //nếu lấy thông tin thành công
+                        $('#noidung').val(data.I.noidung);
+                        $('#ngaygui').val(data.I.ngaygui);
+                        $('#trangthai').val(data.I.trangthai);
+
+                        //gán giá trị cho text hidden có id là idCB = id tr được chọn
+                        $('#idHotro').val(id);
+                        $('#modaltitle').text('Chỉnh sửa cán bộ');
+                        
+                        //không cho chỉnh sửa các giá trị
+                        $('#noidung').prop('readonly', false);
+                        $('#ngaygui').prop('readonly', false);
+                        $('#trangthai').prop('readonly', false);
+
+
+                        $('#modalHotro').modal();
+
+
+
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            })
+        });
+
+        //sự kiện click button xem
+        $(document).on('click', "button[name = 'view' ]", function () {
+            let id = $(this).closest('tr').attr('id');
+            $.ajax({
+                url: '/CanBo/Hotro/ChiTiet',
+                type: 'get',
+                data: {
+                    id: id,
+
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //nếu lấy thông tin thành công
+                        $('#noidung').val(data.I.noidung);
+                        $('#ngaygui').val(data.I.ngaygui);
+                        $('#trangthai').val(data.I.trangthai);
+
+                        //gán giá trị cho text hidden có id là idCB = id tr được chọn
+                        $('#idHotro').val(id);
+                        $('#modaltitle').text('Chỉnh sửa hỗ trợ');
+
+                        //không cho chỉnh sửa các giá trị
+                        $('#noidung').prop('readonly', false);
+                        $('#ngaygui').prop('readonly', false);
+                        $('#trangthai').prop('readonly', false);
+
+                        $('#modalHT').modal();
+                        //ẩn button đi
+                        $('#submit').hide();
+
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            })
+        });
+
+        //sự kiện click button xác nhận
+        $('#btnSubmit').click(function () {
+            let idP = $('#selectPhong option:selected').val();
+            let noidung = $('#noidung').val().trim();
+            let ngaygui = $('#ngaygui').val().trim();
+            let trangthai = $('#trangthai').val().trim();
+
+            //ràng buộc dữ liệu
+            if (noidung.length == 0 || ngaygui.length == 0) {
+                alert('Vui lòng nhập đầy đủ dữ liệu để tiếp tục');
+                return;
+            }
+            let idHotro = $('#idHotro').val().trim();
+
+            if (idHotro.length == 0) {//nếu là thêm mới đơn giá
+                //dùng ajax để thêm mới đơn giá
+                $.ajax({
+                    url: '/Canbo/Hotro/ThemMoi',
+                    type: 'post',
+                    data: {
+                        idP: idP,
+                        noidung: noidung,
+                        ngaygui: ngaygui,
+                        trangthai: trangthai,
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsDongia(tuKhoa, trang);
+                            $('#noidung').val('');
+                            $('#ngaygui').val('');
+                            $('#trangthai').val('');
+                           ;
+                        } else {
+                            alert(data.msg);
+                        }
+
+                    }
+                });
+            } else {//nếu là cập nhật 1 đơn giá đã có
+                //dùng ajax để cập nhật đơn giá
+
+                $.ajax({
+                    url: '/Canbo/Hotro/CapNhat',
+                    type: 'post',
+                    data: {
+                        id: idHotro,
+                        idP: idP,
+                        noidung: noidung,
+                        ngaygui: ngaygui,
+                        trangthai: trangthai,
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            //cập nhật thành công
+                            alert(data.msg);
+                            $('#modalDongia').modal('hide');//đóng modal
+
+                            //load lại danh sách đơn giá sau khi cập nhật
+                            LoadDsDongia(tuKhoa, trang);
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+
+            }
+
+        });
+
+
+        //sự kiện click của button thêm mới đơn giá
+        $('#btnAdd').click(function () {
+            //set header của modal đơn giá
+            $('#modalTitle').text('Thêm mới đơn giá');
+
+            //set giá trị mặc định cho các thành phần của form
+            $('#idHotro').val('');
+            $('#selectPhong').val('');
+            $('#noidung').val('');
+            $('#ngaygui').val('');
+            $('#trangthai').val('');
+           
+
+            //không cho chỉnh sửa các giá trị
+            $('#noidung').prop('readonly', false);
+            $('#selectPhong').prop('readonly', false);
+            $('#ngaygui').prop('readonly', false);
+            $('#trangthai').prop('readonly', false);
+
+            //ẩn button xác nhận
+            $('#btnSubmit').show();
+
+            //hiển thị modal lên
+            $('#modalHotro').modal();
+        })
+
+
+        //hàm load danh sách đơn giá đổ vào table
+        function LoadDsHotro() {
+            //dùng ajax để load danh sách đơn giá trong controller Dongia
+            $.ajax({
+                url: '/Canbo/Hotro/DsHT',
+                type: 'get',
+                data: {
+                    tuKhoa,
+                    trang,
+                },
+                success: function (data) {
+                    //console.log(data);
+                    if (data.code == 200) {
+                        $('#tblDsHotro').empty();
+                        data.dsHT.forEach(p => {
+                            let tr = '<tr id="' + p.ID_PHIEU + '">'
+                            tr += '<td class = "col-sm-2">' + p.MAPHONG + '</td>';
+                            tr += '<td class = "col-sm-2">' + p.NOIDUNG + '</td>';
+                            tr += '<td class = "col-sm-2">' + p.NGAYGUI + '</td>';
+                            tr += '<td class = "col-sm-2">' + (p.TRANGTHAI == 1 ? 'Đã hỗ trợ' : 'Chưa hỗ trợ') + '</td>';
+                            tr += '<td class = "col-sm-2 text-right">';
+                            /*tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';*/
+                            tr += '<button class = "btn btn-xs btn-warning" name = "edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
+                            /*tr += '<button class = "btn btn-xs btn-danger" name = "delete"><i class="fa fa-trash" aria-hidden="true"></i></button>';*/
+                            tr += '</td>';
+                            tr += '</tr>';
+                            $('#tblDsHotro').append(tr);
+                        });
+                       
+                        //phân trang
+
+                        $('#phanTrang').empty();
+                        for (i = 1; i <= data.soTrang; i++) {
+                            let li = '<li class="page-item" id="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+                            $('#phanTrang').append(li);
+                        }
+
+                        let li = $('#phanTrang li#' + trang + '');//tìm li có id = trang truyền vào
+                        //ví dụ trang = 2, sẽ tìm tới cái thằng li có id = 2
+                        //tìm ra đc thằng cần tìm thì add class active để đánh dấu trang hiện tại đang đc load
+                        $(li).addClass('active');
+
+                    }
+                }
+            });
+
+        }
+
+        //load danh sách dãy phòng ID -> Mã phòng
+        function LoadDsPhong() {
+            $.ajax({
+                url: '/CanBo/Hotro/ListPhong',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#selectPhong').empty();
+                        data.dsp.forEach(dp => {
+                            let option = '<option value="' + dp.ID_PHONG + '">' + dp.MAPHONG + '</option>';
+                            $('#selectPhong').append(option);
+                        })
+                    }
+                }
+            })
+        }
+    </script>
+}
