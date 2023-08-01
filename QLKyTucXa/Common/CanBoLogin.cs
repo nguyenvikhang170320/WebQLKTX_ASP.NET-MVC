@@ -5,6 +5,7 @@ using System.Web;
 
 namespace QLKyTucXa.Common
 {
+    //Session tài khoản Cán bộ
     [Serializable]
     public class CanBoLogin
     {

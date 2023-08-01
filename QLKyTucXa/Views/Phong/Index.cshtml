@@ -1,0 +1,283 @@
+﻿
+@{
+    ViewBag.Title = "Phòng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-primary">Phòng</button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-6 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm" id="phanTrang"></ul>
+            </nav>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Dãy phòng
+                </th>
+                <th>
+                    Mã phòng
+                </th>
+                <th>
+                    Tài khoản
+                </th>
+                <th>
+                    Số lượng
+                </th>
+                <th>
+                    Đơn giá
+                </th>
+                <th>
+                    Mô tả khác
+                </th>
+                <th>
+                    Tình trạng
+                </th>
+                <th>
+                    Thao tác
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tblDsPhong">
+        </tbody>
+    </table>
+
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="modalReset">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="modalTitle"></div>
+                <div class="panel-body">
+                    <input type="text" hidden id="idPhong" value="" />
+                    <div class="form-group">
+                        <label>Mật khẩu mới(<span class="text-danger">*</span>):</label>
+                        <input type="password" class="form-control" id="matKhau1" placeholder="Nhập mật khẩu mới">
+                    </div>
+                    <div class="form-group">
+                        <label>Nhập lại mật khẩu(<span class="text-danger">*</span>):</label>
+                        <input type="password" class="form-control" id="matKhau2" placeholder="Nhập lại mật khẩu mới">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnReset">Xác nhận</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var tuKhoa = "";
+        var trang = 1;
+        $(document).ready(function () {
+            LoadDsDayphong();
+            LoadDSPhong();
+        })
+
+        //sự kiện của button reset
+        $('#btnReset').click(function () {
+            $('#tblDsCanbo  > tr').each(function (index, tr) {
+                if ($(this).find('input').is(":checked")) {
+                    let id = $(this).attr('id');
+                    $.ajax({
+                        url: '/CanBo/Phong/Reset',
+                        type: 'post',
+                        data: {
+                            id: id
+                        },
+                        success: function (data) {
+                            if (data.code == 200) {
+                                alert(data.msg);
+                                //console.log(data.msg);
+                            }
+                        },
+                        failed: function (err) {
+                            alert('Loi')
+                        }
+                    })
+
+                }
+            });
+        });
+
+
+        //sự kiện của button reset
+        $('#btnReset').click(function () {
+            let idPhong = $('#idPhong').val().trim();
+            let matKhau1 = $('#matKhau1').val().trim();
+            let matKhau2 = $('#matKhau2').val().trim();
+
+            //ràng buộc dữ liệu
+            if (matKhau1.length == 0
+                || matKhau2.length == 0) {
+                alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
+                return;
+            } else if (matKhau1 != matKhau2) {
+                alert('Nhập lại mật khẩu sai!');
+                return;
+            }
+
+            if (idPhong.length == 0) {//trường hợp k có phòng
+                alert('Không có phòng nào ở đây!!')
+            } else {//trường hợp reset pass phòng
+                $.ajax({
+                    url: '/Canbo/Phong/Reset',
+                    type: 'post',
+                    data: {
+                        id: idPhong,
+                        matKhau1: matKhau1,
+                        matKhau2: matKhau2,
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsPhong(tuKhoa, trang);
+                            $('#modalReset').modal('hide');
+                        }
+                    }
+                })
+            }
+        });
+
+        //sự kiện reset phòng
+        $(document).on('click', "button[name='reset']", function () {
+            let id = $(this).closest('tr').attr('id');
+            $('#idPhong').val(id);//gán vào giá trị cho thằng textbox hidden có giá trị để đánh dấu là trường hợp cập nhật
+            getPass(id);
+            $('#modalReset').modal();
+
+            //set header của modal cán bộ
+            $('#modalTitle').text('Thay đổi mật khẩu');
+
+            $('#matKhau0').prop('readonly', false);
+            //$('#matKhau1').prop('readonly', false);
+            //$('#matKhau2').prop('readonly', false);
+
+            ////ẩn button xác nhận
+            $('#btnReset').show();
+        });
+
+        function getPass(idPhong) {
+            $.ajax({
+                url: '/Canbo/Phong/ChiTietPass',
+                type: 'get',
+                data: {
+                    id: idPhong
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //console.log(data);
+                        //set giá trị mặc định cho các thành phần của form
+                        $('#matKhau').val(data.p.MATKHAU);
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+      
+        $('#btnSearch').click(function () {
+            tuKhoa = $('#txtSearch').val();
+            LoadDSPhong();
+        })
+
+        function LoadDSPhong() {
+            $.ajax({
+                url: '/Phong/DsPhong',
+                type: 'get',
+
+                data: {
+                    tuKhoa,
+                    trang,
+                    //idDp: $('#selectDayphong option:selected').val()
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#tblDsPhong').empty();
+                    if (data.code == 200) {
+                        //let idx = 1;
+
+                        data.dsp.forEach(p => {
+                            let tr = '<tr id ="' + p.ID_PHONG + '">';
+                            //tr += '<td>' + (idx++) + '</td>';
+                            tr += '<td>' + p.MADAYPHONG + '</td>';
+                            tr += '<td>' + p.MAPHONG + '</td>';
+                            tr += '<td>' + p.TAIKHOAN + '</td>';
+                            tr += '<td>' + p.SOLUONGNV + '</td>';
+                            tr += '<td>' + p.DONGIA + '</td>';
+                            tr += '<td>' + p.MOTAKHAC + '</td>';
+                            tr += '<td>' + (p.TINHTRANG == 0 ? 'Còn trống' : 'Có người ở') + '</td>';
+
+                            tr += '<td class = "text-right text-nowrap">';                           
+                            tr += '<button class = "btn btn-xs btn-info" name = "reset"><i class="fa fa-key" aria-hidden="true"></i></button>&nbsp;';
+                            tr += '</td>';
+                            tr += '</tr>';
+                            $('#tblDsPhong').append(tr);
+                        });
+
+                        //phân trang
+
+                        $('#phanTrang').empty();
+                        for (i = 1; i <= data.soTrang; i++) {
+                            let li = '<li class="page-item" id="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+                            $('#phanTrang').append(li);
+                        }
+
+                        let li = $('#phanTrang li#' + trang + '');//tìm li có id = trang truyền vào
+                        //ví dụ trang = 2, sẽ tìm tới cái thằng li có id = 2
+                        //tìm ra đc thằng cần tìm thì add class active để đánh dấu trang hiện tại đang đc load
+                        $(li).addClass('active');
+                    }
+                }
+            })
+        }
+
+        function LoadDsDayphong() {
+            $.ajax({
+                url: '/CanBo/Phong/ListDayphong',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#selectDayphong').empty();
+                        data.dsdp.forEach(dp => {
+                            let option = '<option value = "' + dp.ID_DAY + '">' + dp.MADAYPHONG + '</option>';
+                            $('#selectDayphong').append(option);
+                        })
+                    }
+                }
+            })
+        }
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDSPhong();
+        });
+    </script>
+
+}

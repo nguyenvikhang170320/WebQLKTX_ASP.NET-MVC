@@ -132,8 +132,6 @@
     <Compile Include="Areas\CanBo\Controllers\NhanvienController.cs" />
     <Compile Include="Areas\CanBo\Controllers\PhongController.cs" />
     <Compile Include="Areas\CanBo\Controllers\ThemNVController.cs" />
-    <Compile Include="Areas\CanBo\Models\HDPhong.cs" />
-    <Compile Include="Areas\CanBo\Models\DienNuoc.cs" />
     <Compile Include="Areas\CanBo\Models\LoginModel.cs" />
     <Compile Include="Areas\CanBo\Models\ViewModel_HDĐN_HDP.cs" />
     <Compile Include="Common\CanBoLogin.cs" />
@@ -142,13 +140,15 @@
     <Compile Include="Common\PhongLogin.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CANBOesController.cs" />
-    <Compile Include="Controllers\CONGTODIENNUOCsController.cs" />
+    <Compile Include="Controllers\CONGTODIENNUOCController.cs" />
     <Compile Include="Controllers\DayphongController.cs" />
     <Compile Include="Controllers\HD_PhongController.cs" />
+    <Compile Include="Controllers\HOADON_DIENNUOCController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HOTROesController.cs" />
     <Compile Include="Controllers\LoginPhongController.cs" />
-    <Compile Include="Controllers\HD_DienNuocController.cs" />
+    <Compile Include="Controllers\NhanvienController.cs" />
+    <Compile Include="Controllers\PhongController.cs" />
     <Compile Include="Controllers\XemNVController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -357,10 +357,6 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\CanBo\Views\HOADON_PHONG\Index.cshtml" />
     <Content Include="Areas\CanBo\Views\HOADON_DIENNUOC\Index.cshtml" />
-    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Create.cshtml" />
-    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Delete.cshtml" />
-    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Details.cshtml" />
-    <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Edit.cshtml" />
     <Content Include="Areas\CanBo\Views\CONGTODIENNUOC\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -398,17 +394,18 @@
     <Content Include="Views\HOTROes\Details.cshtml" />
     <Content Include="Views\HOTROes\Edit.cshtml" />
     <Content Include="Views\HOTROes\Index.cshtml" />
-    <Content Include="Views\HD_DienNuoc\CreateDIEN_NUOC.cshtml" />
-    <Content Include="Views\HD_DienNuoc\Index.cshtml" />
     <Content Include="Views\HD_Phong\Index.cshtml" />
     <Content Include="Views\XemNV\Index.cshtml" />
-    <Content Include="Views\CONGTODIENNUOCs\Index.cshtml" />
     <Content Include="Views\CANBOes\Create.cshtml" />
     <Content Include="Views\CANBOes\Delete.cshtml" />
     <Content Include="Views\CANBOes\Details.cshtml" />
     <Content Include="Views\CANBOes\Edit.cshtml" />
     <Content Include="Views\CANBOes\Index.cshtml" />
     <Content Include="Views\Dayphong\Index.cshtml" />
+    <Content Include="Views\Phong\Index.cshtml" />
+    <Content Include="Views\Nhanvien\Index.cshtml" />
+    <Content Include="Views\HOADON_DIENNUOC\Index.cshtml" />
+    <Content Include="Views\CONGTODIENNUOC\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

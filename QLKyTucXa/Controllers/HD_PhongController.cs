@@ -12,12 +12,8 @@ namespace QLKyTucXa.Controllers
     public class HD_PhongController : BaseController
     {
         private QLKyTucXaDbContext db = new QLKyTucXaDbContext();
-        // GET: HD_Phong
-
-
-
-
-            // GET: CanBo/HOADON_PHONG
+            
+            // GET: HD_Phong
             public ActionResult Index()
             {
                 return View();
@@ -35,7 +31,7 @@ namespace QLKyTucXa.Controllers
                       from tA in tableA.Where(x => x.TRANGTHAI == true && x.DAXOA != true && x.ID_PHONG == uid).DefaultIfEmpty()
                       where (hdp.PHONG.MAPHONG.ToLower().Contains(tuKhoa))
                       || hdp.PHONG.DAYPHONG.MADAYPHONG.ToLower().Contains(tuKhoa)
-                      select new ViewModel_HDĐN_HDP
+                      select new ViewModel_HD()
                       {
                           ID_HOADONPHONG = hdp.ID_HOADONPHONG,
                           ID_PHONG = tA.ID_PHONG,
@@ -45,7 +41,7 @@ namespace QLKyTucXa.Controllers
                           KY = hdp.KY,
                           DONGIA = tA.DONGIA,
                           THANHTIEN = tA.DONGIA * 6,
-                          TRANGTHAI = hdp.TRANGTHAI
+                          TRANGTHAIHDP = hdp.TRANGTHAI
                       }).ToList();
 
 

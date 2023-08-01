@@ -13,6 +13,8 @@ namespace QLKyTucXa.Areas.CanBo.Models
         public int ID_HOADONPHONG { get; set; }
         public int ID_DIEN { get; set; }
         public int ID_NUOC { get; set; }
+        public int ID_DIENNUOC { get; set; }
+        public int ID_DONGIA { get; set; }
         // Not used
         public string MAPHONG { get; set; }
         public string MADAYPHONG { get; set; }
@@ -28,22 +30,23 @@ namespace QLKyTucXa.Areas.CanBo.Models
         public double DONGIA_DIEN { get; set; }
         public double DONGIA_NUOC { get; set; }
        
-        public int NUOCCHISODAU { get; set; }
-        public int NUOCCHISOCUOI { get; set; }
-        public int DIENCHISODAU { get; set; }
-        public int DIENCHISOCUOI { get; set; }
+        public int NUOCTHANGDAU { get; set; }
+        public int NUOCTHANGSAU { get; set; }
+        public int DIENTHANGDAU { get; set; }
+        public int DIENTHANGSAU { get; set; }
 
         public int CHISODIEN { get; set; }
         public int CHISONUOC { get; set; }
         public double? THANHTIEN { get; set; }
-        public double? THANHTIEN_DIEN { get; set; }
-        public double? THANHTIEN_NUOC { get; set; }
+        public double? TIENDIEN { get; set; }
+        public double? TIENNUOC { get; set; }
         public int KY { get; set; }
         public double? DONGIA { get; set; }
         public double? DONGIADIEN { get; set; }
         public double? DONGIANUOC { get; set; }
-        public int? TRANGTHAI { get; set; }
-        public int? TRANGTHAIDIEN { get; set; }
-        public int? TRANGTHAINUOC { get; set; }
+        public int? TRANGTHAIHDP { get; set; }
+        public int TRANGTHAIHDDN { get; set; }
+        public int TRANGTHAIDIEN { get; set; }
+        public int TRANGTHAINUOC { get; set; }
     }
 }

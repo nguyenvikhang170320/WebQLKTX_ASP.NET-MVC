@@ -70,7 +70,6 @@
                     <div class="panel-heading" id="modalTitle"></div>
                     <div class="panel-body">
                         <input type="text" hidden id="idHDPhong" value="" />
-                       
                         <div class="form-group">
                             <label>Mã phòng(<span class="text-danger">*</span>):</label>
                             <select id="selectPhong" class="form-control"></select>
@@ -316,7 +315,7 @@
                             tr += '<td>' + (p.KY == null ? '' : p.KY) + '</td>';
                             tr += '<td>' + p.DONGIA + '</td>';
                             tr += '<td>' + p.THANHTIEN + '</td>';
-                            tr += '<td>' + (p.TRANGTHAI == 0 ? 'Đã thu tiền' : 'Chưa thu tiền') + '</td>';
+                            tr += '<td>' + (p.TRANGTHAIHDP == 0 ? 'Đã thu tiền' : 'Chưa thu tiền') + '</td>';
                             tr += '<td class = "text-right text-nowrap">';
                             tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';
                             tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';

@@ -47,7 +47,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                           KY = hdp.KY,
                           DONGIA = tA.DONGIA,
                           THANHTIEN = tA.DONGIA * 6,
-                          TRANGTHAI = hdp.TRANGTHAI
+                          TRANGTHAIHDP = hdp.TRANGTHAI
                       }).ToList();
 
 
@@ -92,6 +92,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 return Json(new { code = 500, msg = "Lấy danh sách phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
 
         [HttpPost]
         public JsonResult ThemMoi(int idP, int nam, int ky, int? trangthai)
@@ -142,18 +143,12 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
 
                     //luu vao csdl
                     db.SaveChanges();
-                    return Json(new { code = 200, msg = "Cập nhật phòng thành công" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { code = 200, msg = "Cập nhật hóa đơn phòng thành công" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     return Json(new { code = 200, msg = "Tài khoản của bạn không có quyền chỉnh sửa" }, JsonRequestBehavior.AllowGet);
                 }
-
-                //p.ID_DAY = idDp;
-                //p.MAPHONG = maPhong;
-              
-
-               
 
             }
             catch (Exception ex)

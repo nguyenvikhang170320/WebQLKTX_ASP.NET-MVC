@@ -1,0 +1,244 @@
+﻿
+@{
+    ViewBag.Title = "Công tơ điện nước";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-success" id="btnAdd"><i class="fa fa-plus" aria-hidden="true"></i> Thêm chí số công tơ điện nước</button>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalDN">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="modalTitle"></div>
+                    <div class="panel-body">
+                        <input type="text" hidden id="idDN" value="" />
+                        <div class="form-group">
+                            <label>Mã phòng(<span class="text-danger">*</span>):</label>
+                            <select id="selectPhong" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Điện tháng trước(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="dienthangdau" placeholder="Điện tháng trước">
+                        </div>
+                        <div class="form-group">
+                            <label>Điện tháng sau(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="dienthangsau" placeholder="Điện tháng sau">
+                        </div>
+                        <div class="form-group">
+                            <label>Nước tháng trước(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="nuocthangdau" placeholder="Nước tháng trước">
+                        </div>
+                        <div class="form-group">
+                            <label>Nước tháng này(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="nuocthangsau" placeholder="Nước tháng sau">
+                        </div>
+                        <div class="form-group">
+                            <label>Tháng điện(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="thang" placeholder="Tháng">
+                        </div>
+                        <div class="form-group">
+                            <label>Năm điện(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="nam" placeholder="Năm">
+                        </div>
+                        <div class="form-group">
+                            <label>Tháng nước(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="thangnuoc" placeholder="Tháng nước">
+                        </div>
+                        <div class="form-group">
+                            <label>Năm nước(<span class="text-danger">*</span>):</label>
+                            <input type="number" class="form-control" id="namnuoc" placeholder="Năm nước">
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng thái điện(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="trangthaidien" id="trangthaidien">
+                                <option value="0" selected>Công tơ cũ</option>
+                                <option value="1">Đổi công tơ mới</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng thái nước(<span class="text-danger">*</span>):</label>
+                            <select class="form-control" name="trangthainuoc" id="trangthainuoc">
+                                <option value="0" selected>Công tơ cũ</option>
+                                <option value="1">Đổi công tơ</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSubmit">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+       
+
+        //sự kiện click của button thêm mới phòng
+        $('#btnAdd').click(function () {
+            //set header của modal phòng
+            $('#modalTitle').text('Thêm mới chỉ số điện nước phòng');
+
+            //set giá trị mặc định cho các thành phần của form
+            //$('#idDN').val('');
+            //$('#dienthangdau').val('');
+            //$('#dienthangsau').val('');
+            //$('#nuocthangdau').val('');
+            //$('#nuocthangsau').val('');
+            //$('#thang').val('');
+            //$('#nam').val('');
+            //$('#thangnuoc').val('');
+            //$('#namnuoc').val('');
+            //$('#trangthaidien').val('');
+            //$('#trangthainuoc').val('');
+
+
+            $('#selectPhong').prop('readonly', false);
+            $('#dienthangdau').prop('readonly', false);
+            $('#dienthangsau').prop('readonly', false);
+            $('#nuocthangdau').prop('readonly', false);
+            $('#nuocthangsau').prop('readonly', false);
+            $('#thang').prop('readonly', false);
+            $('#nam').prop('readonly', false);
+            $('#thangnuoc').prop('readonly', false);
+            $('#namnuoc').prop('readonly', false);
+            $('#trangthaidien').prop('readonly', false);
+            $('#trangthainuoc').prop('readonly', false);
+
+            //hiển thị button xác nhận
+            $('#btnSubmit').show();
+
+            //hiển thị modal lên
+            $('#modalDN').modal();
+        });
+
+
+        //sự kiện của button xác nhận
+        $('#btnSubmit').click(function () {
+            let idDN = $('#idDN').val().trim();
+            let idP = $('#selectPhong option:selected').val().trim();
+            let dienthangdau = $('#dienthangdau').val().trim();
+            let dienthangsau = $('#dienthangsau').val().trim();
+            let nuocthangdau = $('#nuocthangdau').val().trim();
+            let nuocthangsau = $('#nuocthangsau').val().trim();
+            let thang = $('#thang').val().trim();
+            let nam = $('#nam').val().trim();
+            let thangnuoc = $('#thangnuoc').val().trim();
+            let namnuoc = $('#namnuoc').val().trim();
+            let trangthaidien = $('#trangthaidien option:selected').val().trim();
+            let trangthainuoc = $('#trangthainuoc option:selected').val().trim();
+            
+            //ràng buộc dữ liệu
+            if (dienthangdau.length == 0 || dienthangsau.length == 0 ||
+                nuocthangdau.length == 0 || nuocthangsau.length == 0 ||
+                thang.length == 0 || nam.length == 0 ||
+                thangnuoc.length == 0 || namnuoc.length == 0
+                || trangthaidien.length == 0 || trangthainuoc.length == 0) {
+                alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
+                return;
+            }
+
+            if (idDN.length == 0) {//trường hợp thêm mới phòng
+                alert(1);
+
+                $.ajax({
+                    url: '/CanBo/CONGTODIENNUOC/ThemMoi',
+                    type: 'post',
+                    data: {
+                        idP: idP,
+                        dienthangdau: dienthangdau,
+                        dienthangsau: dienthangsau,
+                        nuocthangdau: nuocthangdau,
+                        nuocthangsau: nuocthangsau,
+                        thang: thang,
+                        nam: nam,
+                        thangnuoc: thangnuoc,
+                        namnuoc: namnuoc,
+                        trangthaidien: trangthaidien,
+                        trangthainuoc: trangthainuoc
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDSDN(tuKhoa, trang);//cập nhật lại ds phòng đc hiển thị
+
+                            $('#idDN').val('');
+                            $('#dienthangdau').val('');
+                            $('#dienthangsau').val('');
+                            $('#nuocthangdau').val('');
+                            $('#nuocthangsau').val('');
+                            $('#thang').val('');
+                            $('#nam').val('');
+                            $('#thangnuoc').val('');
+                            $('#namnuoc').val('');
+                            $('#trangthaidien').val('');
+                            $('#trangthainuoc').val('');
+
+
+                            $('#selectPhong').prop('readonly', false);
+                            $('#dienthangdau').prop('readonly', false);
+                            $('#dienthangsau').prop('readonly', false);
+                            $('#nuocthangdau').prop('readonly', false);
+                            $('#nuocthangsau').prop('readonly', false);
+                            $('#thang').prop('readonly', false);
+                            $('#nam').prop('readonly', false);
+                            $('#thangnuoc').prop('readonly', false);
+                            $('#namnuoc').prop('readonly', false);
+                            $('#trangthaidien').prop('readonly', false);
+                            $('#trangthainuoc').prop('readonly', false);
+
+
+                        } else if (data.code == 300) {
+                            alert(data.msg);
+                        }
+                    },
+                    error: function (err) {
+
+                    }
+                });
+            }
+        });
+
+
+        $(document).ready(function () {      
+            LoadDsPhong();// load danh sách dãy phòng ID -> Mã phòng
+        });
+     
+        //load danh sách dãy phòng ID -> Mã phòng
+        function LoadDsPhong() {
+            $.ajax({
+                url: '/CanBo/CONGTODIENNUOC/ListPhong',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#selectPhong').empty();
+                        data.dsp.forEach(dp => {
+                            let option = '<option value="' + dp.ID_PHONG + '">' + dp.MAPHONG + '</option>';
+                            $('#selectPhong').append(option);
+                        })
+                    }
+                }
+            })
+        }
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDSDN();
+            
+        });
+
+    </script>
+}
+

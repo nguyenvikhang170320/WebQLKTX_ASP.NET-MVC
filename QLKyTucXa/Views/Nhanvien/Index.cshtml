@@ -1,13 +1,13 @@
 ﻿
 @{
-    ViewBag.Title = "Dãy phòng";
+    ViewBag.Title = "Nhân viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="jumbotron">
     <div class="row">
         <div class="col-sm-2">
-            <button class="btn btn-primary">Dãy Phòng</button>
+            <button class="btn btn-primary">Nhân viên</button>
         </div>
         <div class="col-sm-4 col-sm-offset-6 text-right">
             <div class="input-group">
@@ -24,22 +24,41 @@
     <div class="row">
         <div class="col-sm-12 col-sm-offset-0 text-right">
             <nav aria-label="...">
-                <ul class="pagination pagination-sm " id="phanTrang">
-                </ul>
+                <ul class="pagination pagination-sm" id="phanTrang"></ul>
             </nav>
         </div>
     </div>
+
 
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    Mã dãy phòng
+                    Mã nhân viên
+                </th>
+                <th>
+                    Họ & tên
+                </th>
+                <th>
+                    Ngày sinh
+                </th>
+                <th>
+                    Giới tính
+                </th>
+                <th>
+                    Điện thoại
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Địa chỉ
                 </th>
             </tr>
         </thead>
-        <tbody id="tblDsDayphong">
+        <tbody id="tblDsNhanvien">
         </tbody>
+
     </table>
 
 </div>
@@ -50,8 +69,9 @@
     <script>
         var tuKhoa = '';
         var trang = 1;
+
         $(document).ready(function () {
-            LoadDsDayphong(tuKhoa, trang);
+            LoadDsNhanvien(tuKhoa, trang);
         });
 
         //sự kiện enter của text có id là txtSearch
@@ -61,27 +81,26 @@
             }
         });
 
-
         //sự kiện click của trang
         $("#phanTrang").on("click", "li", function (e) {
             e.preventDefault();
             trang = $(this).text();
-            LoadDsDayphong(tuKhoa, trang);
+            LoadDsNhanvien(tuKhoa, trang)
         });
-
 
         //sự kiện click của button tìm kiếm
         $('#btnSearch').click(function () {
             trang = 1;
             tuKhoa = $('#txtSearch').val();
-            LoadDsDayphong(tuKhoa, trang);
+            LoadDsNhanvien(tuKhoa, trang);
         });
 
+
         //hàm load danh sách lớp đổ vào table
-        function LoadDsDayphong(search, trang) {
+        function LoadDsNhanvien(search, trang) {
             //dùng ajax để load danh sách lớp trong controller lop
             $.ajax({
-                url: '/Dayphong/DsDayphong',
+                url: '/Nhanvien/DsNhanvien',
                 type: 'get',
                 data: {
                     tuKhoa: search,
@@ -90,12 +109,18 @@
                 success: function (data) {
                     //console.log(data);
                     if (data.code == 200) {
-                        $('#tblDsDayphong').empty();
-                        $.each(data.dsDayphong, function (k, v) {
-                            let tr = '<tr id="' + v.ID_DAY + '">'
-                            tr += '<td class = "col-sm-8">' + v.MADAYPHONG + '</td>';
+                        $('#tblDsNhanvien').empty();
+                        $.each(data.dsNhanvien, function (k, v) {
+                            let tr = '<tr id="' + v.ID_NHANVIEN + '">'
+                            tr += '<td class = "col-sm-1">' + v.MANV + '</td>';
+                            tr += '<td class = "col-sm-2">' + v.TENNV + '</td>';
+                            tr += '<td class = "col-sm-1">' + v.NGAYSINH + '</td>';//ConvertJsonDateString(v.NGAYSINH)
+                            tr += '<td class = "col-sm-1">' + (v.GIOITINH == true ? 'Nam': 'Nữ') + '</td>';
+                            tr += '<td class = "col-sm-2">' + (v.SDT == null ? '' : v.SDT) + '</td>';
+                            tr += '<td class = "col-sm-2">' + (v.EMAIL == null ? '' : v.EMAIL) + '</td>';
+                            tr += '<td class = "col-sm-2">' + (v.DIACHI == null ? '' : v.DIACHI) + '</td>';
                             tr += '</tr>';
-                            $('#tblDsDayphong').append(tr);
+                            $('#tblDsNhanvien').append(tr);
                         });
 
                         //phân trang
@@ -115,5 +140,22 @@
                 }
             });
         }
+
+            //convert Date
+        //function ConvertJsonDateString(jsonDate) {
+        //    var shortDate = null;
+        //    if (jsonDate) {
+        //        var regex = /-?\d+/;
+        //        var matches = regex.exec(jsonDate);
+        //        var dt = new Date(parseInt(matches[0]));
+        //        var month = dt.getMonth() + 1;
+        //        var monthString = month > 9 ? month : '0' + month;
+        //        var day = dt.getDate();
+        //        var dayString = day > 9 ? day : '0' + day;
+        //        var year = dt.getFullYear();
+        //        shortDate = year + '/' + monthString + '/' + dayString;
+        //    }
+        //    return shortDate;
+        //};
     </script>
 }

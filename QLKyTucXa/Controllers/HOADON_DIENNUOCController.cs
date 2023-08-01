@@ -12,7 +12,7 @@ using Model.EF;
 using QLKyTucXa.Areas.CanBo.Models;
 using QLKyTucXa.Models;
 
-namespace QLKyTucXa.Areas.CanBo.Controllers
+namespace QLKyTucXa.Controllers
 {
     public class HOADON_DIENNUOCController : Controller
     {
@@ -30,9 +30,10 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         {
             try
             {
+                int uid = Convert.ToInt32(Session["idphong"]);
                 var dshddn = (from hddn in db.HOADON_DIENNUOC
                                join p in db.PHONGs on hddn.ID_PHONG equals p.ID_PHONG into tableA
-                               from tA in tableA.Where(x => x.TRANGTHAI == true && x.DAXOA == false).DefaultIfEmpty()
+                               from tA in tableA.Where(x => x.TRANGTHAI == true && x.DAXOA == false && x.ID_PHONG == uid).DefaultIfEmpty()
                                join dien in db.CONGTODIENs on hddn.ID_PHONG equals dien.ID_PHONG into tableB
                                from tB in tableB.Where(x => x.THANG == hddn.THANG && x.NAM == hddn.NAM && x.TRANGTHAI == 0).DefaultIfEmpty()
                                join nuoc in db.CONGTONUOCs on hddn.ID_PHONG equals nuoc.ID_PHONG into tableC
@@ -41,7 +42,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                                from tD in tableD.DefaultIfEmpty()
                                where (hddn.PHONG.MAPHONG.ToLower().Contains(tuKhoa))
                                      || hddn.PHONG.DAYPHONG.MADAYPHONG.ToLower().Contains(tuKhoa)
-                               select new ViewModel_HDĐN_HDP()
+                               select new ViewModel_HD()
                                {
                                    ID_HOADONDIENNUOC = hddn.ID_HOADONDIENNUOC,
                                    MAPHONG = tA.MAPHONG,
@@ -57,7 +58,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                                    THANHTIEN = (tB.CHISOCUOI - tB.CHISODAU) * tD.DONGIADIEN + (tC.CHISOCUOI - tC.CHISODAU) * tD.DONGIANUOC,
                                    THANG = hddn.THANG,
                                    NAM = hddn.NAM,
-                                   TRANGTHAIHDDN = hddn.TRANGTHAI
+                                   TRANGTHAIHDDN= hddn.TRANGTHAI
 
                                }).ToList().Distinct();
 
@@ -125,75 +126,6 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult ThemMoi(int idP, int idDg,  int thang, int nam, int trangthai)
-        {
-            try
-            {
-                //var chk = db.HOADON_PHONG.Where(x => x.NAM == nam).Count() == 0;
-
-
-                //if (!chk)
-                //{
-                //    return Json(new { code = 300, msg = "Năm này đã tồn tại trong hệ thống!" }, JsonRequestBehavior.AllowGet);
-                //}
-
-                int uid = Convert.ToInt32(Session["idcb"]);
-                var p = new HOADON_DIENNUOC();
-                p.ID_PHONG = idP;
-                p.ID_CANBO = uid;
-                p.ID_DONGIA = idDg; // suy nghĩ chỗ này sau lấy được đơn giá
-
-                p.NAM = nam;
-                p.THANG = thang;
-                p.TRANGTHAI = trangthai;
-
-                db.HOADON_DIENNUOC.Add(p);
-                db.SaveChanges();
-                return Json(new { code = 200, msg = "Thêm mới hóa đơn điện nước thành công" }, JsonRequestBehavior.AllowGet);
-
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 500, msg = "Thêm mới hóa đơn điện nước thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        //chỉnh sửa hóa đơn điện nước
-        [HttpPost]
-        public JsonResult CapNhat(int id, int idP, int idDg, int thang, int nam, int trangthai) //, int idDp, string maPhong, string taiKhoan, string matKhau
-        {
-            try
-            {
-                //tìm ra phòng cần cập nhật dựa vào id truyền vào
-                var hddn = db.HOADON_DIENNUOC.SingleOrDefault(x => x.ID_HOADONDIENNUOC == id); // lỗi khúc này
-                //var encryptedMd5Pas = Encryptor.MD5Hash(matKhau);
-                int uid = Convert.ToInt32(Session["idcb"]);
-                if (uid == 1)
-                {
-                    hddn.NAM = nam;
-                    hddn.THANG = thang;
-                    hddn.ID_PHONG = idP;
-                    hddn.ID_DONGIA = idDg;
-                    hddn.ID_CANBO = 1;
-                    hddn.TRANGTHAI = trangthai;
-
-
-                    //luu vao csdl
-                    db.SaveChanges();
-                    return Json(new { code = 200, msg = "Cập nhật hóa đơn điện nước thành công" }, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    return Json(new { code = 200, msg = "Tài khoản của bạn không có quyền chỉnh sửa" }, JsonRequestBehavior.AllowGet);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 500, msg = "Cập nhật phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
 
         //Chi tiết hóa đơn điện nước
         [HttpGet]
@@ -202,12 +134,12 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             try
             {
                 db.Configuration.ProxyCreationEnabled = false;//cấu hình proxy cho database
-                var hddp = db.HOADON_DIENNUOC.SingleOrDefault(x => x.ID_HOADONDIENNUOC == id);
-                return Json(new { code = 200, hddp = hddp }, JsonRequestBehavior.AllowGet);
+                var hddn = db.HOADON_DIENNUOC.SingleOrDefault(x => x.ID_HOADONDIENNUOC == id);
+                return Json(new { code = 200, hddn = hddn }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 500, msg = "Lấy thông tin chi tiết của hóa đơn điện nước thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 500, msg = "Lấy thông tin chi tiết của cán bộ thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
     }

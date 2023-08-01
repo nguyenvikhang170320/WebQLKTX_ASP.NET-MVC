@@ -22,7 +22,7 @@ namespace Model.EF
 
         public int NAM { get; set; }
 
-        public int? TRANGTHAI { get; set; }
+        public int TRANGTHAI { get; set; }
 
         public virtual PHONG PHONG { get; set; }
     }
