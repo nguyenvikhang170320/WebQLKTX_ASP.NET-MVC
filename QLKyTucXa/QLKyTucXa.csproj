@@ -140,6 +140,7 @@
     <Compile Include="Controllers\CANBOesController.cs" />
     <Compile Include="Controllers\CONGTODIENNUOCController.cs" />
     <Compile Include="Controllers\DayphongController.cs" />
+    <Compile Include="Controllers\DongiaController.cs" />
     <Compile Include="Controllers\HD_PhongController.cs" />
     <Compile Include="Controllers\HOADON_DIENNUOCController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -389,6 +390,7 @@
     <Content Include="Views\HOADON_DIENNUOC\Index.cshtml" />
     <Content Include="Views\CONGTODIENNUOC\Index.cshtml" />
     <Content Include="Views\Hotro\Index.cshtml" />
+    <Content Include="Views\Dongia\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

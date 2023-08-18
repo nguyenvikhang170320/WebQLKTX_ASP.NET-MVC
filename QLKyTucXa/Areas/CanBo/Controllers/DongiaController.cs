@@ -12,6 +12,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         // GET: CanBo/Dongia
         private QLKyTucXaDbContext db = new QLKyTucXaDbContext();
 
+
         public ActionResult Index()
         {
             return View();
@@ -23,6 +24,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         {
             try
             {
+                db.Configuration.ProxyCreationEnabled = false;
 
                 var dsDongia = (from dg in db.DONGIAs
                              .Where(x => x.DAXOA != true && x.MADONGIA.ToLower().Contains(tuKhoa))
@@ -53,11 +55,12 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult ThemMoi(string maDongia, double donGiadien, double donGianuoc, bool trangThai, DateTime ngayApdung)
+        public JsonResult ThemMoi(int id, string maDongia, double donGiadien, double donGianuoc, bool trangThai, DateTime ngayApdung)
         {
             try
             {
                 var dg = new DONGIA();
+                dg.ID_DONGIA = id;
                 dg.MADONGIA = maDongia;
                 dg.DONGIADIEN = donGiadien;
                 dg.DONGIANUOC = donGianuoc;

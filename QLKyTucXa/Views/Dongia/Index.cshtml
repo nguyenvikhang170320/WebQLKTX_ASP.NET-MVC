@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "Đơn giá";
+    Layout = "~/Areas/CanBo/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-success">Đơn giá</button>
+        </div>
+        <div class="col-sm-4 col-sm-offset-6 text-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-sm-offset-0 text-right">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm " id="phanTrang">
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã đơn giá
+                </th>
+                <th>
+                    Đơn giá điện (nghìn/kWh)
+                </th>
+                <th>
+                    Đơn giá nước (nghìn/m3)
+                </th>
+                <th>
+                    Trạng thái
+                </th>
+                <th>
+                    Ngày áp dụng
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tblDsDongia">
+        </tbody>
+    </table>
+
+    
+</div>
+
+
+@section scripts{
+
+    <script>
+        var tuKhoa = '';
+        var trang = 1;
+        $(document).ready(function () {
+            LoadDsDongia(tuKhoa, trang);
+        });
+
+        //sự kiện enter của text có id là txtSearch
+        $('#txtSearch').on('keypress', function (e) {
+            if (e.which == 13) {//nếu phím đc gõ là enter
+                $('#btnSearch').click();//thì gọi tới sự kiện click của button có id là btnSearch
+            }
+        });
+
+
+        //sự kiện click của trang
+        $("#phanTrang").on("click", "li", function (e) {
+            e.preventDefault();
+            trang = $(this).text();
+            LoadDsDongia(tuKhoa, trang);
+        });
+
+
+        //sự kiện click của button tìm kiếm
+        $('#btnSearch').click(function () {
+            trang = 1;
+            tuKhoa = $('#txtSearch').val();
+            LoadDsDongia(tuKhoa, trang);
+        });
+
+
+     
+
+
+        //hàm load danh sách đơn giá đổ vào table
+        function LoadDsDongia(search, trang) {
+            //dùng ajax để load danh sách đơn giá trong controller Dongia
+            $.ajax({
+                url: '/Dongia/DsDongia',
+                type: 'get',
+                data: {
+                    tuKhoa: search,
+                    trang: trang
+                },
+                success: function (data) {
+                    //console.log(data);
+                    if (data.code == 200) {
+                        $('#tblDsDongia').empty();
+                        data.dsDongia.forEach(p => {
+                            let tr = '<tr id="' + p.ID_DONGIA + '">'
+                            tr += '<td class = "col-sm-2">' + p.MADONGIA + '</td>';
+                            tr += '<td class = "col-sm-2">' + p.DONGIADIEN + '</td>';
+                            tr += '<td class = "col-sm-2">' + p.DONGIANUOC + '</td>';
+                            tr += '<td class = "col-sm-2">' + (p.TRANGTHAI == 1 ? 'Đang áp dụng' : 'Không áp dụng') + '</td>';
+                            tr += '<td class = "col-sm-2">' + p.NGAYAPDUNG + '</td>';
+                            tr += '</tr>';
+                            $('#tblDsDongia').append(tr);
+                        });
+                      
+                        //phân trang
+
+                        $('#phanTrang').empty();
+                        for (i = 1; i <= data.soTrang; i++) {
+                            let li = '<li class="page-item" id="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+                            $('#phanTrang').append(li);
+                        }
+
+                        let li = $('#phanTrang li#' + trang + '');//tìm li có id = trang truyền vào
+                        //ví dụ trang = 2, sẽ tìm tới cái thằng li có id = 2
+                        //tìm ra đc thằng cần tìm thì add class active để đánh dấu trang hiện tại đang đc load
+                        $(li).addClass('active');
+
+                    }
+                }
+            });
+        }
+    </script>
+}

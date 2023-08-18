@@ -288,13 +288,13 @@
                     //console.log(data);
                     if (data.code == 200) {
                         $('#tblDsDongia').empty();
-                        $.each(data.dsDongia, function (k, v) {
-                            let tr = '<tr id="' + v.ID_DONGIA + '">'
-                            tr += '<td class = "col-sm-2">' + v.MADONGIA + '</td>';
-                            tr += '<td class = "col-sm-2">' + v.DONGIADIEN + '</td>';
-                            tr += '<td class = "col-sm-2">' + v.DONGIANUOC + '</td>';
-                            tr += '<td class = "col-sm-2">' + (v.TRANGTHAI == 1 ? 'Đang áp dụng' : 'Không áp dụng') + '</td>';
-                            tr += '<td class = "col-sm-2">' + v.NGAYAPDUNG + '</td>';
+                        data.dsDongia.forEach(p => {
+                            let tr = '<tr id="' + p.ID_DONGIA + '">'
+                            tr += '<td class = "col-sm-2">' + p.MADONGIA + '</td>';
+                            tr += '<td class = "col-sm-2">' + p.DONGIADIEN + '</td>';
+                            tr += '<td class = "col-sm-2">' + p.DONGIANUOC + '</td>';
+                            tr += '<td class = "col-sm-2">' + (p.TRANGTHAI == 1 ? 'Đang áp dụng' : 'Không áp dụng') + '</td>';
+                            tr += '<td class = "col-sm-2">' + p.NGAYAPDUNG + '</td>';
                             tr += '<td class = "col-sm-2 text-right">';
                             /*tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';*/
                             tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
@@ -303,7 +303,7 @@
                             tr += '</tr>';
                             $('#tblDsDongia').append(tr);
                         });
-
+                      
                         //phân trang
 
                         $('#phanTrang').empty();
