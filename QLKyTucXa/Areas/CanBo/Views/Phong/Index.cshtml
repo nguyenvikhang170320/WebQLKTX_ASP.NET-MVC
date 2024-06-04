@@ -334,7 +334,7 @@
             $('#modalPhong').modal();
             //set header của modal phong
             $('#modalTitle').text('Cập nhật thông tin phòng');
-
+      
             $('#maPhong').prop('readonly', true);
             $('#taiKhoan').prop('readonly', true);
             $('#matKhau').prop('readonly', true);
@@ -420,6 +420,7 @@
             }
 
             if (idPhong.length == 0) {//trường hợp thêm mới phòng
+              
                 $.ajax({
                     url: '/CanBo/Phong/ThemMoi',
                     type: 'post',
@@ -467,6 +468,7 @@
                     }
                 });
             } else {//trường hợp cập nhật phòng
+                alert(idDp);
                 $.ajax({
                     url: '/CanBo/Phong/CapNhat',
                     type: 'post',
