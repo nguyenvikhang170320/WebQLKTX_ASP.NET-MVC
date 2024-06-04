@@ -58,18 +58,18 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult CapNhat(int id, int soLuongnv, double donGia,string motaKhac, int tinhTrang, bool trangThai) //, int idDp, string maPhong, string taiKhoan, string matKhau
+        public JsonResult CapNhat(int id, int idDp, string maPhong, string taiKhoan, string matKhau, int soLuongnv, double donGia,string motaKhac, int tinhTrang, bool trangThai) //, int idDp, string maPhong, string taiKhoan, string matKhau
         {
             try
             {
                 //tìm ra phòng cần cập nhật dựa vào id truyền vào
                 var p = db.PHONGs.SingleOrDefault(x => x.ID_PHONG == id);
-                //var encryptedMd5Pas = Encryptor.MD5Hash(matKhau);
+                var encryptedMd5Pas = Encryptor.MD5Hash(matKhau); // chuyển đổi sang MD5
 
-                //p.ID_DAY = idDp;
-                //p.MAPHONG = maPhong;
-                //p.TAIKHOAN = taiKhoan;
-                //p.MATKHAU = encryptedMd5Pas;
+                p.ID_DAY = idDp;
+                p.MAPHONG = maPhong;
+                p.TAIKHOAN = taiKhoan;
+                p.MATKHAU = encryptedMd5Pas;
                 p.SOLUONGNV = soLuongnv;
                 p.DONGIA = donGia;
                 p.MOTAKHAC = motaKhac;

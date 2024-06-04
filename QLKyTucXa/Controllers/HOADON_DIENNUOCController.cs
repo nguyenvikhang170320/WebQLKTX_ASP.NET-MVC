@@ -45,8 +45,8 @@ namespace QLKyTucXa.Controllers
                                select new ViewModel_HD()
                                {
                                    ID_HOADONDIENNUOC = hddn.ID_HOADONDIENNUOC,
-                                   MAPHONG = tA.MAPHONG,
-                                   MADAYPHONG = tA.DAYPHONG.MADAYPHONG,
+                                   MAPHONG = hddn.PHONG.MAPHONG,
+                                   MADAYPHONG = hddn.PHONG.DAYPHONG.MADAYPHONG,
                                    DIENTHANGDAU = tB.CHISODAU,
                                    DIENTHANGSAU = tB.CHISOCUOI,
                                    CHISODIEN = tB.CHISOCUOI - tB.CHISODAU,
