@@ -209,6 +209,7 @@
                     success: function (data) {
                         if (data.code == 200) {
                             alert(data.msg);
+                            alert(1);
                             LoadDsDayphong(tuKhoa, trang);
                             $('#maDayphong').val('');
                         } else {
@@ -231,10 +232,10 @@
                         if (data.code == 200) {
                             //cập nhật thành công
                             alert(data.msg);
-                            $('#modalDayphong').modal('hide');//đóng modal
-
+            
                             //load lại danh sách lớp sau khi cập nhật
                             LoadDsDayphong(tuKhoa, trang);
+                            $('#modalDayphong').modal('hide');//đóng modal
                         } else {
                             alert(data.msg);
                         }

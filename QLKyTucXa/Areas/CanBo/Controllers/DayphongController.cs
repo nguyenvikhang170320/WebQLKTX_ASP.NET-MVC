@@ -132,7 +132,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 //lưu lại csdl
                 db.SaveChanges();
 
-                return Json(new { code = 200, dp = dp, msg = "Cập nhật dãy phòng thành công!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 200, msg = "Cập nhật dãy phòng thành công!" }, JsonRequestBehavior.AllowGet);
 
             }
             catch (Exception ex)
