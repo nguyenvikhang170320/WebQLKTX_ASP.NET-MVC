@@ -144,11 +144,12 @@
                         $('#modalTitle').text('Cập nhật thông tin dãy phòng');
                         //không cho chỉnh sửa các giá trị
                         $('#maDayphong').prop('readonly', false);
-
+                      
                         //ẩn button xác nhận
                         $('#btnSubmit').show();
-
+                        
                         $('#modalDayphong').modal();
+
                     } else {
                         alert(data.msg);
                     }

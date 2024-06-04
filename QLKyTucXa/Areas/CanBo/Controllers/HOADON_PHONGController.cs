@@ -40,13 +40,13 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                       select new ViewModel_HDĐN_HDP
                       {
                           ID_HOADONPHONG = hdp.ID_HOADONPHONG,
-                          ID_PHONG = tA.ID_PHONG,
-                          MAPHONG = tA.MAPHONG,
-                          MADAYPHONG = tA.DAYPHONG.MADAYPHONG,
+                          ID_PHONG = hdp.ID_PHONG,
+                          MAPHONG = hdp.PHONG.MAPHONG,
+                          MADAYPHONG = hdp.PHONG.DAYPHONG.MADAYPHONG,
                           NAM = hdp.NAM,
                           KY = hdp.KY,
-                          DONGIA = tA.DONGIA,
-                          THANHTIEN = tA.DONGIA * 6,
+                          DONGIA = hdp.PHONG.DONGIA,
+                          THANHTIEN = hdp.PHONG.DONGIA * 6,
                           TRANGTHAIHDP = hdp.TRANGTHAI
                       }).ToList();
 
