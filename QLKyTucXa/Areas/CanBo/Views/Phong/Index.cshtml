@@ -271,6 +271,7 @@
 
             //set giá trị mặc định cho các thành phần của form
             $('#idPhong').val('');
+            //$('#idPhong').val('');
             $('#maPhong').val('');
             $('#taiKhoan').val('');
             $('#matKhau').val('');
@@ -413,6 +414,7 @@
                 || matKhau.length == 0
                 || soLuongnv.length == 0
                 || donGia.length == 0
+                || motaKhac.length == 0
                 || tinhTrang.length == 0
                 || trangThai.length == 0) {
                 alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
@@ -420,9 +422,10 @@
             }
 
             if (idPhong.length == 0) {//trường hợp thêm mới phòng
-              
+                alert(1);
+                
                 $.ajax({
-                    url: '/CanBo/Phong/ThemMoi',
+                    url: '/CanBo/Phong/Themmoi',
                     type: 'post',
                     data: {
                         idDp: idDp,
@@ -433,7 +436,8 @@
                         donGia: donGia,
                         motaKhac: motaKhac,
                         tinhTrang: tinhTrang,
-                        trangThai: trangThai
+                        trangThai: trangThai,
+                        
                     },
                     success: function (data) {
                         if (data.code == 200) {
@@ -468,7 +472,7 @@
                     }
                 });
             } else {//trường hợp cập nhật phòng
-                alert(idDp);
+                alert(trangThai);
                 $.ajax({
                     url: '/CanBo/Phong/CapNhat',
                     type: 'post',
@@ -508,7 +512,7 @@
                 data: {
                     tuKhoa,
                     trang,
-                    //idDp: $('#selectDayphong option:selected').val()
+                    idDp: $('#selectDayphong option:selected').val()
                 },
                 success: function (data) {
                     console.log(data);
@@ -526,6 +530,7 @@
                             tr += '<td>' + p.DONGIA + '</td>';
                             tr += '<td>' + p.MOTAKHAC + '</td>';
                             tr += '<td>' + (p.TINHTRANG == 0 ? 'Còn trống' : 'Có người ở') + '</td>';
+                           
 
                             tr += '<td class = "text-right text-nowrap">';
                             tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';

@@ -18,7 +18,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult ThemMoi(int idDp, string maPhong, string taiKhoan, string matKhau, int soLuongnv, double donGia, string motaKhac, int tinhTrang, bool trangThai)
+        public JsonResult Themmoi(int idDp, string maPhong, string taiKhoan, string matKhau, int soLuongnv, double donGia, string motaKhac, int tinhTrang, bool trangThai)
         {
             try
             {
@@ -64,12 +64,12 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             {
                 //tìm ra phòng cần cập nhật dựa vào id truyền vào
                 var p = db.PHONGs.SingleOrDefault(x => x.ID_PHONG == id);
-                var encryptedMd5Pas = Encryptor.MD5Hash(matKhau); // chuyển đổi sang MD5
+                /*var encryptedMd5Pas = Encryptor.MD5Hash(matKhau);*/ // chuyển đổi sang MD5
 
                 p.ID_DAY = idDp;
                 p.MAPHONG = maPhong;
                 p.TAIKHOAN = taiKhoan;
-                p.MATKHAU = encryptedMd5Pas;
+                p.MATKHAU = matKhau;
                 p.SOLUONGNV = soLuongnv;
                 p.DONGIA = donGia;
                 p.MOTAKHAC = motaKhac;

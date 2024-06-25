@@ -16,33 +16,6 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //public JsonResult AllNhanvien()
-        //{
-        //    try
-        //    {
-        //        var dsNhanvien = (from nv in db.NHANVIENs.Where(x => x.DAXOA != true)
-        //                          select new
-        //                          {
-        //                              ID_NHANVIEN = nv.ID_NHANVIEN,
-        //                              MANV = nv.MANV,
-        //                              TENNV = nv.TENNV,
-        //                              NGAYSINH = nv.NGAYSINH,
-        //                              GIOITINH = nv.GIOITINH,
-        //                              CMND_CCCD = nv.CMND_CCCD,
-        //                              SDT = nv.SDT,
-        //                              EMAIL = nv.EMAIL,
-        //                              DIACHI = nv.DIACHI,
-
-        //                          }).ToList();
-
-        //        return Json(new { code = 200, dsNhanvien = dsNhanvien }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Json(new { code = 500, msg = "Lấy danh sách nhân viên thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
 
         [HttpGet]
         public JsonResult DsNhanvien(string tuKhoa, int trang)
@@ -106,7 +79,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult ThemMoi(string maNV, string tenNV, string cmndCccd, bool gioiTinh, DateTime ngaySinh, string sdt, string email, string diaChi, bool daXoa)
+        public JsonResult Themmoi(string maNV, string tenNV,  DateTime ngaySinh, bool gioiTinh, string cmndCccd, string sdt, string email, string diaChi)
         {
             try
             {
@@ -116,7 +89,6 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                     return Json(new { code = 300, msg = "Mã nhân viên này đã tồn tại trong hệ thống" }, JsonRequestBehavior.AllowGet);
                 }
                 var nv = new NHANVIEN();
-
                 nv.MANV = maNV;
                 nv.TENNV = tenNV;
                 nv.GIOITINH = gioiTinh;
@@ -141,7 +113,7 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult CapNhat(int id, string maNV, string tenNV, string cmndCccd, bool gioiTinh, DateTime ngaySinh, string sdt, string email, string diaChi)
+        public JsonResult CapNhat(int id, string maNV, string tenNV,  DateTime ngaySinh, bool gioiTinh, string cmndCccd, string sdt, string email, string diaChi)
         {
             try
             {

@@ -7,7 +7,7 @@
 <div class="jumbotron">
     <div class="row">
         <div class="col-sm-2">
-            <button class="btn btn-success" id="btnAdd">Hỗ trợ</button>
+            <button class="btn btn-success" id="btnAdd">Chỉnh sửa Hỗ trợ</button>
         </div>
         <div class="col-sm-4 col-sm-offset-6 text-right">
             <div class="input-group">
@@ -125,107 +125,7 @@
             LoadDsHotro(tuKhoa, trang);
         });
 
-        function getHDPhong(idHotro) {
-            $.ajax({
-                url: '/Canbo/Hotro/ChiTiet',
-                type: 'get',
-                data: {
-                    id: idHotro
-                },
-                success: function (data) {
-                    if (data.code == 200) {
-                        //console.log(data);
-                        //alert("Danh sách hóa đơn phòng đã load lên");
-                        //set giá trị mặc định cho các thành phần của form
-                        //nếu lấy thông tin thành công
-                        $('#noidung').val(data.I.noidung);
-                        $('#ngaygui').val(data.I.ngaygui);
-                        $('#trangthai').val(data.I.trangthai);
-                        //$('#quanTri').prop('checked', data.cb.QUANTRI == 1?true:false);
-                    } else {
-                        alert(data.msg);
-                    }
-                }
-            });
-        }
-
-        //sự kiện click button chỉnh sửa
-        $(document).on('click', "button[name = 'edit' ]", function () {
-            let id = $(this).closest('tr').attr('id');
-            $('#idHotro').val(id);//gán vào giá trị cho thằng textbox hidden có giá trị để đánh dấu là trường hợp cập nhật
-            getHDPhong(id);
-            $.ajax({
-                url: '/CanBo/Hotro/ChiTiet',
-                type: 'get',
-                data: {
-                    id: idHotro,
-
-                },
-                success: function (data) {
-                    if (data.code == 200) {
-                        //nếu lấy thông tin thành công
-                        $('#noidung').val(data.I.noidung);
-                        $('#ngaygui').val(data.I.ngaygui);
-                        $('#trangthai').val(data.I.trangthai);
-
-                        //gán giá trị cho text hidden có id là idCB = id tr được chọn
-                        $('#idHotro').val(id);
-                        $('#modaltitle').text('Chỉnh sửa cán bộ');
-                        
-                        //không cho chỉnh sửa các giá trị
-                        $('#noidung').prop('readonly', false);
-                        $('#ngaygui').prop('readonly', false);
-                        $('#trangthai').prop('readonly', false);
-
-
-                        $('#modalHotro').modal();
-
-
-
-                    } else {
-                        alert(data.msg);
-                    }
-                }
-            })
-        });
-
-        //sự kiện click button xem
-        $(document).on('click', "button[name = 'view' ]", function () {
-            let id = $(this).closest('tr').attr('id');
-            $.ajax({
-                url: '/CanBo/Hotro/ChiTiet',
-                type: 'get',
-                data: {
-                    id: id,
-
-                },
-                success: function (data) {
-                    if (data.code == 200) {
-                        //nếu lấy thông tin thành công
-                        $('#noidung').val(data.I.noidung);
-                        $('#ngaygui').val(data.I.ngaygui);
-                        $('#trangthai').val(data.I.trangthai);
-
-                        //gán giá trị cho text hidden có id là idCB = id tr được chọn
-                        $('#idHotro').val(id);
-                        $('#modaltitle').text('Chỉnh sửa hỗ trợ');
-
-                        //không cho chỉnh sửa các giá trị
-                        $('#noidung').prop('readonly', false);
-                        $('#ngaygui').prop('readonly', false);
-                        $('#trangthai').prop('readonly', false);
-
-                        $('#modalHT').modal();
-                        //ẩn button đi
-                        $('#submit').hide();
-
-                    } else {
-                        alert(data.msg);
-                    }
-                }
-            })
-        });
-
+      
         //sự kiện click button xác nhận
         $('#btnSubmit').click(function () {
             let idP = $('#selectPhong option:selected').val();
@@ -265,43 +165,61 @@
 
                     }
                 });
-            } else {//nếu là cập nhật 1 đơn giá đã có
-                //dùng ajax để cập nhật đơn giá
-
-                $.ajax({
-                    url: '/Canbo/Hotro/CapNhat',
-                    type: 'post',
-                    data: {
-                        id: idHotro,
-                        idP: idP,
-                        noidung: noidung,
-                        ngaygui: ngaygui,
-                        trangthai: trangthai,
-                    },
-                    success: function (data) {
-                        if (data.code == 200) {
-                            //cập nhật thành công
-                            alert(data.msg);
-                            $('#modalDongia').modal('hide');//đóng modal
-
-                            //load lại danh sách đơn giá sau khi cập nhật
-                            LoadDsDongia(tuKhoa, trang);
-                        } else {
-                            alert(data.msg);
-                        }
-                    }
-                })
-
-            }
-
+            } 
         });
 
+        function GetDetail(idHotro) {
+            $.ajax({
+                url: '/CanBo/Hotro/ChiTiet',
+                type: 'get',
+                data: {
+                    id: idHotro
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        //console.log(data);
+                        //set giá trị mặc định cho các thành phần của form
+                        alert(chitiết);
+                        $('#selectPhong').val(data.p.ID_PHONG);
+                        $('#noidung').val(data.p.NOIDUNG);
+                        $('#ngaygui').val(data.p.NGAYGUI);
+                      
+                        $('#trangthai').val(data.p.TRANGTHAI);
+                        alert(data.msg);
+                       
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+        $(document).on('click', "button[name='update']", function () {
+            let id = $(this).closest('tr').attr('id');
+            $('#idHotro').val(id);//gán vào giá trị cho thằng textbox hidden có giá trị để đánh dấu là trường hợp cập nhật
+            GetDetail(id);
+            $('#modalHotro').modal();
+            //set header của modal phong
+            $('#modalTitle').text('Cập nhật thông tin hỗ trợ');
 
-        //sự kiện click của button thêm mới đơn giá
+            $('#maPhong').prop('readonly', false);
+            $('#noidung').prop('readonly', false);
+            $('#ngaygui').prop('readonly', false);
+            $('#trangthai').prop('readonly', false);
+           
+            ////ẩn button xác nhận
+            $('#btnSubmit').show();
+        });
+        //sự kiện click của button chỉnh sửa hỗ trợ
         $('#btnAdd').click(function () {
             //set header của modal đơn giá
-            $('#modalTitle').text('Thêm mới đơn giá');
+            $('#modalTitle').text('Chỉnh sửa hỗ trợ');
+            
+      
 
+            $('#noidung').prop('readonly', false);
+            $('#ngaygui').prop('readonly', false);
+            $('#trangthai').prop('readonly', false);
+           
             //set giá trị mặc định cho các thành phần của form
             $('#idHotro').val('');
             $('#selectPhong').val('');
@@ -346,7 +264,7 @@
                             tr += '<td class = "col-sm-2">' + (p.TRANGTHAI == 1 ? 'Đã hỗ trợ' : 'Chưa hỗ trợ') + '</td>';
                             tr += '<td class = "col-sm-2 text-right">';
                             /*tr += '<button class = "btn btn-xs btn-info" name = "view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';*/
-                            tr += '<button class = "btn btn-xs btn-warning" name = "edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
+                            tr += '<button class = "btn btn-xs btn-warning" name = "update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
                             /*tr += '<button class = "btn btn-xs btn-danger" name = "delete"><i class="fa fa-trash" aria-hidden="true"></i></button>';*/
                             tr += '</td>';
                             tr += '</tr>';

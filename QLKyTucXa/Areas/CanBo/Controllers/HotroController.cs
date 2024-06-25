@@ -1,4 +1,5 @@
 ﻿using Model.EF;
+using QLKyTucXa.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,60 +76,57 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 return Json(new { code = 500, msg = "Thêm mới hỗ trợ thất bại. Lỗi: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-
-        [HttpGet]
-        public JsonResult CapNhat(int id)
-        {
-            try
-            {
-                var dg = db.HOTROes.SingleOrDefault(x => x.ID_PHIEU == id);
-                return Json(new { code = 200, DG = dg, msg = "Lấy thông tin cập nhật của đơn giá thành công" }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 500, msg = "Lấy thông tin đơn giá thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        [HttpPost]
-        public JsonResult CapNhat(int id, int trangThai)
-        {
-            try
-            {
-                //tìm đơn giá dựa vào id
-                var dg = db.HOTROes.SingleOrDefault(x => x.ID_PHIEU == id);
-
-                //gán lại các thuộc tính của đơn giá đc tìm thấy
-                dg.TRANGTHAI = trangThai;
-
-                //lưu lại csdl
-                db.SaveChanges();
-
-                return Json(new { code = 200, msg = "Cập nhật hỗ trợ thành công!" }, JsonRequestBehavior.AllowGet);
-
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 500, msg = "Cập nhật hỗ trợ thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        //phần detail
         [HttpGet]
         public JsonResult ChiTiet(int id)
         {
             try
             {
-                var i = db.HOTROes.SingleOrDefault(x => x.ID_PHIEU == id);
-                return Json(new { code = 200, I = i, msg = "Lấy thông tin chi tiết cán bộ thành công" }, JsonRequestBehavior.AllowGet);
-
+                var dsp = (from p in db.PHONGs
+                           join ht in db.HOTROes on p.ID_PHONG equals ht.ID_PHONG
+                           where (ht.ID_PHONG == id)
+                           select new
+                           {
+                               ID_PHIEU = ht.ID_PHIEU,
+                               ID_PHONG = p.ID_PHONG,
+                               MAPHONG = p.MAPHONG,
+                               NOIDUNG = ht.NOIDUNG,
+                               NGAYGUI = ht.NGAYGUI,
+                               TRANGTHAI = ht.TRANGTHAI,
+                               
+                           }).ToList();
+                return Json(new { code = 200, msg = "Lấy thông tin phòng thành công!", ht = dsp.Count() > 0 ? dsp[0] : null }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return Json(new { code = 500, msg = "Lấy thông tin  cán bộ thất bại" + e.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 500, msg = "Lấy thông tin phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        public JsonResult CapNhat(int id, string noidung, DateTime ngaygui, int trangthai)
+        {
+            try
+            {
+                //tìm ra phòng cần cập nhật dựa vào id truyền vào
+                var p = db.HOTROes.SingleOrDefault(x => x.ID_PHIEU == id);
+                
+           
+                p.NOIDUNG = noidung;
+                p.NGAYGUI = ngaygui;
+                p.TRANGTHAI = trangthai;
+              
 
+                //luu vao csdl
+                db.SaveChanges();
+
+                return Json(new { code = 200, msg = "Cập nhật phòng thành công" }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = "Cập nhật phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
         // danh sách mã phòng
         [HttpGet]
         public JsonResult ListPhong()

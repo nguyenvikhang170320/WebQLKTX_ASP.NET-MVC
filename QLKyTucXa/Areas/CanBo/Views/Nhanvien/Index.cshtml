@@ -86,7 +86,7 @@
                         </div>
                         <div class="form-group">
                             <label>Giới tính(<span class="text-danger">*</span>):</label>
-                            <select class="form-control" name="gioiTinh" id="gioiTinh">
+                            <select class="form-control" placeholder="gioiTinh" id="gioiTinh">
                                 <option value="True">Nam</option>
                                 <option value="False">Nữ</option>
                             </select>
@@ -154,7 +154,8 @@
 
         //sự kiện của button xác nhận
         $('#btnSubmit').click(function () {
-            
+           
+            let idNhanvien = $('#idNhanvien').val().trim();
             let maNV = $('#maNV').val().trim();
             let tenNV = $('#tenNV').val().trim();
             let ngaySinh = $('#ngaySinh').val().trim();
@@ -177,10 +178,12 @@
                 alert('Vui lòng nhập đầy đủ thông tin ở các trường có dấu *');
                 return;
             }
-            let idNhanvien = $('#idNhanvien').val().trim();
-            if (idNhanvien.length == 0) {//trường hợp thêm mới nhân viên
+
+            if (idNhanvien.length == 0) {
+                alert(0);
+                
                 $.ajax({
-                    url: '/Canbo/Nhanvien/ThemMoi',
+                    url: '/Canbo/Nhanvien/Themmoi',
                     type: 'post',
                     data: {
                         maNV: maNV,
@@ -212,7 +215,9 @@
                     }
                 });
             } else {//trường hợp cập nhật nhân viên
+                alert(1);
                 $.ajax({
+                    
                     url: '/Canbo/Nhanvien/CapNhat',
                     type: 'post',
                     data: {
@@ -225,7 +230,6 @@
                         sdt: sdt,
                         email: email,
                         diaChi: diaChi,
-                        
 
                     },
                     success: function (data) {
