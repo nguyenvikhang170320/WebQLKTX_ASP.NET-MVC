@@ -7,7 +7,7 @@
 <div class="jumbotron">
     <div class="row">
         <div class="col-sm-2">
-            <button class="btn btn-success" id="btnAdd">Chỉnh sửa Hỗ trợ</button>
+            <button class="btn btn-success" id="btnAdd">Thêm Hỗ trợ</button>
         </div>
         <div class="col-sm-4 col-sm-offset-6 text-right">
             <div class="input-group">
@@ -128,6 +128,7 @@
       
         //sự kiện click button xác nhận
         $('#btnSubmit').click(function () {
+          
             let idP = $('#selectPhong option:selected').val();
             let noidung = $('#noidung').val().trim();
             let ngaygui = $('#ngaygui').val().trim();
@@ -140,12 +141,14 @@
             }
             let idHotro = $('#idHotro').val().trim();
 
-            if (idHotro.length == 0) {//nếu là thêm mới đơn giá
+            if (idHotro.length != 0) {//nếu là thêm mới đơn giá
                 //dùng ajax để thêm mới đơn giá
+                
                 $.ajax({
-                    url: '/Canbo/Hotro/ThemMoi',
+                    url: '/Canbo/Hotro/CapNhat',
                     type: 'post',
                     data: {
+                        id: idHotro,
                         idP: idP,
                         noidung: noidung,
                         ngaygui: ngaygui,
@@ -158,7 +161,7 @@
                             $('#noidung').val('');
                             $('#ngaygui').val('');
                             $('#trangthai').val('');
-                           ;
+                
                         } else {
                             alert(data.msg);
                         }
@@ -211,34 +214,9 @@
         });
         //sự kiện click của button chỉnh sửa hỗ trợ
         $('#btnAdd').click(function () {
-            //set header của modal đơn giá
-            $('#modalTitle').text('Chỉnh sửa hỗ trợ');
-            
-      
-
-            $('#noidung').prop('readonly', false);
-            $('#ngaygui').prop('readonly', false);
-            $('#trangthai').prop('readonly', false);
-           
-            //set giá trị mặc định cho các thành phần của form
-            $('#idHotro').val('');
-            $('#selectPhong').val('');
-            $('#noidung').val('');
-            $('#ngaygui').val('');
-            $('#trangthai').val('');
-           
-
-            //không cho chỉnh sửa các giá trị
-            $('#noidung').prop('readonly', false);
-            $('#selectPhong').prop('readonly', false);
-            $('#ngaygui').prop('readonly', false);
-            $('#trangthai').prop('readonly', false);
-
-            //ẩn button xác nhận
-            $('#btnSubmit').show();
-
+            alert("Bạn không thể dùng chức năng thêm hỗ trợ");
             //hiển thị modal lên
-            $('#modalHotro').modal();
+            $('#modalHotro').modal('hide');
         })
 
 

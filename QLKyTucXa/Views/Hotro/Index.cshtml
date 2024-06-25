@@ -6,8 +6,9 @@
 
 <div class="jumbotron">
     <div class="row">
-        <div class="col-sm-2">
-            <button class="btn btn-success" id="btnAdd">Hỗ trợ</button>
+        <div class="col-sm-offset-2">
+            <button class="btn btn-success">Hỗ trợ</button>
+            <button class="btn btn-success" id="btnAdd">Thêm mới Hỗ trợ</button>
         </div>
         <div class="col-sm-4 col-sm-offset-6 text-right">
             <div class="input-group">
@@ -123,115 +124,7 @@
         });
 
 
-        ////sự kiện của button sửa trên từng dòng
-        //$(document).on('click', "button[name='update']", function () {
-        //    let idHotro = $(this).closest('tr').attr('id');
-        //    $.ajax({
-        //        url: '/Canbo/Hotro/CapNhat',
-        //        type: 'get',
-        //        data: {
-        //            id: idHotro
-        //        },
-        //        success: function (data) {
-        //            if (data.code == 200) {
-        //                //nếu lấy thông tin đơn giá thành công
-        //                $('#noidung').val(data.DG.MADONGIA);
-        //                $('#ngaygui').val(data.DG.DONGIADIEN);
-        //                $('#trangthai').val(data.DG.DONGIANUOC);
-
-        //                //gán giá trị cho text hidden có id là idDongia = id của tr được chọn
-        //                $('#idHotro').val(idDongia);
-        //                $('#modalTitle').text('Cập nhật thông tin đơn giá');
-        //                //không cho chỉnh sửa các giá trị
-        //                $('#noidung').prop('readonly', false);
-        //                $('#ngaygui').prop('readonly', false);
-        //                $('#trangthai').prop('readonly', false);
-              
-
-        //                //ẩn button xác nhận
-        //                $('#btnSubmit').show();
-
-        //                $('#modalHotro').modal();
-        //            } else {
-        //                alert(data.msg);
-        //            }
-        //        }
-        //    });
-        /*});*/
-        //sự kiện click button chỉnh sửa
-        $(document).on('click', "button[name = 'edit' ]", function () {
-            let id = $(this).closest('tr').attr('id');
-            $.ajax({
-                url: '/Hotro/ChiTiet',
-                type: 'get',
-                data: {
-                    id: id,
-
-                },
-                success: function (data) {
-                    if (data.code == 200) {
-                        //nếu lấy thông tin thành công
-                        $('#noidung').val(data.I.noidung);
-                        $('#ngaygui').val(data.I.ngaygui);
-                        $('#trangthai').val(data.I.trangthai);
-
-                        //gán giá trị cho text hidden có id là idCB = id tr được chọn
-                        $('#idHotro').val(id);
-                        $('#modaltitle').text('Chỉnh sửa cán bộ');
-                        
-                        //không cho chỉnh sửa các giá trị
-                        $('#noidung').prop('readonly', false);
-                        $('#ngaygui').prop('readonly', false);
-                        $('#trangthai').prop('readonly', false);
-
-
-                        $('#modalHotro').modal();
-
-
-
-                    } else {
-                        alert(data.msg);
-                    }
-                }
-            })
-        });
-
-        //sự kiện click button xem
-        $(document).on('click', "button[name = 'view' ]", function () {
-            let id = $(this).closest('tr').attr('id');
-            $.ajax({
-                url: '/Hotro/ChiTiet',
-                type: 'get',
-                data: {
-                    id: id,
-
-                },
-                success: function (data) {
-                    if (data.code == 200) {
-                        //nếu lấy thông tin thành công
-                        $('#noidung').val(data.I.noidung);
-                        $('#ngaygui').val(data.I.ngaygui);
-                        $('#trangthai').val(data.I.trangthai);
-
-                        //gán giá trị cho text hidden có id là idCB = id tr được chọn
-                        $('#idHotro').val(id);
-                        $('#modaltitle').text('Chỉnh sửa hỗ trợ');
-
-                        //không cho chỉnh sửa các giá trị
-                        $('#noidung').prop('readonly', false);
-                        $('#ngaygui').prop('readonly', false);
-                        $('#trangthai').prop('readonly', false);
-
-                        $('#modalHT').modal();
-                        //ẩn button đi
-                        $('#submit').hide();
-
-                    } else {
-                        alert(data.msg);
-                    }
-                }
-            })
-        });
+        
 
         //sự kiện click button xác nhận
         $('#btnSubmit').click(function () {
@@ -272,34 +165,7 @@
 
                     }
                 });
-            } else {//nếu là cập nhật 1 đơn giá đã có
-                //dùng ajax để cập nhật đơn giá
-
-                $.ajax({
-                    url: '/Canbo/Hotro/CapNhat',
-                    type: 'post',
-                    data: {
-                        id: idHotro,
-                        idP: idP,
-                        noidung: noidung,
-                        ngaygui: ngaygui,
-                        trangthai: trangthai,
-                    },
-                    success: function (data) {
-                        if (data.code == 200) {
-                            //cập nhật thành công
-                            alert(data.msg);
-                            $('#modalDongia').modal('hide');//đóng modal
-
-                            //load lại danh sách đơn giá sau khi cập nhật
-                            LoadDsDongia(tuKhoa, trang);
-                        } else {
-                            alert(data.msg);
-                        }
-                    }
-                })
-
-            }
+            } 
 
         });
 

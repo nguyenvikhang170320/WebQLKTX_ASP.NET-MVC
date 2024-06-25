@@ -46,11 +46,11 @@ namespace QLKyTucXa.Controllers
                             .Skip((trang - 1) * pageSize)
                              .Take(pageSize)
                              .ToList();
-                return Json(new { code = 200, soTrang = soTrang, dsHT = dsdg, msg = "Lấy danh sách đơn giá thành công!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 200, soTrang = soTrang, dsHT = dsdg, msg = "Lấy danh sách hỗ trợ thành công!" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 500, msg = "Lấy danh sách đơn giá thất bại: " + ex.Message, JsonRequestBehavior.AllowGet });
+                return Json(new { code = 500, msg = "Lấy danh sách hỗ trợ thất bại: " + ex.Message, JsonRequestBehavior.AllowGet });
             }
         }
 
@@ -73,45 +73,6 @@ namespace QLKyTucXa.Controllers
             catch (Exception ex)
             {
                 return Json(new { code = 500, msg = "Thêm mới hỗ trợ thất bại. Lỗi: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        [HttpPost]
-        public JsonResult CapNhat(int id, int trangThai)
-        {
-            try
-            {
-                //tìm đơn giá dựa vào id
-                var dg = db.HOTROes.SingleOrDefault(x => x.ID_PHIEU == id);
-
-                //gán lại các thuộc tính của đơn giá đc tìm thấy
-                dg.TRANGTHAI = trangThai;
-
-                //lưu lại csdl
-                db.SaveChanges();
-
-                return Json(new { code = 200, msg = "Cập nhật hỗ trợ thành công!" }, JsonRequestBehavior.AllowGet);
-
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 500, msg = "Cập nhật hỗ trợ thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        //phần detail
-        [HttpGet]
-        public JsonResult ChiTiet(int id)
-        {
-            try
-            {
-                var i = db.HOTROes.SingleOrDefault(x => x.ID_PHIEU == id);
-                return Json(new { code = 200, I = i, msg = "Lấy thông tin chi tiết cán bộ thành công" }, JsonRequestBehavior.AllowGet);
-
-            }
-            catch (Exception e)
-            {
-                return Json(new { code = 500, msg = "Lấy thông tin  cán bộ thất bại" + e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 

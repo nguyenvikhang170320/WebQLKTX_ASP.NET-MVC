@@ -47,35 +47,15 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                             .Skip((trang - 1) * pageSize)
                              .Take(pageSize)
                              .ToList();
-                return Json(new { code = 200, soTrang = soTrang, dsHT = dsdg, msg = "Lấy danh sách đơn giá thành công!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 200, soTrang = soTrang, dsHT = dsdg, msg = "Lấy danh sách hỗ trợ thành công!" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 500, msg = "Lấy danh sách đơn giá thất bại: " + ex.Message, JsonRequestBehavior.AllowGet });
+                return Json(new { code = 500, msg = "Lấy danh sách hỗ trợ thất bại: " + ex.Message, JsonRequestBehavior.AllowGet });
             }
         }
 
-        [HttpPost]
-        public JsonResult ThemMoi(int idP, string noidung, DateTime ngaygui, int trangthai)
-        {
-            try
-            {
-                var dg = new HOTRO();
-                dg.ID_PHONG = idP;  
-                dg.NOIDUNG = noidung;
-                dg.TRANGTHAI = trangthai;
-                dg.NGAYGUI = ngaygui;
-
-                db.HOTROes.Add(dg);//them doi tuong don gia dc khai bao o phia tren
-                db.SaveChanges();//luu vao csdl
-
-                return Json(new { code = 200, msg = "Thêm hỗ trợ mới thành công!" }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 500, msg = "Thêm mới hỗ trợ thất bại. Lỗi: " + ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
+       
         [HttpGet]
         public JsonResult ChiTiet(int id)
         {
@@ -118,12 +98,12 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
                 //luu vao csdl
                 db.SaveChanges();
 
-                return Json(new { code = 200, msg = "Cập nhật phòng thành công" }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 200, msg = "Cập nhật hỗ trợ thành công" }, JsonRequestBehavior.AllowGet);
 
             }
             catch (Exception ex)
             {
-                return Json(new { code = 500, msg = "Cập nhật phòng thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 500, msg = "Cập nhật hỗ trợ thất bại: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
 
         }
