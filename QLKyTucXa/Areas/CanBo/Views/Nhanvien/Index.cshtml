@@ -82,7 +82,7 @@
                         </div>
                         <div class="form-group">
                             <label>Ngày sinh(<span class="text-danger">*</span>):</label>
-                            <input type="text" class="form-control" id="ngaySinh" placeholder="năm/tháng/ngày">
+                            <input type="text" class="form-control" id="ngaySinh" placeholder="dd/mm/yyyy">
                         </div>
                         <div class="form-group">
                             <label>Giới tính(<span class="text-danger">*</span>):</label>
@@ -120,7 +120,7 @@
 
 
 @section scripts{
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script>
         var tuKhoa = '';
         var trang = 1;
@@ -154,7 +154,7 @@
 
         //sự kiện của button xác nhận
         $('#btnSubmit').click(function () {
-           
+
             let idNhanvien = $('#idNhanvien').val().trim();
             let maNV = $('#maNV').val().trim();
             let tenNV = $('#tenNV').val().trim();
@@ -164,7 +164,7 @@
             let sdt = $('#sdt').val().trim();
             let email = $('#email').val().trim();
             let diaChi = $('#diaChi').val().trim();
-            
+            ngaySinh = moment(ngaySinh, "DD/MM/YYYY").format("YYYY-MM-DD");
 
             //ràng buộc dữ liệu
             if (maNV.length == 0
@@ -181,7 +181,7 @@
 
             if (idNhanvien.length == 0) {
                 alert(0);
-                
+
                 $.ajax({
                     url: '/Canbo/Nhanvien/Themmoi',
                     type: 'post',
@@ -194,7 +194,7 @@
                         sdt: sdt,
                         email: email,
                         diaChi: diaChi
-                        
+
                     },
                     success: function (data) {
                         if (data.code == 200) {
@@ -217,7 +217,7 @@
             } else {//trường hợp cập nhật nhân viên
                 alert(1);
                 $.ajax({
-                    
+
                     url: '/Canbo/Nhanvien/CapNhat',
                     type: 'post',
                     data: {
@@ -261,7 +261,7 @@
             $('#sdt').val('');
             $('#email').val('');
             $('#diaChi').val('');
-            
+
 
 
             $('#maNV').prop('readonly', false);
@@ -272,7 +272,7 @@
             $('#sdt').prop('readonly', false);
             $('#email').prop('readonly', false);
             $('#diaChi').prop('readonly', false);
-            
+
 
             //ẩn button xác nhận
             $('#btnSubmit').show();
@@ -325,7 +325,7 @@
             $('#sdt').prop('readonly', false);
             $('#email').prop('readonly', false);
             $('#diaChi').prop('readonly', false);
-           
+
 
             ////ẩn button xác nhận
             $('#btnSubmit').show();
@@ -348,7 +348,7 @@
             $('#sdt').prop('readonly', true);
             $('#email').prop('readonly', true);
             $('#diaChi').prop('readonly', true);
-            
+
 
             $('#btnSubmit').hide();
         });
@@ -371,7 +371,7 @@
                         $('#sdt').val(data.nv.SDT);
                         $('#email').val(data.nv.EMAIL);
                         $('#diaChi').val(data.nv.DIACHI);
-                        
+
 
                         //$('.datepicker').val(ConvertJsonDateString(data.hs.NgaySinh));
 
@@ -401,7 +401,7 @@
                             tr += '<td class = "col-sm-1">' + v.MANV + '</td>';
                             tr += '<td class = "col-sm-2">' + v.TENNV + '</td>';
                             tr += '<td class = "col-sm-1">' + v.NGAYSINH + '</td>';//ConvertJsonDateString(v.NGAYSINH)
-                            tr += '<td class = "col-sm-1">' + (v.GIOITINH == true ? 'Nam': 'Nữ') + '</td>';
+                            tr += '<td class = "col-sm-1">' + (v.GIOITINH == true ? 'Nam' : 'Nữ') + '</td>';
                             tr += '<td class = "col-sm-2">' + (v.SDT == null ? '' : v.SDT) + '</td>';
                             tr += '<td class = "col-sm-2">' + (v.EMAIL == null ? '' : v.EMAIL) + '</td>';
                             tr += '<td class = "col-sm-2">' + (v.DIACHI == null ? '' : v.DIACHI) + '</td>';

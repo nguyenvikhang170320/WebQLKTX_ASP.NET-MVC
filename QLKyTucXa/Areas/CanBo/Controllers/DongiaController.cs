@@ -55,12 +55,11 @@ namespace QLKyTucXa.Areas.CanBo.Controllers
         }
 
         [HttpPost]
-        public JsonResult ThemMoi(int id, string maDongia, double donGiadien, double donGianuoc, bool trangThai, DateTime ngayApdung)
+        public JsonResult ThemMoi(string maDongia, double donGiadien, double donGianuoc, bool trangThai, DateTime ngayApdung)
         {
             try
             {
                 var dg = new DONGIA();
-                dg.ID_DONGIA = id;
                 dg.MADONGIA = maDongia;
                 dg.DONGIADIEN = donGiadien;
                 dg.DONGIANUOC = donGianuoc;

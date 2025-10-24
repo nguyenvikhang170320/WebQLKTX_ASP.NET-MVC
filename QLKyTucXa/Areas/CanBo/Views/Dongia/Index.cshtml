@@ -85,7 +85,7 @@
                         </div>
                         <div class="form-group">
                             <label>Ngày áp dụng(<span class="text-danger">*</span>):</label>
-                            <input type="text" class="form-control" id="ngayApdung" placeholder="mm/dd/yyyy">
+                            <input type="text" class="form-control" id="ngayApdung" placeholder="dd/mm/yyyy">
                         </div>
                     </div>
                 </div>
@@ -100,10 +100,12 @@
 
 
 @section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
     <script>
         var tuKhoa = '';
         var trang = 1;
+
         $(document).ready(function () {
             LoadDsDongia(tuKhoa, trang);
         });
@@ -178,6 +180,7 @@
             let donGianuoc = $('#donGianuoc').val().trim();
             let trangThai = $('#trangThai').val().trim();
             let ngayApdung = $('#ngayApdung').val().trim();
+            ngayApdung = moment(ngayApdung, "DD/MM/YYYY").format("YYYY-MM-DD");
 
             //ràng buộc dữ liệu
             if (maDongia.length == 0 || donGiadien.length == 0 || donGianuoc.length == 0) {
@@ -200,6 +203,7 @@
                     },
                     success: function (data) {
                         if (data.code == 200) {
+                            alert(1);
                             alert(data.msg);
                             LoadDsDongia(tuKhoa, trang);
                             $('#maDongia').val('');
@@ -303,7 +307,7 @@
                             tr += '</tr>';
                             $('#tblDsDongia').append(tr);
                         });
-                      
+
                         //phân trang
 
                         $('#phanTrang').empty();
